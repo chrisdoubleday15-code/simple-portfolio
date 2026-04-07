@@ -1,8 +1,4 @@
 ---
-// component imports
-import {Badge} from "./ui/badge";
-
-// library imports
 import {formatDatetime} from "../lib/utils";
 
 interface Job {
@@ -15,32 +11,21 @@ interface Job {
     currentJob: boolean;
 }
 
-const {jobData} = Astro.props;  // Ensure correct typing for the props
-const {
-    title,
-    company,
-    location,
-    startDate,
-    endDate,
-    goals,
-    currentJob,
-} = jobData as Job;
-
+const {jobData} = Astro.props;
+const { title, company, location, startDate, endDate, goals, currentJob } = jobData as Job;
 ---
 
-<div class="flex flex-col gap-2">
-    <h3 class="text-xl font-bold">{title}</h3>
-    <div class="flex items-center gap-2">
-        <Badge className="bg-primary-light dark:bg-primary-dark w-fit rounded-md whitespace-nowrap	">
-            {formatDatetime(startDate)} - {currentJob ? "Present" : formatDatetime(endDate)}
-        </Badge>
-        <p class="truncate">{company}</p>
-        <span class="text-sm font-bold">/</span>
-        <p class="truncate">{location}</p>
+<div class="flex flex-col gap-3 py-8">
+    <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
+        <h3 class="text-xl font-semibold text-n200">{title}</h3>
+        <span class="text-n500 text-sm tracking-widest uppercase whitespace-nowrap">
+            {formatDatetime(startDate)} — {currentJob ? "Present" : formatDatetime(endDate)}
+        </span>
     </div>
-    <ul style="list-style: disc;">
+    <p class="text-n500 text-sm tracking-wide">{company} <span class="text-primary-dark mx-1">/</span> {location}</p>
+    <ul class="flex flex-col gap-1 mt-1">
         {goals.map((goal: string) => (
-                <li>{goal}</li>
+            <li class="text-n500 text-sm pl-4 relative before:content-['—'] before:absolute before:left-0 before:text-primary-dark">{goal}</li>
         ))}
     </ul>
 </div>

@@ -1,29 +1,29 @@
 export const SITE = {
-    website: "https://simple-portfolio.vicbox.dev", // replace this with your deployed domain
-    title: "Simple Portfolio",
-    description: "A simple but beautiful portfolio created with Astro",
-    tags: ["portfolio", "Resume cv", "Astro"],
+    website: "chrisdoubleday.com", // replace this with your deployed domain
+    title: "Christopher Doubleday | Motion Designer",
+    description: "Motion designer and video editor creating bold, high-energy content for brands.",
+    tags: ["portfolio", "Motion Graphics", "Video Editor"],
     ogImage: "/og-image.webp",
     logo: "logo",
-    logoText: "Portfolio",
+    logoText: "Christopher Doubleday",
     lang: "en",
     favicon: "/favicon.png",
-    repository: "https://github.com/vito8916/simple-portfolio.git",
-    author: "Victor Alvarado",
-    profile: "https://victoralvarado.dev/",
+    repository: "https://github.com/chrisdoubleday/simple-portfolio.git",
+    author: "Christopher Doubleday",
+    profile: "https://chrisdoubleday.com",
 }
 
 export const ME = {
-    name: "VicBox Dot Dev",
-    profession: "Software Engineer | Full Stack Developer",
-    profileImage: "pp2.png",
+    name: "Christopher Doubleday",
+    profession: "Motion Designer | Video Editor",
+    profileImage: "chris.jpg",
     profileFacts: [
         {
-            value: 10,
+            value: 5,
             description: "Years of Experience"
         },
         {
-            value: 5,
+            value: 100,
             description: "Completed Projects"
         },
         {
@@ -32,11 +32,11 @@ export const ME = {
         }
     ],
     contactInfo: {
-        email: "vicbox.dev@vicbox.dev",
-        linkedin: "https://www.linkedin.com/in/victor-alvaradohn",
+        email: "chrisdoubleday15@gmail.com",
+        linkedin: "https://www.linkedin.com/in/christopher-doubleday-986bb4241",
         resumeDoc: "resume.pdf",
     },
-    aboutMe: "I am a software engineer with a passion for web development. I have experience in building web " + "applications using modern technologies. I am a self-taught developer who enjoys learning new things and " + "sharing knowledge with others.",
+    aboutMe: "I'm Chris - video editor and motion designer. I help brands create content that gets noticed, engagement and results. I work with Premiere Pro + After Effects, focusing on quick turnarounds, with head turning visuals."
 }
 
 export const SOCIALS = [
@@ -67,13 +67,13 @@ export const SOCIALS = [
     {
         name: "TikTok",
         url: "https://tiktok.com/vicbox.dev",
-        icon: "tik-fill",
+        icon: "tiktok-fill",
         show: false
     },
     {
         name: "GitHub",
         url: "https://github.com/vicbox.dev",
         icon: "github-fill",
-        show: true
+        show: false
     }
 ]

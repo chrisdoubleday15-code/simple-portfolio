@@ -1,0 +1,173 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { ME } from '../config';
+---
+
+<Layout
+  title="Contact — Christopher Doubleday"
+  description="Get in touch with Christopher Doubleday — motion designer and video editor."
+  scrollSmooth={false}
+>
+  <div class="max-w-2xl mx-auto py-16 flex flex-col gap-16">
+
+    <!-- Heading -->
+    <div>
+      <p class="text-primary-dark text-sm tracking-widest uppercase mb-4">Get in touch</p>
+      <h1 class="font-display tracking-display text-6xl md:text-8xl text-n200 leading-none mb-6">
+        Let's Work Together
+      </h1>
+      <p class="text-n500 text-lg leading-relaxed max-w-lg">
+        Have a project in mind? Reach out directly or use the form below and I'll get back to you.
+      </p>
+    </div>
+
+    <!-- Direct links -->
+    <div class="flex flex-col gap-4">
+      <a
+        href={`mailto:${ME.contactInfo.email}`}
+        class="contact-link group flex items-center justify-between border-b border-white/10 pb-4 hover:border-primary-dark transition-colors duration-300"
+      >
+        <div>
+          <p class="text-n500 text-xs tracking-widest uppercase mb-1">Email</p>
+          <p class="text-n200 text-lg">{ME.contactInfo.email}</p>
+        </div>
+        <span class="text-n500 group-hover:text-primary-dark transition-colors duration-200 text-xl">↗</span>
+      </a>
+
+      <a
+        href={ME.contactInfo.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="contact-link group flex items-center justify-between border-b border-white/10 pb-4 hover:border-primary-dark transition-colors duration-300"
+      >
+        <div>
+          <p class="text-n500 text-xs tracking-widest uppercase mb-1">LinkedIn</p>
+          <p class="text-n200 text-lg">Christopher Doubleday</p>
+        </div>
+        <span class="text-n500 group-hover:text-primary-dark transition-colors duration-200 text-xl">↗</span>
+      </a>
+    </div>
+
+    <!-- Contact form -->
+    <!--
+      To activate this form:
+      1. Sign up at https://formspree.io (free)
+      2. Create a new form and copy your endpoint URL
+      3. Replace "YOUR_FORMSPREE_ENDPOINT" below with your URL
+         e.g. https://formspree.io/f/abcdefgh
+    -->
+    <form
+      action="YOUR_FORMSPREE_ENDPOINT"
+      method="POST"
+      class="flex flex-col gap-6"
+      id="contact-form"
+    >
+      <div class="flex flex-col gap-6 md:flex-row">
+        <div class="flex flex-col gap-2 flex-1">
+          <label for="name" class="text-n500 text-xs tracking-widest uppercase">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Your name"
+            class="form-input"
+          />
+        </div>
+        <div class="flex flex-col gap-2 flex-1">
+          <label for="email" class="text-n500 text-xs tracking-widest uppercase">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            placeholder="your@email.com"
+            class="form-input"
+          />
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="subject" class="text-n500 text-xs tracking-widest uppercase">Subject</label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          placeholder="Project enquiry, collaboration..."
+          class="form-input"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="message" class="text-n500 text-xs tracking-widest uppercase">Message</label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          rows="6"
+          placeholder="Tell me about your project..."
+          class="form-input resize-none"
+        ></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn self-start">
+        Send Message
+      </button>
+
+      <!-- Success/error feedback -->
+      <p id="form-status" class="text-sm tracking-wide hidden"></p>
+    </form>
+
+  </div>
+</Layout>
+
+<style>
+  .form-input {
+    @apply w-full bg-n700 border border-white/10 text-n200 px-4 py-3 text-sm
+           placeholder:text-n500 outline-none
+           focus:border-primary-dark transition-colors duration-200;
+  }
+
+  .submit-btn {
+    @apply bg-primary-dark text-white px-10 py-3 text-sm font-semibold tracking-widest uppercase
+           hover:bg-primary-hover-dark transition-all duration-200;
+  }
+
+  #form-status.success { @apply text-green-400; }
+  #form-status.error   { @apply text-primary-dark; }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const status = document.getElementById('form-status')!;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const action = form.getAttribute('action') ?? '';
+    if (action === 'YOUR_FORMSPREE_ENDPOINT') {
+      status.textContent = 'Form not yet connected — add your Formspree endpoint to activate.';
+      status.className = 'text-sm tracking-wide error';
+      status.classList.remove('hidden');
+      return;
+    }
+
+    const data = new FormData(form);
+    const res  = await fetch(action, {
+      method: 'POST',
+      body: data,
+      headers: { Accept: 'application/json' },
+    });
+
+    if (res.ok) {
+      status.textContent = 'Message sent — I\'ll be in touch soon.';
+      status.className = 'text-sm tracking-wide success';
+      form.reset();
+    } else {
+      status.textContent = 'Something went wrong. Try emailing me directly.';
+      status.className = 'text-sm tracking-wide error';
+    }
+
+    status.classList.remove('hidden');
+  });
+</script>

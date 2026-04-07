@@ -1,73 +1,57 @@
 ---
 // data imports
 import workExperience from "@/data/Jobs.ts"
-import education from "@/data/education.ts"
-import languages from "../data/languages.ts"
 import hardSkills from "@/data/hardSkills"
 import softSkills from "@/data/softSkills"
 
 // component imports
 import JobDetails from "./JobDetails.astro";
-import EduDetail from "./EduDetail.astro";
 import SkillCard from "./SkillCard.astro";
 
 // config import
-import {ME} from '@/config';
-
+import { ME } from '@/config';
 ---
 
-<div class="relative flex flex-col gap-8 text-n700 dark:text-n200 w-full mt-10 px-4">
-    {/*Description or About me -- Section*/}
-    <div class="mb-4">
-        <p>
-            {ME.aboutMe}
-        </p>
+<div class="flex flex-col gap-16 text-n200 py-8">
+
+  <!-- About Me -->
+  <div class="animate-fade-in delay-[0ms]">
+    <p class="text-primary-dark text-sm tracking-widest uppercase mb-4">About</p>
+    <p class="text-xl md:text-2xl leading-relaxed text-n200 font-light max-w-2xl">
+      {ME.aboutMe}
+    </p>
+  </div>
+
+  <!-- Work Experience -->
+  <div class="animate-fade-in delay-[100ms]">
+    <p class="text-primary-dark text-sm tracking-widest uppercase mb-6">Experience</p>
+    <h2 class="font-display tracking-display text-4xl md:text-5xl text-n200 mb-8">Work Experience</h2>
+    <div class="flex flex-col divide-y divide-white/5">
+      {workExperience.map((job) => (
+        <JobDetails jobData={job} />
+      ))}
     </div>
-    {/*Work experience section*/}
-    <div class="mb-4">
-        <h2 class="text-3xl font-bold mb-4">Work Experience</h2>
-        <div class="flex flex-col gap-6">
-            {workExperience.map((job) => (
-                    <JobDetails jobData={job}/>
-            ))}
-        </div>
+  </div>
+
+  <!-- Hard Skills -->
+  <div class="animate-fade-in delay-[200ms]">
+    <p class="text-primary-dark text-sm tracking-widest uppercase mb-6">Toolkit</p>
+    <h2 class="font-display tracking-display text-4xl md:text-5xl text-n200 mb-8">Hard Skills</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {hardSkills.map((skill) => (
+        <SkillCard {...skill} showDescription={true}/>
+      ))}
     </div>
-    {/*Education section*/}
-    <div class="mb-4">
-        <h2 class="text-3xl font-bold mb-4">Education</h2>
-        <div class="flex flex-col gap-6">
-            {education.map((edu) => (
-                    <EduDetail eduData={edu}/>
-            ))}
-        </div>
+  </div>
+
+  <!-- Soft Skills -->
+  <div class="animate-fade-in delay-[300ms]">
+    <h2 class="font-display tracking-display text-4xl md:text-5xl text-n200 mb-8">Soft Skills</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {softSkills.map((skill) => (
+        <SkillCard {...skill} showDescription={false} iconType="svg"/>
+      ))}
     </div>
-    {/*Skills section*/}
-    <div class="mb-4">
-        <h2 class="text-3xl font-bold mb-4">Hard Skills</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {hardSkills.map((skill) => (
-                    <SkillCard {...skill} showDescription={true}/>
-            ))}
-        </div>
-    </div>
-    {/*Hobbies section*/}
-    <div class="mb-4">
-        <h2 class="text-2xl font-bold mb-4">Soft Skills</h2>
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {softSkills.map((skill) => (
-                    <SkillCard {...skill} showDescription={false}/>
-            ))}
-        </div>
-    </div>
-    {/*Languages section*/}
-    <div class="mb-4">
-        <h2 class="text-2xl font-bold mb-4">Languages</h2>
-        <div class="flex flex-col gap-2">
-            {
-                languages.map((lang) => (
-                    lang.show ? <p>{lang.name} - {lang.level}</p> : null
-                ))
-            }
-        </div>
-    </div>
+  </div>
+
 </div>

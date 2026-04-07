@@ -1,41 +1,48 @@
 ---
 // astro imports
-import {getCollection} from "astro:content";
+import { getCollection } from "astro:content";
 
 // components imports
 import ProjectCard from "./ProjectCard.astro";
-import {buttonVariants} from "./ui/button";
+import { buttonVariants } from "./ui/button";
 
-const allProjects = (await getCollection('projects'))
-    .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime());;
+const allProjects = (await getCollection("projects"))
+  .sort((a, b) => b.data.startDate.getTime() - a.data.startDate.getTime());
 ---
 
-<!--Grid section to show the projects in to columns -->
-<>
-    <section class="mt-10 px-4 w-full">
-        <div class="mb-4">
-            <h2 class="text-3xl font-bold mb-4">Projects</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {
-                allProjects.map((project) => (
-                        <ProjectCard
-                                id={project.id}
-                                title={project.data.title}
-                                summary={project.data.summary}
-                                tags={project.data.tags}
-                                cover={project.data.cover}
-                        />
-                ))
-            }
-        </div>
-    </section>
-    <div class="flex justify-center mt-10">
-        <a href="/projects" class={buttonVariants({ variant: "default" }) + "text-n700 bg-primary-light dark:bg-primary-dark hover:bg-primary-hover-light dark:hover:bg-primary-hover-dark"}>
-            See All Projects
-        </a>
-    </div>
-</>
+<!-- 🧩 Projects Section -->
+<section class="mt-10 px-4 w-full animate-fade-in">
+  <div class="mb-6">
+    <h2 class="text-3xl font-bold mb-4 text-primary-dark">Projects</h2>
+  </div>
 
+  <!-- Grid with staggered fade-in -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {allProjects.map((project, index) => (
+      <div
+        class="animate-fade-in hover:scale-[1.02] hover:shadow-lg transition-transform duration-300"
+        style={`animation-delay: ${index * 120}ms`}
+      >
+        <ProjectCard
+          id={project.id}
+          title={project.data.title}
+          summary={project.data.summary}
+          tags={project.data.tags}
+          cover={project.data.cover}
+        />
+      </div>
+    ))}
+  </div>
 
-
+  <!-- See All Projects Button -->
+  <div class="flex justify-center mt-12">
+    <a
+      href="/projects"
+      class={`${buttonVariants({
+        variant: "default",
+      })} text-n700 bg-primary-light dark:bg-primary-dark hover:bg-primary-hover-light dark:hover:bg-primary-hover-dark transition-all duration-300 shadow-md px-6 py-3 rounded-lg font-semibold`}
+    >
+      See All Projects
+    </a>
+  </div>
+</section>

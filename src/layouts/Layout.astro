@@ -30,7 +30,7 @@ const {
 ---
 
 <!doctype html>
-<html lang={SITE.lang ?? "en"} class={cn({"scroll-smooth": scrollSmooth})}>
+<html lang={SITE.lang ?? "en"} class={cn("dark", {"scroll-smooth": scrollSmooth})}>
 <head>
     <meta name="msapplication-TileColor" content="#000000"/>
     <meta name="viewport" content="width=device-width"/>
@@ -60,10 +60,10 @@ const {
     <title>{title}</title>
     <ClientRouter/>
 </head>
-<body class="bg-light-theme dark:bg-dark-theme antialiased text-n700 dark:text-light-theme w-full h-screen flex flex-col">
+<body class="bg-dark-theme antialiased text-n200 font-sans w-full min-h-screen flex flex-col">
 <Navbar/>
-<main class="container py-24 flex gap-8 flex-col" role="main"  id="top">
-    <slot/>
+<main class="container pt-32 pb-24 flex flex-col gap-8 flex-grow" role="main" id="top">
+  <slot/>
 </main>
 <Footer/>
 </body>

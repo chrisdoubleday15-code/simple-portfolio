@@ -1,30 +1,23 @@
-interface HardSkill {
-  name: string;
-  description: string;
-  icon: string;
-}
-
-const hardSkills: HardSkill[] = [
+const hardSkills = [
   {
-    name: "AstroJs",
-    description: "My favorite static site generator for building modern websites",
-    icon: "astro_dark"
+    name: "After Effects",
+    description: "The industry standard in Motion Design, and a tool I use for every project.",
+    icon: "aftereffects",
   },
   {
-    name: "NextJs",
-    description: "My favorite React framework for building modern web apps",
-    icon: "nextjs_icon_dark"
+    name: "Premiere Pro",
+    description: "My go-to editing software, allowing for easy After Effects integration.",
+    icon: "premierepro",
   },
   {
-    name: "NodeJs",
-    description: "I've been using NodeJs for backend development since 2018",
-    icon: "nodejs"
+    name: "Blender",
+    description: "Working with 3D software has allowed me to become a well-rounded editor.",
+    icon: "blender",
   },
   {
-    name: "MongoDB",
-    description: "My favorite database for modern apps",
-    icon: "mongodb"
-  }
+    name: "Photoshop",
+    description: "With Photoshop, I'm able to quickly edit, touch-up and export images.",
+    icon: "photoshop",
+  },
 ];
-
 export default hardSkills;

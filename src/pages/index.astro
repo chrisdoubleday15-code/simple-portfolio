@@ -1,21 +1,263 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProfileInfo from "../components/ProfileInfo.astro";
-import ProfileActionButton from "../components/ProfileActionButton.astro";
-import TabsButtons from "../components/TabsButtons.tsx";
-import ProjectsCC from '@/components/ProjectsCC.astro';
-import AboutMeCC from "../components/AboutMeCC.astro";
-import ProfileFacts from "../components/ProfileFacts.astro";
+import ReelsCarousel from '../components/ReelsCarousel.astro';
 ---
 
-<Layout title="VicBox Dot Dev | Portfolio" description="A simple portfolio created with Astro." scrollSmooth={false}>
-    <>
-        <ProfileInfo/>
-        <ProfileFacts/>
-        <ProfileActionButton/>
-        <TabsButtons client:idle>
-            <ProjectsCC slot="portfolio"/>
-            <AboutMeCC slot="about"/>
-        </TabsButtons>
-    </>
+<Layout
+  title="Christopher Doubleday | Motion Designer"
+  description="Motion designer and video editor creating bold, high-energy content for brands."
+  scrollSmooth={true}
+>
+  <>
+    <!-- ==============================
+         HERO — name + tagline only
+    ============================== -->
+    <section class="text-center relative overflow-hidden pb-16">
+      <div class="relative z-10">
+
+        <div class="hero-clip">
+          <p class="hero-word text-primary-dark font-sans text-sm tracking-widest uppercase mb-4" style="animation-delay: 0ms">
+            Motion Designer & Video Editor
+          </p>
+        </div>
+
+        <h1 class="font-display tracking-display text-7xl md:text-9xl text-n200 leading-none mb-6 flex flex-wrap justify-center gap-x-6">
+          <span class="hero-clip"><span class="hero-word" style="animation-delay: 80ms">Chris</span></span>
+          <span class="hero-clip"><span class="hero-word" style="animation-delay: 200ms">Doubleday</span></span>
+        </h1>
+
+        <div class="hero-clip">
+          <p class="hero-word mt-4 max-w-xl mx-auto text-n500 text-lg leading-relaxed" style="animation-delay: 380ms">
+            Bold visuals. Fast edits. Built for brands that demand attention.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==============================
+         FEATURED — 3D carousel
+    ============================== -->
+    <section id="featured" class="py-16">
+      <ReelsCarousel />
+    </section>
+
+    <!-- ==============================
+         STICKY SECTION NAV
+    ============================== -->
+    <div class="sticky top-[72px] z-10 border-y border-white/5 bg-dark-theme/90 backdrop-blur-md">
+      <nav class="container flex items-center justify-center gap-8 md:gap-16 py-4">
+        <a href="#featured"      class="section-nav-link" data-section="featured">Featured</a>
+        <a href="#showreel"      class="section-nav-link" data-section="showreel">Showreel</a>
+        <a href="#reels"         class="section-nav-link" data-section="reels">Short-form & Reels</a>
+        <a href="#motion-design" class="section-nav-link" data-section="motion-design">Motion Design</a>
+        <a href="#video-editing" class="section-nav-link" data-section="video-editing">Video Editing</a>
+      </nav>
+    </div>
+
+    <!-- ==============================
+         SHOWREEL
+    ============================== -->
+    <section id="showreel" class="py-24 border-t border-white/5">
+      <div class="mb-12">
+        <div class="reveal-clip"><p class="reveal-word text-primary-dark text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms">Featured</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Showreel</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">A full-cut overview of motion design and video editing work across brands and platforms.</p></div>
+      </div>
+
+      <div class="w-full max-w-4xl glow overflow-hidden">
+        <iframe
+          width="100%"
+          height="480"
+          src="https://www.youtube.com/embed/6FyY_3Au-o4?rel=0&controls=1"
+          title="Showreel"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </section>
+
+    <!-- ==============================
+         SHORT-FORM & REELS
+    ============================== -->
+    <section id="reels" class="py-24 border-t border-white/5">
+      <div class="mb-12">
+        <div class="reveal-clip"><p class="reveal-word text-primary-dark text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms">Social</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Short-form & Reels</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Vertical content, social reels, and fast-cut brand clips built for attention.</p></div>
+      </div>
+
+      <div class="flex gap-4">
+        {[1,2,3,4].map((i) => (
+          <div class="placeholder-card flex-shrink-0 w-40 md:w-52 aspect-[9/16] rounded-sm border border-white/5 bg-n700 flex items-center justify-center">
+            <span class="text-n500 text-xs tracking-widest uppercase">Clip {i}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ==============================
+         MOTION DESIGN
+    ============================== -->
+    <section id="motion-design" class="py-24 border-t border-white/5">
+      <div class="mb-12">
+        <div class="reveal-clip"><p class="reveal-word text-primary-dark text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms">Design</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Motion Design</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Motion graphics, title sequences, and animated assets built in After Effects.</p></div>
+      </div>
+
+      <div class="card-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+        {[1,2,3,4].map((i) => (
+          <div class="stagger-card group aspect-video rounded-sm border border-white/5 bg-n700 flex items-center justify-center relative overflow-hidden" style={`--card-delay: ${(i-1) * 80}ms`}>
+            <div class="absolute inset-0 bg-primary-dark/0 group-hover:bg-primary-dark/5 transition-all duration-300" />
+            <span class="text-n500 text-xs tracking-widest uppercase">Project {i}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ==============================
+         VIDEO EDITING
+    ============================== -->
+    <section id="video-editing" class="py-24 border-t border-white/5">
+      <div class="mb-12">
+        <div class="reveal-clip"><p class="reveal-word text-primary-dark text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms">Cut</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Video Editing</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Long-form edits, brand films, and YouTube content cut in Premiere Pro.</p></div>
+      </div>
+
+      <div class="card-grid grid grid-cols-1 md:grid-cols-2 gap-4">
+        {[1,2,3,4].map((i) => (
+          <div class="stagger-card group aspect-video rounded-sm border border-white/5 bg-n700 flex items-center justify-center relative overflow-hidden" style={`--card-delay: ${(i-1) * 80}ms`}>
+            <div class="absolute inset-0 bg-primary-dark/0 group-hover:bg-primary-dark/5 transition-all duration-300" />
+            <span class="text-n500 text-xs tracking-widest uppercase">Project {i}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  </>
 </Layout>
+
+<style>
+  /* ── Hero entrance ── */
+  .hero-clip {
+    overflow: hidden;
+    display: block;
+  }
+  h1 .hero-clip {
+    display: inline-block;
+  }
+  .hero-word {
+    display: block;
+    transform: translateY(110%);
+    opacity: 0;
+    animation: hero-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  h1 .hero-word {
+    display: inline-block;
+  }
+  @keyframes hero-rise {
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ── Section nav ── */
+  .section-nav-link {
+    @apply text-n500 text-xs tracking-widest uppercase transition-colors duration-200 hover:text-n200 py-1;
+  }
+  .section-nav-link.active {
+    @apply text-primary-dark;
+  }
+
+  /* ── Placeholder pulse ── */
+  .placeholder-card, .stagger-card {
+    animation: placeholder-pulse 3s ease-in-out infinite;
+  }
+  @keyframes placeholder-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.6; }
+  }
+
+  /* ── Scroll reveal — headings ── */
+  .reveal-clip {
+    overflow: hidden;
+    display: block;
+  }
+  .reveal-word {
+    display: block;
+    transform: translateY(110%);
+    opacity: 0;
+    transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.75s ease;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .is-visible .reveal-word {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* ── Scroll reveal — cards ── */
+  .stagger-card {
+    transform: translateY(24px);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+    transition-delay: var(--card-delay, 0ms);
+  }
+  .card-grid.is-visible .stagger-card {
+    transform: translateY(0);
+    opacity: 1;
+    animation: none;
+  }
+</style>
+
+<script>
+  function init() {
+    // ── Active section nav highlight ──
+    const sections = ['featured', 'showreel', 'reels', 'motion-design', 'video-editing'];
+    const links = document.querySelectorAll('.section-nav-link');
+
+    const navObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            links.forEach((link) => {
+              link.classList.toggle(
+                'active',
+                link.getAttribute('data-section') === entry.target.id
+              );
+            });
+          }
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px' }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) navObserver.observe(el);
+    });
+
+    // ── Scroll reveal ──
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: '0px 0px -10% 0px' }
+    );
+
+    document.querySelectorAll('#showreel, #reels, #motion-design, #video-editing').forEach((section) => {
+      revealObserver.observe(section);
+    });
+
+    document.querySelectorAll('.card-grid').forEach((grid) => {
+      revealObserver.observe(grid);
+    });
+  }
+
+  // Run on initial load and after every view transition
+  document.addEventListener('astro:page-load', init);
+</script>

@@ -1,29 +1,36 @@
 ---
-// component imports
 import {Icon} from "astro-icon/components";
 
 interface SkillCardProps {
-    icon: string;
-    name: string;
-    description: string;
-    showDescription?: boolean;
+  icon: string;
+  name: string;
+  description: string;
+  showDescription?: boolean;
+  iconType?: "png" | "svg";
 }
 
 const {
-    icon,
-    name,
-    description,
-    showDescription = true,
+  icon,
+  name,
+  description,
+  showDescription = true,
+  iconType = "png",
 } = Astro.props as SkillCardProps;
-
 ---
 
-<div class="flex flex-col gap-2 h-skill-icon bg-white dark:bg-n700 p-4 rounded-md">
-    <div class="w-10 h-10">
-        <Icon width={40} height={40} name={icon} class="text-primary-light dark:text-primary-dark" />
-    </div>
-    <h3 class="text-lg font-bold">{name}</h3>
-    {
-        showDescription && <p class="text-n700 dark:text-n200">{description}</p>
-    }
+<div class="flex flex-col gap-2 bg-n700 border border-white/5 p-4 rounded-sm">
+  <div class="w-10 h-10 flex items-center justify-center">
+    {iconType === "svg" ? (
+      <Icon name={icon} class="w-8 h-8 text-primary-dark" />
+    ) : (
+      <img
+        src={`/src/assets/Icons/${icon}.png`}
+        alt={name}
+        class="w-10 h-10 object-contain"
+        loading="lazy"
+      />
+    )}
+  </div>
+  <h3 class="text-lg font-bold">{name}</h3>
+  {showDescription && <p class="text-n700 dark:text-n200">{description}</p>}
 </div>
