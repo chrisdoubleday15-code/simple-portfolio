@@ -7,7 +7,7 @@ export const SITE = {
     logo: "logo",
     logoText: "Christopher Doubleday",
     lang: "en",
-    favicon: "/favicon.png",
+    favicon: "/images/cd-logo-black.svg",
     repository: "https://github.com/chrisdoubleday/simple-portfolio.git",
     author: "Christopher Doubleday",
     profile: "https://chrisdoubleday.com",

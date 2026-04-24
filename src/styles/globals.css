@@ -6,6 +6,13 @@
 @layer base {
     :root {
         --radius: 0.5rem;
+        --color-bg-base:      #0e0e11;
+        --color-bg-surface:   #141418;
+        --color-bg-elevated:  #1a1a20;
+        --color-accent-blue:  #00c8ff;
+        --color-accent-red:   #ff2d2d;
+        --color-text-primary: #f0f0f0;
+        --color-text-muted:   #888899;
     }
 }
 
@@ -88,10 +95,10 @@ code {
 /* Subtle glowing animation for video container */
 @keyframes glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 26, 26, 0.15);
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
   }
   50% {
-    box-shadow: 0 0 50px rgba(255, 26, 26, 0.3);
+    box-shadow: 0 0 50px rgba(0, 200, 255, 0.3);
   }
 }
 
@@ -101,16 +108,18 @@ code {
 
 /* === GLOBAL SECTION WRAPPER === */
 .section-wrapper {
-  @apply w-full px-8 md:px-16 py-16 overflow-hidden relative isolate;
+  @apply w-full px-8 md:px-16 py-8 overflow-hidden relative isolate;
 }
 
 /* Dark section */
 .section-wrapper-light {
-  @apply bg-n700 text-n200;
+  background: var(--color-bg-surface);
+  @apply text-n200;
 }
 
 .section-wrapper-dark {
-  @apply bg-n700 text-n200;
+  background: var(--color-bg-surface);
+  @apply text-n200;
 }
 
 /* Accent section */
@@ -145,6 +154,28 @@ code {
 
 .animate-fade-in {
   animation: fade-in 0.5s ease-out both;
+}
+
+[data-state="active"][role="tab"] {
+  background-color: var(--color-accent-blue);
+}
+
+/* Film grain jitter — hard-cut position shifts at ~10fps, no interpolation */
+@keyframes grain-jitter {
+  0%   { background-position:   0px   0px; }
+  11%  { background-position: -47px  23px; }
+  22%  { background-position:  31px -38px; }
+  33%  { background-position: -19px  61px; }
+  44%  { background-position:  58px -14px; }
+  55%  { background-position: -63px  44px; }
+  66%  { background-position:  22px -57px; }
+  77%  { background-position: -38px  18px; }
+  88%  { background-position:  51px -29px; }
+  100% { background-position:   0px   0px; }
+}
+
+#film-grain {
+  animation: grain-jitter 2s steps(1) infinite;
 }
 
 .delay-\[0ms\] { animation-delay: 0ms; }

@@ -1,23 +1,16 @@
 ---
-// component imports
-import {Icon} from "astro-icon/components";
-
-// data imports
 import {menu} from "../data/menu";
-
-// config import
-import {SITE} from "../config";
 
 const pathname = Astro.url.pathname;
 ---
 
-<nav class="bg-dark-theme/90 backdrop-blur-md border-b border-white/5 fixed w-full z-20 top-0 start-0" id="menu">
+<nav class="backdrop-blur-md border-b border-white/5 fixed w-full z-20 top-0 start-0" id="menu" style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-            <Icon name={SITE.logo} width={40} height={40}/>
-            <span class="self-center text-2xl font-display tracking-display whitespace-nowrap text-n200">
-                { SITE.logoText}
-            </span>
+        <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse" style="color: white;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="557 300 806 480" class="h-9 w-auto" aria-label="CD">
+                <path fill="currentColor" d="M797.07,402.54c60.51,0,111.88,39.15,130.16,93.51,42.38-7.9,77.3-17.59,102.72-29.48,0,0,12.49,15.36,14.73,36.06h77.98v-100.09c62.93,0,115.97,42.34,132.19,100.09h104.37c-17.88-114.57-116.98-202.23-236.56-202.23h-103.43v150c-35.43-87.93-121.54-150-222.16-150-128.72,0-233.69,101.57-239.2,228.93,21.17-.65,58.09-2.01,102.74-4.61,7.53-68.71,65.75-122.17,136.46-122.17Z"/>
+                <path fill="currentColor" d="M1122.65,677.14v-99.76h-78.01c-2.34,20.54-14.7,35.74-14.7,35.74-25.42-11.89-60.34-21.59-102.72-29.48-18.28,54.35-69.65,93.51-130.16,93.51-70.71,0-128.93-53.46-136.46-122.17-44.64-2.6-81.56-3.96-102.74-4.61,5.5,127.36,110.48,228.93,239.2,228.93,100.62,0,186.73-62.07,222.16-150v150h103.43c119.47,0,218.49-87.5,236.51-201.91h-104.4c-16.33,57.58-69.29,99.76-132.1,99.76Z"/>
+            </svg>
         </a>
         <div class="flex md:order-1 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <button id="btn-menu" data-collapse-toggle="navbar-sticky" type="button"
@@ -53,7 +46,7 @@ const pathname = Astro.url.pathname;
 
 <style>
     .active {
-        @apply text-primary-dark;
+        color: var(--color-accent-blue);
     }
 
     nav a {
@@ -61,7 +54,7 @@ const pathname = Astro.url.pathname;
     }
 
     nav a.active {
-        @apply text-primary-dark;
+        color: var(--color-accent-blue);
     }
 </style>
 

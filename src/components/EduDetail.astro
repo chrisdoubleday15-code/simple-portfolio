@@ -28,7 +28,7 @@ const {
 ---
 
 <div class="flex flex-col gap-2">
-    <Badge className="bg-primary-light dark:bg-primary-dark w-fit rounded-md">
+    <Badge className="w-fit rounded-md" style={{ background: "var(--color-accent-blue)" }}>
         {formatDatetime(startDate)} - {currentUni ? "Present" : formatDatetime(endDate)}
     </Badge>
     <h3 class="text-xl font-bold">{title}</h3>

@@ -1,0 +1,239 @@
+---
+const cards = [1, 2, 3, 4, 5, 6];
+---
+
+<div class="carousel-wrapper">
+  <div class="carousel-scene" id="carousel-scene">
+    {cards.map((i) => (
+      <div class="carousel-card" data-index={i - 1}>
+        <div class="card-inner">
+          <span class="text-n500 text-xs tracking-widest uppercase">Clip {i}</span>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Navigation arrows -->
+  <button class="carousel-arrow left"  id="carousel-prev" aria-label="Previous">&#8592;</button>
+  <button class="carousel-arrow right" id="carousel-next" aria-label="Next">&#8594;</button>
+
+  <!-- Dot indicators -->
+  <div class="carousel-dots" id="carousel-dots">
+    {cards.map((_, i) => (
+      <button class="carousel-dot" data-dot={i} aria-label={`Go to clip ${i + 1}`} />
+    ))}
+  </div>
+</div>
+
+<style>
+  .carousel-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    user-select: none;
+  }
+
+  /* 3D stage */
+  .carousel-scene {
+    position: relative;
+    width: 100%;
+    height: 580px;
+    perspective: 1400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+  }
+
+  .carousel-scene.dragging {
+    cursor: grabbing;
+  }
+
+  /* Each card — portrait 9:16 */
+  .carousel-card {
+    position: absolute;
+    width: 260px;
+    height: 462px;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity  0.55s ease,
+                z-index  0s;
+    will-change: transform, opacity;
+  }
+
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg-surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+
+  /* ── Offset-based transforms ── */
+  .carousel-card[data-offset="0"] {
+    transform: translateX(0)     rotateY(0deg)   scale(1);
+    opacity: 1;
+    z-index: 5;
+    cursor: default;
+  }
+  .carousel-card[data-offset="1"] {
+    transform: translateX(58%)   rotateY(-28deg) scale(0.84);
+    opacity: 0.85;
+    z-index: 4;
+    cursor: pointer;
+  }
+  .carousel-card[data-offset="-1"] {
+    transform: translateX(-58%)  rotateY(28deg)  scale(0.84);
+    opacity: 0.85;
+    z-index: 4;
+    cursor: pointer;
+  }
+  .carousel-card[data-offset="2"] {
+    transform: translateX(105%)  rotateY(-42deg) scale(0.68);
+    opacity: 0.45;
+    z-index: 3;
+    cursor: pointer;
+  }
+  .carousel-card[data-offset="-2"] {
+    transform: translateX(-105%) rotateY(42deg)  scale(0.68);
+    opacity: 0.45;
+    z-index: 3;
+    cursor: pointer;
+  }
+  .carousel-card[data-offset="hidden"] {
+    transform: translateX(0) scale(0.5);
+    opacity: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Arrows */
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #888;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    font-size: 1rem;
+    z-index: 10;
+  }
+  .carousel-arrow:hover {
+    border-color: var(--color-accent-blue);
+    color: var(--color-accent-blue);
+  }
+  .carousel-arrow.left  { left:  0; }
+  .carousel-arrow.right { right: 0; }
+
+  /* Dots */
+  .carousel-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .carousel-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #444;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    padding: 0;
+  }
+  .carousel-dot.active {
+    background: var(--color-accent-blue);
+    transform: scale(1.4);
+  }
+</style>
+
+<script>
+  function initCarousel() {
+    const TOTAL = 6;
+    let active = 0;
+
+    const scene = document.getElementById('carousel-scene');
+    if (!scene) return;
+
+    const cards = Array.from(scene.querySelectorAll<HTMLElement>('.carousel-card'));
+    const dots  = Array.from(document.querySelectorAll<HTMLElement>('.carousel-dot'));
+    const prev  = document.getElementById('carousel-prev');
+    const next  = document.getElementById('carousel-next');
+
+    function getOffset(index: number): string {
+      let offset = ((index - active) % TOTAL + TOTAL) % TOTAL;
+      if (offset > TOTAL / 2) offset -= TOTAL;
+      if (offset < -2 || offset > 2) return 'hidden';
+      return String(offset);
+    }
+
+    function render() {
+      cards.forEach((card, i) => card.setAttribute('data-offset', getOffset(i)));
+      dots.forEach((dot, i) => dot.classList.toggle('active', i === active));
+    }
+
+    function advance(dir: number) {
+      active = ((active + dir) % TOTAL + TOTAL) % TOTAL;
+      render();
+    }
+
+    prev?.addEventListener('click', () => advance(-1));
+    next?.addEventListener('click', () => advance(1));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => { active = i; render(); }));
+
+    let dragStart = 0;
+    let dragging  = false;
+    let dragStartTarget: Element | null = null;
+    const THRESHOLD = 60;
+
+    scene.addEventListener('pointerdown', (e) => {
+      dragging        = true;
+      dragStart       = e.clientX;
+      dragStartTarget = e.target as Element;
+      scene.classList.add('dragging');
+      scene.setPointerCapture(e.pointerId);
+    });
+
+    scene.addEventListener('pointerup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      scene.classList.remove('dragging');
+      const delta = e.clientX - dragStart;
+      if (Math.abs(delta) > THRESHOLD) {
+        advance(delta < 0 ? 1 : -1);
+      } else {
+        const clickedCard = dragStartTarget?.closest<HTMLElement>('.carousel-card');
+        if (clickedCard) {
+          const offset = clickedCard.getAttribute('data-offset');
+          if (offset && offset !== '0' && offset !== 'hidden') {
+            const cardIndex = cards.indexOf(clickedCard);
+            if (cardIndex !== -1) { active = cardIndex; render(); }
+          }
+        }
+      }
+    });
+
+    scene.addEventListener('pointercancel', () => {
+      dragging = false;
+      scene.classList.remove('dragging');
+    });
+
+    render();
+  }
+
+  document.addEventListener('astro:page-load', initCarousel);
+</script>

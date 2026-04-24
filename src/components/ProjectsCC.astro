@@ -11,9 +11,9 @@ const allProjects = (await getCollection("projects"))
 ---
 
 <!-- 🧩 Projects Section -->
-<section class="mt-10 px-4 w-full animate-fade-in">
+<section class="mt-5 px-4 w-full animate-fade-in">
   <div class="mb-6">
-    <h2 class="text-3xl font-bold mb-4 text-primary-dark">Projects</h2>
+    <h2 class="text-3xl font-bold mb-4" style="color: var(--color-accent-blue);">Projects</h2>
   </div>
 
   <!-- Grid with staggered fade-in -->
@@ -35,7 +35,7 @@ const allProjects = (await getCollection("projects"))
   </div>
 
   <!-- See All Projects Button -->
-  <div class="flex justify-center mt-12">
+  <div class="flex justify-center mt-6">
     <a
       href="/projects"
       class={`${buttonVariants({

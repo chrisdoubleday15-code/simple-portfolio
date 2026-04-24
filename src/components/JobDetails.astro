@@ -15,17 +15,23 @@ const {jobData} = Astro.props;
 const { title, company, location, startDate, endDate, goals, currentJob } = jobData as Job;
 ---
 
-<div class="flex flex-col gap-3 py-8">
+<div class="flex flex-col gap-3 py-4">
     <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
         <h3 class="text-xl font-semibold text-n200">{title}</h3>
         <span class="text-n500 text-sm tracking-widest uppercase whitespace-nowrap">
             {formatDatetime(startDate)} — {currentJob ? "Present" : formatDatetime(endDate)}
         </span>
     </div>
-    <p class="text-n500 text-sm tracking-wide">{company} <span class="text-primary-dark mx-1">/</span> {location}</p>
+    <p class="text-n500 text-sm tracking-wide">{company} <span class="mx-1" style="color: var(--color-accent-blue);">/</span> {location}</p>
     <ul class="flex flex-col gap-1 mt-1">
         {goals.map((goal: string) => (
-            <li class="text-n500 text-sm pl-4 relative before:content-['—'] before:absolute before:left-0 before:text-primary-dark">{goal}</li>
+            <li class="job-bullet text-n500 text-sm pl-4 relative before:content-['—'] before:absolute before:left-0">{goal}</li>
         ))}
     </ul>
 </div>
+
+<style>
+  .job-bullet::before {
+    color: var(--color-accent-blue);
+  }
+</style>

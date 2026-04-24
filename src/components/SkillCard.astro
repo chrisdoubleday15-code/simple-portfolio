@@ -18,10 +18,10 @@ const {
 } = Astro.props as SkillCardProps;
 ---
 
-<div class="flex flex-col gap-2 bg-n700 border border-white/5 p-4 rounded-sm">
+<div class="flex flex-col gap-2 border border-white/5 p-4 rounded-sm" style="background: var(--color-bg-surface);">
   <div class="w-10 h-10 flex items-center justify-center">
     {iconType === "svg" ? (
-      <Icon name={icon} class="w-8 h-8 text-primary-dark" />
+      <Icon name={icon} class="w-8 h-8" style="color: var(--color-accent-blue);" />
     ) : (
       <img
         src={`/src/assets/Icons/${icon}.png`}

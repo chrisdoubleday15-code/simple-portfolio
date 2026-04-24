@@ -6,13 +6,12 @@ const TabsButtons = (props: any) => {
       <div className="w-full max-w-5xl">
 
         {/* Tabs header */}
-        <TabsList className="bg-white/10 dark:bg-n700/80 w-full px-4 py-5 flex rounded-t-2xl mt-6 mx-auto max-w-3xl gap-3">
+        <TabsList className="w-full px-4 py-5 flex rounded-t-2xl mt-3 mx-auto max-w-3xl gap-3" style={{ background: "var(--color-bg-surface)" }}>
           
           {/* Portfolio Tab */}
           <TabsTrigger
             className="group w-full py-4 text-lg font-semibold rounded-lg border transition-all duration-200
-                       data-[state=active]:bg-primary-dark data-[state=active]:text-white data-[state=active]:border-transparent
-                       dark:data-[state=active]:bg-primary-dark dark:data-[state=active]:text-white
+                       data-[state=active]:text-white data-[state=active]:border-transparent
                        data-[state=inactive]:border-white/10 data-[state=inactive]:bg-white/[0.03] data-[state=inactive]:text-gray-300
                        hover:border-white/20 hover:bg-white/10"
             value="portfolio"
@@ -30,8 +29,7 @@ const TabsButtons = (props: any) => {
           {/* About Tab */}
           <TabsTrigger
             className="group w-full py-4 text-lg font-semibold rounded-lg border transition-all duration-200
-                       data-[state=active]:bg-primary-dark data-[state=active]:text-white data-[state=active]:border-transparent
-                       dark:data-[state=active]:bg-primary-dark dark:data-[state=active]:text-white
+                       data-[state=active]:text-white data-[state=active]:border-transparent
                        data-[state=inactive]:border-white/10 data-[state=inactive]:bg-white/[0.03] data-[state=inactive]:text-gray-300
                        hover:border-white/20 hover:bg-white/10"
             value="about"
@@ -48,7 +46,7 @@ const TabsButtons = (props: any) => {
         </TabsList>
 
         {/* Tabs content */}
-        <div className="px-6 md:px-12 py-8">
+        <div className="px-6 md:px-12 py-4">
           <TabsContent value="portfolio">
             <div className="section-wrapper section-wrapper-dark rounded-none shadow-none">
               {props.portfolio}
