@@ -282,7 +282,7 @@ const DEG   = 360 / TOTAL;         // 60
     }
 
     function render() {
-      cylinder.style.transform = `rotateY(${rotation}deg)`;
+      if (cylinder) cylinder.style.transform = `rotateY(${rotation}deg)`;
 
       cards.forEach((card, i) => {
         const off = getOffset(i);
