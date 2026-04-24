@@ -12,7 +12,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
     <!-- ==============================
          HERO — name + tagline only
     ============================== -->
-    <section class="text-center relative overflow-hidden pt-8 pb-8">
+    <section class="text-center relative pt-8 pb-4">
       <div class="relative z-10">
 
         <div class="hero-clip">
@@ -22,8 +22,8 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
         </div>
 
         <h1 class="font-display tracking-display text-7xl md:text-9xl text-n200 leading-none mb-6 flex flex-wrap justify-center gap-x-6">
-          <span class="hero-clip"><span class="hero-word" style="animation-delay: 80ms">Chris</span></span>
-          <span class="hero-clip"><span class="hero-word" style="animation-delay: 200ms">Doubleday</span></span>
+          <span class="hero-clip"><span class="hero-word" style="animation-delay: 80ms"><span class="hero-letter">C</span><span class="hero-letter">h</span><span class="hero-letter">r</span><span class="hero-letter">i</span><span class="hero-letter">s</span></span></span>
+          <span class="hero-clip"><span class="hero-word" style="animation-delay: 200ms"><span class="hero-letter">D</span><span class="hero-letter">o</span><span class="hero-letter">u</span><span class="hero-letter">b</span><span class="hero-letter">l</span><span class="hero-letter">e</span><span class="hero-letter">d</span><span class="hero-letter">a</span><span class="hero-letter">y</span></span></span>
         </h1>
 
         <div class="hero-clip">
@@ -38,7 +38,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
     <!-- ==============================
          FEATURED — 3D carousel
     ============================== -->
-    <section id="featured" class="py-8">
+    <section id="featured" class="py-4">
       <ReelsCarousel />
     </section>
 
@@ -95,7 +95,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
         ].map((id) => (
           <button class="editing-card" data-video-id={id} aria-label="Play clip" data-section="motion">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true`}
+              src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
               loading="lazy"
               allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
               style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -144,7 +144,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
         ].map((id) => (
           <button class="editing-card" data-video-id={id} aria-label="Play clip">
             <iframe
-              src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true`}
+              src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
               loading="lazy"
               allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
               style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -198,7 +198,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
               aria-label="Play clip"
             >
               <iframe
-                src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true`}
+                src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
                 loading="lazy"
                 allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
                 style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -235,7 +235,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
 <style>
   /* ── Hero entrance ── */
   .hero-clip {
-    overflow: hidden;
+    overflow: visible;
     display: block;
   }
   h1 .hero-clip {
@@ -252,6 +252,22 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
   }
   @keyframes hero-rise {
     to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ── Per-letter hover ── */
+  .hero-letter {
+    display: inline-block;
+    overflow: visible;
+    color: var(--color-text-primary);
+    -webkit-text-stroke: 2px transparent;
+    paint-order: stroke fill;
+    transition: color 0.15s ease, -webkit-text-stroke-color 0.15s ease;
+    cursor: default;
+  }
+  .hero-letter:hover {
+    color: transparent;
+    -webkit-text-stroke-color: var(--color-accent-blue);
+    text-shadow: 0 0 20px rgba(0, 200, 255, 0.4), 0 0 60px rgba(0, 200, 255, 0.2), 0 0 100px rgba(0, 200, 255, 0.08);
   }
 
   /* ── Section nav ── */
