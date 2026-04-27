@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ReelsCarousel from '../components/ReelsCarousel.astro';
+import WorkOverlay from '../components/WorkOverlay.astro';
 ---
 
 <Layout
@@ -47,11 +48,9 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
     ============================== -->
     <div class="sticky top-[72px] z-10 border-y border-white/5 backdrop-blur-md" style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
       <nav class="container flex items-center justify-center gap-8 md:gap-16 py-4">
-        <a href="#featured"      class="section-nav-link" data-section="featured">Featured</a>
-        <a href="#showreel"      class="section-nav-link" data-section="showreel">Showreel</a>
-        <a href="#motion-design" class="section-nav-link" data-section="motion-design">Motion Design</a>
-        <a href="#video-editing" class="section-nav-link" data-section="video-editing">Video Editing</a>
-        <a href="#reels"         class="section-nav-link" data-section="reels">Short-form & Reels</a>
+        <a href="#featured"  class="section-nav-link" data-section="featured">Featured</a>
+        <a href="#showreel"  class="section-nav-link" data-section="showreel">Showreel</a>
+        <button             class="section-nav-link" id="nav-work-btn">Work</button>
       </nav>
     </div>
 
@@ -76,159 +75,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
       </div>
     </section>
 
-    <!-- ==============================
-         MOTION DESIGN
-    ============================== -->
-    <section id="motion-design" class="py-12 border-t border-white/5">
-      <div class="mb-6">
-        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Design</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Motion Design</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Motion graphics, title sequences, and animated assets built in After Effects.</p></div>
-      </div>
-
-      <div class="editing-grid">
-        {[
-          'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
-          '7125608a-fd3c-4047-8657-c8384556fefd',
-          'd588c3c9-8722-46c2-bc98-ce9d412cd237',
-          'f143afcd-46f0-478d-ac6d-1922cb6a2bcf',
-        ].map((id) => (
-          <button class="editing-card" data-video-id={id} aria-label="Play clip" data-section="motion">
-            <iframe
-              src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
-              loading="lazy"
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-              tabindex="-1"
-            ></iframe>
-            <div class="editing-play">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </div>
-          </button>
-        ))}
-      </div>
-
-      <!-- Lightbox -->
-      <div id="motion-lightbox" class="reels-lightbox" aria-hidden="true">
-        <div class="reels-lightbox-backdrop" id="motion-backdrop"></div>
-        <div class="reels-lightbox-card editing-lightbox-card">
-          <iframe
-            id="motion-iframe"
-            src=""
-            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen
-            style="border:none;width:100%;height:100%;"
-          ></iframe>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==============================
-         VIDEO EDITING
-    ============================== -->
-    <section id="video-editing" class="py-12 border-t border-white/5">
-      <div class="mb-6">
-        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Cut</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Video Editing</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Long-form edits, brand films, and YouTube content cut in Premiere Pro.</p></div>
-      </div>
-
-      <div class="editing-grid">
-        {[
-          '23d4f219-d53c-4d6a-ada3-4213d9904d66',
-          'cecc7cde-69fa-40e7-a2c7-ae15da37c852',
-          '6d4255ef-8984-49e7-9beb-a17f36a421b0',
-          'dfcfb265-cf70-46d2-a944-92ba1ee0b431',
-        ].map((id) => (
-          <button class="editing-card" data-video-id={id} aria-label="Play clip">
-            <iframe
-              src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
-              loading="lazy"
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-              style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-              tabindex="-1"
-            ></iframe>
-            <div class="editing-play">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                <path d="M8 5v14l11-7z"/>
-              </svg>
-            </div>
-          </button>
-        ))}
-      </div>
-
-      <!-- Lightbox -->
-      <div id="editing-lightbox" class="reels-lightbox" aria-hidden="true">
-        <div class="reels-lightbox-backdrop" id="editing-backdrop"></div>
-        <div class="reels-lightbox-card editing-lightbox-card">
-          <iframe
-            id="editing-iframe"
-            src=""
-            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen
-            style="border:none;width:100%;height:100%;"
-          ></iframe>
-        </div>
-      </div>
-    </section>
-
-    <!-- ==============================
-         SHORT-FORM & REELS
-    ============================== -->
-    <section id="reels" class="py-12 border-t border-white/5">
-      <div class="mb-6">
-        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Social</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Short-form & Reels</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Vertical content, social reels, and fast-cut brand clips built for attention.</p></div>
-      </div>
-
-      <div class="reels-grid-wrap">
-        <div class="reels-grid">
-          {[
-            'd9e1da32-992e-481f-ba9b-ba69eeafa70d',
-            '0dd1a40a-3928-4f0a-bd66-7f5729395cb2',
-            '043cbe34-6d9e-447a-941d-863c3ba2d9d6',
-            'c8b72103-2fa9-4603-9ff9-04a8602fb449',
-          ].map((id) => (
-            <button
-              class="reel-card"
-              data-video-id={id}
-              aria-label="Play clip"
-            >
-              <iframe
-                src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
-                loading="lazy"
-                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-                tabindex="-1"
-              ></iframe>
-              <div class="reel-overlay"></div>
-              <div class="reel-play">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <!-- Lightbox -->
-      <div id="reels-lightbox" class="reels-lightbox" aria-hidden="true">
-        <div class="reels-lightbox-backdrop" id="reels-backdrop"></div>
-        <div class="reels-lightbox-card">
-          <iframe
-            id="reels-iframe"
-            src=""
-            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-            allowfullscreen
-            style="border:none;width:100%;height:100%;"
-          ></iframe>
-        </div>
-      </div>
-    </section>
+    <WorkOverlay />
   </>
 </Layout>
 
@@ -278,128 +125,6 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
     color: var(--color-accent-blue);
   }
 
-  /* ── Reels grid ── */
-  .reels-grid-wrap {
-    display: flex;
-    justify-content: center;
-  }
-  .reels-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    max-width: 480px;
-    width: 100%;
-  }
-  .reel-card {
-    position: relative;
-    aspect-ratio: 9 / 16;
-    overflow: hidden;
-    border-radius: 2px;
-    background: var(--color-bg-surface);
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
-  .reel-card:hover {
-    transform: scale(1.02);
-  }
-  .reel-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.3);
-    transition: background 0.2s ease;
-  }
-  .reel-card:hover .reel-overlay {
-    background: rgba(0,0,0,0.15);
-  }
-  .reel-play {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.85);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  .reel-card:hover .reel-play {
-    opacity: 1;
-  }
-
-  /* ── Reels lightbox ── */
-  .reels-lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-  .reels-lightbox.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .reels-lightbox-backdrop {
-    position: absolute;
-    inset: 0;
-    background: color-mix(in srgb, var(--color-bg-elevated) 85%, transparent);
-    backdrop-filter: blur(8px);
-  }
-  .reels-lightbox-card {
-    position: relative;
-    z-index: 1;
-    height: 85vh;
-    aspect-ratio: 9 / 16;
-    border-radius: 4px;
-    overflow: hidden;
-    transform: scale(0.92);
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  .reels-lightbox.open .reels-lightbox-card {
-    transform: scale(1);
-  }
-
-  /* ── Video editing grid ── */
-  .editing-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .editing-card {
-    position: relative;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    border-radius: 2px;
-    background: var(--color-bg-surface);
-    border: none;
-    padding: 0;
-    cursor: pointer;
-  }
-  .editing-lightbox-card {
-    height: auto;
-    max-width: 85vw;
-    max-height: 85vh;
-    width: min(85vw, calc(85vh * 16 / 9));
-    aspect-ratio: 16 / 9;
-  }
-  .editing-play {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.85);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-  .editing-card:hover .editing-play {
-    opacity: 1;
-  }
-
   /* ── Placeholder pulse ── */
   .placeholder-card, .stagger-card {
     animation: placeholder-pulse 3s ease-in-out infinite;
@@ -443,7 +168,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
 <script>
   function init() {
     // ── Active section nav highlight ──
-    const sections = ['featured', 'showreel', 'motion-design', 'video-editing', 'reels'];
+    const sections = ['featured', 'showreel'];
     const links = document.querySelectorAll('.section-nav-link');
 
     const navObserver = new IntersectionObserver(
@@ -480,7 +205,7 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
       { rootMargin: '0px 0px -10% 0px' }
     );
 
-    document.querySelectorAll('#showreel, #reels, #motion-design, #video-editing').forEach((section) => {
+    document.querySelectorAll('#showreel').forEach((section) => {
       revealObserver.observe(section);
     });
 
@@ -488,105 +213,9 @@ import ReelsCarousel from '../components/ReelsCarousel.astro';
       revealObserver.observe(grid);
     });
 
-    // ── Hover autoplay on preview iframes ──
-    function addHoverAutoplay(card: HTMLElement) {
-      const iframe = card.querySelector<HTMLIFrameElement>('iframe');
-      if (!iframe) return;
-      const baseSrc = iframe.src;
-      card.addEventListener('mouseenter', () => {
-        iframe.src = baseSrc + '&autoplay=true&muted=true';
-      });
-      card.addEventListener('mouseleave', () => {
-        iframe.src = baseSrc;
-      });
-    }
-    document.querySelectorAll<HTMLElement>('.reel-card, .editing-card').forEach(addHoverAutoplay);
-
-    // ── Reels lightbox ──
-    const lightbox = document.getElementById('reels-lightbox');
-    const backdrop = document.getElementById('reels-backdrop');
-    const iframe   = document.getElementById('reels-iframe') as HTMLIFrameElement | null;
-
-    function openLightbox(videoId: string) {
-      if (!lightbox || !iframe) return;
-      iframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true&loop=true`;
-      lightbox.classList.add('open');
-      lightbox.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeLightbox() {
-      if (!lightbox || !iframe) return;
-      lightbox.classList.remove('open');
-      lightbox.setAttribute('aria-hidden', 'true');
-      iframe.src = '';
-    }
-
-    document.querySelectorAll<HTMLElement>('.reel-card').forEach((card) => {
-      card.addEventListener('click', () => openLightbox(card.dataset.videoId!));
-    });
-
-    backdrop?.addEventListener('click', closeLightbox);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
-    });
-
-    // ── Video editing lightbox ──
-    const editingLightbox = document.getElementById('editing-lightbox');
-    const editingBackdrop = document.getElementById('editing-backdrop');
-    const editingIframe   = document.getElementById('editing-iframe') as HTMLIFrameElement | null;
-
-    function openEditingLightbox(videoId: string) {
-      if (!editingLightbox || !editingIframe) return;
-      editingIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true`;
-      editingLightbox.classList.add('open');
-      editingLightbox.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeEditingLightbox() {
-      if (!editingLightbox || !editingIframe) return;
-      editingLightbox.classList.remove('open');
-      editingLightbox.setAttribute('aria-hidden', 'true');
-      editingIframe.src = '';
-    }
-
-    document.querySelectorAll<HTMLElement>('.editing-card:not([data-section="motion"])').forEach((card) => {
-      card.addEventListener('click', () => openEditingLightbox(card.dataset.videoId!));
-    });
-
-    editingBackdrop?.addEventListener('click', closeEditingLightbox);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeEditingLightbox();
-    });
-
-    // ── Motion design lightbox ──
-    const motionLightbox = document.getElementById('motion-lightbox');
-    const motionBackdrop = document.getElementById('motion-backdrop');
-    const motionIframe   = document.getElementById('motion-iframe') as HTMLIFrameElement | null;
-
-    function openMotionLightbox(videoId: string) {
-      if (!motionLightbox || !motionIframe) return;
-      motionIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true`;
-      motionLightbox.classList.add('open');
-      motionLightbox.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeMotionLightbox() {
-      if (!motionLightbox || !motionIframe) return;
-      motionLightbox.classList.remove('open');
-      motionLightbox.setAttribute('aria-hidden', 'true');
-      motionIframe.src = '';
-    }
-
-    document.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
-      card.addEventListener('click', () => openMotionLightbox(card.dataset.videoId!));
-    });
-
-    motionBackdrop?.addEventListener('click', closeMotionLightbox);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeMotionLightbox();
+    // ── "Work" sticky nav button opens overlay ──
+    document.getElementById('nav-work-btn')?.addEventListener('click', () => {
+      document.querySelector<HTMLElement>('.work-tab[data-target="0"]')?.click();
     });
   }
 

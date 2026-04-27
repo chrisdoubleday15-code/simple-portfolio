@@ -1,0 +1,640 @@
+---
+// WorkOverlay — work preview block + fullscreen swipeable overlay
+// All JS-toggled CSS lives in <style is:global> to survive Astro's scoped hashing.
+---
+
+<!-- ══════════════════════════════════════════════
+     WORK PREVIEW BLOCK (in-page)
+══════════════════════════════════════════════ -->
+<section id="work" class="py-12 border-t border-white/5">
+  <div class="mb-6">
+    <p class="text-sm tracking-widest uppercase mb-3" style="color: var(--color-accent-blue);">Work</p>
+    <h2 class="font-display tracking-display text-5xl md:text-7xl text-n200">Selected Work</h2>
+    <p class="text-n500 mt-4 max-w-lg">Motion design, video editing, and short-form content.</p>
+  </div>
+
+  <!-- Tab row -->
+  <div class="work-tabs">
+    <button class="work-tab work-tab--active" data-target="0" aria-label="Open Motion Design work">Motion</button>
+    <button class="work-tab" data-target="1" aria-label="Open Video Editing work">Editing</button>
+    <button class="work-tab" data-target="2" aria-label="Open Short-form work">Short Form</button>
+  </div>
+
+  <!-- Looping preview video -->
+  <button class="work-preview-video" data-target="0" aria-label="Browse all work">
+    <iframe
+      src="https://iframe.mediadelivery.net/embed/635173/e2a9c8f2-1429-4b94-a05c-2ad99da565c3?autoplay=true&loop=true&muted=true&preload=true&responsive=true"
+      loading="lazy"
+      allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+      style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+      tabindex="-1"
+    ></iframe>
+    <div class="work-preview-cta">
+      <span>Browse Work</span>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+  </button>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     FULLSCREEN OVERLAY
+══════════════════════════════════════════════ -->
+<div id="work-overlay" class="work-overlay" aria-hidden="true" aria-modal="true" role="dialog">
+  <div class="work-overlay-backdrop" id="work-overlay-backdrop"></div>
+
+  <div class="work-overlay-shell">
+    <!-- Close button -->
+    <button class="work-overlay-close" id="work-overlay-close" aria-label="Close work overlay">&#10005;</button>
+
+    <!-- Tab bar -->
+    <div class="work-overlay-tabs" role="tablist">
+      <button class="work-overlay-tab work-overlay-tab--active" data-index="0" role="tab" aria-selected="true">Motion</button>
+      <button class="work-overlay-tab" data-index="1" role="tab" aria-selected="false">Editing</button>
+      <button class="work-overlay-tab" data-index="2" role="tab" aria-selected="false">Short Form</button>
+    </div>
+
+    <!-- Sliding track -->
+    <div class="work-overlay-track-wrap">
+      <div class="work-overlay-track" id="work-overlay-track">
+
+        <!-- Panel 0: Motion Design -->
+        <div class="work-overlay-panel" data-panel="0">
+          <p class="work-panel-label">Motion Design</p>
+          <div class="editing-grid">
+            {[
+              'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
+              '7125608a-fd3c-4047-8657-c8384556fefd',
+              'd588c3c9-8722-46c2-bc98-ce9d412cd237',
+              'f143afcd-46f0-478d-ac6d-1922cb6a2bcf',
+            ].map((id) => (
+              <button class="editing-card" data-video-id={id} data-section="motion" aria-label="Play clip">
+                <iframe
+                  src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
+                  loading="lazy"
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+                  style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+                  tabindex="-1"
+                ></iframe>
+                <div class="editing-play">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Panel 1: Video Editing -->
+        <div class="work-overlay-panel" data-panel="1">
+          <p class="work-panel-label">Video Editing</p>
+          <div class="editing-grid">
+            {[
+              '23d4f219-d53c-4d6a-ada3-4213d9904d66',
+              'cecc7cde-69fa-40e7-a2c7-ae15da37c852',
+              '6d4255ef-8984-49e7-9beb-a17f36a421b0',
+              'dfcfb265-cf70-46d2-a944-92ba1ee0b431',
+            ].map((id) => (
+              <button class="editing-card" data-video-id={id} aria-label="Play clip">
+                <iframe
+                  src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
+                  loading="lazy"
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+                  style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+                  tabindex="-1"
+                ></iframe>
+                <div class="editing-play">
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Panel 2: Short-form & Reels -->
+        <div class="work-overlay-panel" data-panel="2">
+          <p class="work-panel-label">Short-form & Reels</p>
+          <div class="reels-grid-wrap">
+            <div class="reels-grid">
+              {[
+                'd9e1da32-992e-481f-ba9b-ba69eeafa70d',
+                '0dd1a40a-3928-4f0a-bd66-7f5729395cb2',
+                '043cbe34-6d9e-447a-941d-863c3ba2d9d6',
+                'c8b72103-2fa9-4603-9ff9-04a8602fb449',
+              ].map((id) => (
+                <button class="reel-card" data-video-id={id} aria-label="Play clip">
+                  <iframe
+                    src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
+                    loading="lazy"
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+                    style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+                    tabindex="-1"
+                  ></iframe>
+                  <div class="reel-overlay"></div>
+                  <div class="reel-play">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /track -->
+    </div><!-- /track-wrap -->
+  </div><!-- /shell -->
+</div><!-- /overlay -->
+
+
+<!-- ══════════════════════════════════════════════
+     LIGHTBOXES (stacked above overlay at z-index 10000)
+══════════════════════════════════════════════ -->
+
+<!-- Motion lightbox -->
+<div id="motion-lightbox" class="reels-lightbox" aria-hidden="true">
+  <div class="reels-lightbox-backdrop" id="motion-backdrop"></div>
+  <div class="reels-lightbox-card editing-lightbox-card">
+    <iframe id="motion-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+  </div>
+</div>
+
+<!-- Editing lightbox -->
+<div id="editing-lightbox" class="reels-lightbox" aria-hidden="true">
+  <div class="reels-lightbox-backdrop" id="editing-backdrop"></div>
+  <div class="reels-lightbox-card editing-lightbox-card">
+    <iframe id="editing-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+  </div>
+</div>
+
+<!-- Reels lightbox -->
+<div id="reels-lightbox" class="reels-lightbox" aria-hidden="true">
+  <div class="reels-lightbox-backdrop" id="reels-backdrop"></div>
+  <div class="reels-lightbox-card">
+    <iframe id="reels-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     GLOBAL STYLES (JS-toggled rules must be global)
+══════════════════════════════════════════════ -->
+<style is:global>
+
+  /* ── Preview block ── */
+  .work-tabs {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.25rem;
+  }
+  .work-tab {
+    font-family: var(--font-display, 'Bebas Neue', sans-serif);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: color 0.2s ease;
+  }
+  .work-tab:hover {
+    color: var(--color-text-primary);
+  }
+  .work-tab--active {
+    color: var(--color-accent-blue);
+  }
+
+  .work-preview-video {
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 56rem;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--color-bg-surface);
+    cursor: pointer;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+    padding: 0;
+  }
+  .work-preview-video:hover {
+    border-color: var(--color-accent-blue);
+    transform: scale(1.005);
+  }
+  .work-preview-cta {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.9);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.35);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .work-preview-video:hover .work-preview-cta {
+    opacity: 1;
+  }
+
+  /* ── Overlay shell ── */
+  .work-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 140px max(1rem, calc((100vw - 1280px) / 2 + 1rem)) 80px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .work-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .work-overlay-backdrop {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-bg-elevated) 85%, transparent);
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+  }
+  .work-overlay-shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: min(85vw, 1200px);
+    align-self: stretch;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-bg-base);
+  }
+
+  /* ── Overlay close button ── */
+  .work-overlay-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    z-index: 10;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    line-height: 1;
+    transition: color 0.15s ease;
+  }
+  .work-overlay-close:hover {
+    color: var(--color-accent-blue);
+  }
+
+  /* ── Overlay tab bar ── */
+  .work-overlay-tabs {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+  .work-overlay-tab {
+    font-family: 'Bebas Neue', var(--font-display, sans-serif);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-size: 2.5rem;
+    background: none;
+    border: none;
+    padding: 2px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition: color 0.15s ease, background 0.15s ease;
+    line-height: 1.3;
+  }
+  .work-overlay-tab:hover {
+    color: var(--color-text-primary);
+  }
+  .work-overlay-tab--active {
+    background: var(--color-accent-blue);
+    color: #000;
+  }
+
+  /* ── Sliding track ── */
+  .work-overlay-track-wrap {
+    flex: 1;
+    overflow: hidden;
+  }
+  .work-overlay-track {
+    display: flex;
+    width: 300%;
+    height: 100%;
+    transform: translateX(0%);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .work-overlay-track.dragging {
+    transition: none;
+  }
+  .work-overlay-panel {
+    flex: 0 0 33.3333%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .work-panel-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+  }
+
+  /* ── Short-form panel: 4-column single row ── */
+  .work-overlay-panel[data-panel="2"] .reels-grid {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 100%;
+  }
+
+  /* ── Responsive scaling ── */
+  @media (max-width: 1024px) {
+    .work-overlay-shell {
+      width: min(72vw, 800px);
+    }
+    .work-overlay-panel {
+      padding: 1.25rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .work-overlay-shell {
+      width: 82vw;
+      border-radius: 6px;
+    }
+    .work-overlay-tabs {
+      padding: 0.75rem 1rem;
+      gap: 0.5rem;
+    }
+    .work-overlay-tab {
+      font-size: 1.2rem;
+      padding: 2px 10px;
+    }
+    .work-overlay-close {
+      top: 0.6rem;
+      right: 0.75rem;
+    }
+    .work-overlay-panel {
+      padding: 1rem;
+    }
+    .work-overlay-panel[data-panel="2"] .reels-grid {
+      grid-template-columns: repeat(2, 1fr);
+      max-width: 480px;
+    }
+    .work-overlay-panel .editing-grid {
+      gap: 6px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .work-overlay-shell {
+      width: 92vw;
+      border-radius: 4px;
+    }
+    .work-overlay-panel {
+      padding: 0.75rem;
+    }
+    .work-overlay-tab {
+      font-size: 1rem;
+      padding: 1px 8px;
+    }
+  }
+
+</style>
+
+
+<!-- ══════════════════════════════════════════════
+     SCRIPT
+══════════════════════════════════════════════ -->
+<script>
+  function initWorkOverlay() {
+    // ── Elements ──
+    const overlay    = document.getElementById('work-overlay') as HTMLElement | null;
+    const track      = document.getElementById('work-overlay-track') as HTMLElement | null;
+    const backdrop   = document.getElementById('work-overlay-backdrop');
+    const closeBtn   = document.getElementById('work-overlay-close');
+
+    if (!overlay || !track) return;
+
+    let currentPanel = 0;
+
+    // ── Panel navigation ──
+    function goToPanel(index: number, animate = true) {
+      currentPanel = Math.max(0, Math.min(2, index));
+      if (!animate) track!.classList.add('dragging');
+      track!.style.transform = `translateX(${-currentPanel * (100 / 3)}%)`;
+      if (!animate) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => track!.classList.remove('dragging'));
+        });
+      }
+      // Update overlay tabs
+      document.querySelectorAll<HTMLElement>('.work-overlay-tab').forEach((tab) => {
+        const active = Number(tab.dataset.index) === currentPanel;
+        tab.classList.toggle('work-overlay-tab--active', active);
+        tab.setAttribute('aria-selected', String(active));
+      });
+    }
+
+    // ── Open / close overlay ──
+    function openOverlay(panelIndex: number) {
+      if (!overlay) return;
+      goToPanel(panelIndex, false);
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOverlay() {
+      if (!overlay) return;
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    // ── Preview block: tab clicks ──
+    document.querySelectorAll<HTMLElement>('.work-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        openOverlay(Number(tab.dataset.target));
+      });
+    });
+
+    // ── Preview block: video click ──
+    document.querySelectorAll<HTMLElement>('.work-preview-video').forEach((btn) => {
+      btn.addEventListener('click', () => openOverlay(Number(btn.dataset.target ?? 0)));
+    });
+
+    // ── Overlay tab bar clicks ──
+    document.querySelectorAll<HTMLElement>('.work-overlay-tab').forEach((tab) => {
+      tab.addEventListener('click', () => goToPanel(Number(tab.dataset.index)));
+    });
+
+    // ── Close triggers ──
+    backdrop?.addEventListener('click', closeOverlay);
+    closeBtn?.addEventListener('click', closeOverlay);
+
+    // ── Pointer drag (swipe) ──
+    let dragStartX = 0;
+    let isDragging = false;
+
+    track.addEventListener('pointerdown', (e: PointerEvent) => {
+      dragStartX = e.clientX;
+      isDragging = true;
+      track.classList.add('dragging');
+      track.setPointerCapture(e.pointerId);
+    });
+
+    track.addEventListener('pointermove', (e: PointerEvent) => {
+      if (!isDragging) return;
+      const delta = e.clientX - dragStartX;
+      const panelWidthPct = 100 / 3;
+      const basePct = -currentPanel * panelWidthPct;
+      // Dampen drag at edges
+      const maxEdge = 40;
+      let offset = delta / track.offsetWidth * 100;
+      if ((currentPanel === 0 && delta > 0) || (currentPanel === 2 && delta < 0)) {
+        offset = offset * 0.2;
+        offset = Math.sign(offset) * Math.min(Math.abs(offset), maxEdge / track.offsetWidth * 100);
+      }
+      track.style.transform = `translateX(${basePct + offset}%)`;
+    });
+
+    track.addEventListener('pointerup', (e: PointerEvent) => {
+      if (!isDragging) return;
+      isDragging = false;
+      track.classList.remove('dragging');
+      const delta = e.clientX - dragStartX;
+      if (Math.abs(delta) > 80) {
+        goToPanel(delta < 0 ? currentPanel + 1 : currentPanel - 1);
+      } else {
+        goToPanel(currentPanel);
+      }
+    });
+
+    // ── Keyboard navigation ──
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (!overlay.classList.contains('open')) return;
+      // Only handle if no lightbox is open
+      const lightboxOpen = document.querySelector('.reels-lightbox.open');
+      if (lightboxOpen) return;
+      if (e.key === 'ArrowRight') goToPanel(currentPanel + 1);
+      if (e.key === 'ArrowLeft')  goToPanel(currentPanel - 1);
+      if (e.key === 'Escape')     closeOverlay();
+    });
+
+    // ── Hover autoplay on grid cards ──
+    function addHoverAutoplay(card: HTMLElement) {
+      const iframe = card.querySelector<HTMLIFrameElement>('iframe');
+      if (!iframe) return;
+      const baseSrc = iframe.src;
+      card.addEventListener('mouseenter', () => {
+        iframe.src = baseSrc + '&autoplay=true&muted=true';
+      });
+      card.addEventListener('mouseleave', () => {
+        iframe.src = baseSrc;
+      });
+    }
+    document.querySelectorAll<HTMLElement>('.editing-card, .reel-card').forEach(addHoverAutoplay);
+
+    // ── Motion lightbox ──
+    const motionLightbox = document.getElementById('motion-lightbox');
+    const motionBackdrop = document.getElementById('motion-backdrop');
+    const motionIframe   = document.getElementById('motion-iframe') as HTMLIFrameElement | null;
+
+    function openMotionLightbox(videoId: string) {
+      if (!motionLightbox || !motionIframe) return;
+      motionIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true`;
+      motionLightbox.classList.add('open');
+      motionLightbox.setAttribute('aria-hidden', 'false');
+    }
+    function closeMotionLightbox() {
+      if (!motionLightbox || !motionIframe) return;
+      motionLightbox.classList.remove('open');
+      motionLightbox.setAttribute('aria-hidden', 'true');
+      motionIframe.src = '';
+    }
+
+    document.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
+      card.addEventListener('click', () => openMotionLightbox(card.dataset.videoId!));
+    });
+    motionBackdrop?.addEventListener('click', closeMotionLightbox);
+
+    // ── Editing lightbox ──
+    const editingLightbox = document.getElementById('editing-lightbox');
+    const editingBackdrop = document.getElementById('editing-backdrop');
+    const editingIframe   = document.getElementById('editing-iframe') as HTMLIFrameElement | null;
+
+    function openEditingLightbox(videoId: string) {
+      if (!editingLightbox || !editingIframe) return;
+      editingIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true`;
+      editingLightbox.classList.add('open');
+      editingLightbox.setAttribute('aria-hidden', 'false');
+    }
+    function closeEditingLightbox() {
+      if (!editingLightbox || !editingIframe) return;
+      editingLightbox.classList.remove('open');
+      editingLightbox.setAttribute('aria-hidden', 'true');
+      editingIframe.src = '';
+    }
+
+    document.querySelectorAll<HTMLElement>('.editing-card:not([data-section="motion"])').forEach((card) => {
+      card.addEventListener('click', () => openEditingLightbox(card.dataset.videoId!));
+    });
+    editingBackdrop?.addEventListener('click', closeEditingLightbox);
+
+    // ── Reels lightbox ──
+    const reelsLightbox = document.getElementById('reels-lightbox');
+    const reelsBackdrop = document.getElementById('reels-backdrop');
+    const reelsIframe   = document.getElementById('reels-iframe') as HTMLIFrameElement | null;
+
+    function openReelsLightbox(videoId: string) {
+      if (!reelsLightbox || !reelsIframe) return;
+      reelsIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true&loop=true`;
+      reelsLightbox.classList.add('open');
+      reelsLightbox.setAttribute('aria-hidden', 'false');
+    }
+    function closeReelsLightbox() {
+      if (!reelsLightbox || !reelsIframe) return;
+      reelsLightbox.classList.remove('open');
+      reelsLightbox.setAttribute('aria-hidden', 'true');
+      reelsIframe.src = '';
+    }
+
+    document.querySelectorAll<HTMLElement>('.reel-card').forEach((card) => {
+      card.addEventListener('click', () => openReelsLightbox(card.dataset.videoId!));
+    });
+    reelsBackdrop?.addEventListener('click', closeReelsLightbox);
+
+    // ── Escape stacking (lightbox first, then overlay) ──
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      if (motionLightbox?.classList.contains('open'))  { closeMotionLightbox();  return; }
+      if (editingLightbox?.classList.contains('open')) { closeEditingLightbox(); return; }
+      if (reelsLightbox?.classList.contains('open'))   { closeReelsLightbox();   return; }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initWorkOverlay);
+</script>
