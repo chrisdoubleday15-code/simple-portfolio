@@ -150,26 +150,38 @@
 ══════════════════════════════════════════════ -->
 
 <!-- Motion lightbox -->
-<div id="motion-lightbox" class="reels-lightbox" aria-hidden="true">
+<div id="motion-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="motion-backdrop"></div>
-  <div class="reels-lightbox-card editing-lightbox-card">
-    <iframe id="motion-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+  <div class="lightbox-inner">
+    <button class="lightbox-arrow" data-section="motion" data-dir="-1" aria-label="Previous video">&#10094;</button>
+    <div class="reels-lightbox-card editing-lightbox-card">
+      <iframe id="motion-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+    </div>
+    <button class="lightbox-arrow" data-section="motion" data-dir="1" aria-label="Next video">&#10095;</button>
   </div>
 </div>
 
 <!-- Editing lightbox -->
-<div id="editing-lightbox" class="reels-lightbox" aria-hidden="true">
+<div id="editing-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="editing-backdrop"></div>
-  <div class="reels-lightbox-card editing-lightbox-card">
-    <iframe id="editing-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+  <div class="lightbox-inner">
+    <button class="lightbox-arrow" data-section="editing" data-dir="-1" aria-label="Previous video">&#10094;</button>
+    <div class="reels-lightbox-card editing-lightbox-card">
+      <iframe id="editing-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+    </div>
+    <button class="lightbox-arrow" data-section="editing" data-dir="1" aria-label="Next video">&#10095;</button>
   </div>
 </div>
 
 <!-- Reels lightbox -->
-<div id="reels-lightbox" class="reels-lightbox" aria-hidden="true">
+<div id="reels-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="reels-backdrop"></div>
-  <div class="reels-lightbox-card">
-    <iframe id="reels-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+  <div class="lightbox-inner">
+    <button class="lightbox-arrow" data-section="reels" data-dir="-1" aria-label="Previous video">&#10094;</button>
+    <div class="reels-lightbox-card">
+      <iframe id="reels-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+    </div>
+    <button class="lightbox-arrow" data-section="reels" data-dir="1" aria-label="Next video">&#10095;</button>
   </div>
 </div>
 
@@ -264,7 +276,7 @@
     position: absolute;
     inset: 0;
     background: color-mix(in srgb, var(--color-bg-elevated) 85%, transparent);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(3px);
     cursor: pointer;
   }
   .work-overlay-shell {
@@ -369,6 +381,39 @@
     max-width: 100%;
   }
 
+  /* ── Lightbox inner wrapper (arrows flanking the card) ── */
+  .lightbox-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* ── Lightbox navigation arrows ── */
+  .lightbox-arrow {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(13, 13, 31, 0.65);
+    border: 1.5px solid var(--color-accent-blue);
+    color: var(--color-accent-blue);
+    font-size: 1.4rem;
+    font-weight: 700;
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+    line-height: 1;
+  }
+  .lightbox-arrow:hover {
+    background: var(--color-accent-blue);
+    color: #000;
+  }
+
   /* ── Responsive scaling ── */
   @media (max-width: 1024px) {
     .work-overlay-shell {
@@ -406,6 +451,14 @@
     .work-overlay-panel .editing-grid {
       gap: 6px;
     }
+    .lightbox-arrow {
+      width: 40px;
+      height: 40px;
+      font-size: 1.1rem;
+    }
+    .lightbox-inner {
+      gap: 0.5rem;
+    }
   }
 
   @media (max-width: 480px) {
@@ -420,6 +473,11 @@
       font-size: 1rem;
       padding: 1px 8px;
     }
+    .lightbox-arrow {
+      width: 32px;
+      height: 32px;
+      font-size: 0.9rem;
+    }
   }
 
 </style>
@@ -431,14 +489,93 @@
 <script>
   function initWorkOverlay() {
     // ── Elements ──
-    const overlay    = document.getElementById('work-overlay') as HTMLElement | null;
-    const track      = document.getElementById('work-overlay-track') as HTMLElement | null;
-    const backdrop   = document.getElementById('work-overlay-backdrop');
-    const closeBtn   = document.getElementById('work-overlay-close');
+    const overlay  = document.getElementById('work-overlay') as HTMLElement | null;
+    const track    = document.getElementById('work-overlay-track') as HTMLElement | null;
+    const backdrop = document.getElementById('work-overlay-backdrop');
+    const closeBtn = document.getElementById('work-overlay-close');
 
     if (!overlay || !track) return;
 
     let currentPanel = 0;
+
+    // ── Section configs ──
+    type SectionKey = 'motion' | 'editing' | 'reels';
+
+    const sections: Record<SectionKey, {
+      ids: string[];
+      index: number;
+      lightboxEl: HTMLElement | null;
+      iframeEl: HTMLIFrameElement | null;
+      backdropEl: HTMLElement | null;
+      buildSrc: (id: string) => string;
+    }> = {
+      motion: {
+        ids: [
+          'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
+          '7125608a-fd3c-4047-8657-c8384556fefd',
+          'd588c3c9-8722-46c2-bc98-ce9d412cd237',
+          'f143afcd-46f0-478d-ac6d-1922cb6a2bcf',
+        ],
+        index: 0,
+        lightboxEl: document.getElementById('motion-lightbox'),
+        iframeEl: document.getElementById('motion-iframe') as HTMLIFrameElement | null,
+        backdropEl: document.getElementById('motion-backdrop'),
+        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
+      },
+      editing: {
+        ids: [
+          '23d4f219-d53c-4d6a-ada3-4213d9904d66',
+          'cecc7cde-69fa-40e7-a2c7-ae15da37c852',
+          '6d4255ef-8984-49e7-9beb-a17f36a421b0',
+          'dfcfb265-cf70-46d2-a944-92ba1ee0b431',
+        ],
+        index: 0,
+        lightboxEl: document.getElementById('editing-lightbox'),
+        iframeEl: document.getElementById('editing-iframe') as HTMLIFrameElement | null,
+        backdropEl: document.getElementById('editing-backdrop'),
+        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
+      },
+      reels: {
+        ids: [
+          'd9e1da32-992e-481f-ba9b-ba69eeafa70d',
+          '0dd1a40a-3928-4f0a-bd66-7f5729395cb2',
+          '043cbe34-6d9e-447a-941d-863c3ba2d9d6',
+          'c8b72103-2fa9-4603-9ff9-04a8602fb449',
+        ],
+        index: 0,
+        lightboxEl: document.getElementById('reels-lightbox'),
+        iframeEl: document.getElementById('reels-iframe') as HTMLIFrameElement | null,
+        backdropEl: document.getElementById('reels-backdrop'),
+        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true&loop=true`,
+      },
+    };
+
+    // ── Lightbox helpers ──
+    function openLightbox(key: SectionKey, videoId: string) {
+      const s = sections[key];
+      if (!s.lightboxEl || !s.iframeEl) return;
+      const idx = s.ids.indexOf(videoId);
+      s.index = idx >= 0 ? idx : 0;
+      s.iframeEl.src = s.buildSrc(s.ids[s.index]);
+      s.lightboxEl.classList.add('open');
+      s.lightboxEl.setAttribute('aria-hidden', 'false');
+      s.lightboxEl.focus();
+    }
+
+    function closeLightbox(key: SectionKey) {
+      const s = sections[key];
+      if (!s.lightboxEl || !s.iframeEl) return;
+      s.lightboxEl.classList.remove('open');
+      s.lightboxEl.setAttribute('aria-hidden', 'true');
+      s.iframeEl.src = '';
+    }
+
+    function navLightbox(key: SectionKey, dir: number) {
+      const s = sections[key];
+      if (!s.iframeEl) return;
+      s.index = (s.index + dir + s.ids.length) % s.ids.length;
+      s.iframeEl.src = s.buildSrc(s.ids[s.index]);
+    }
 
     // ── Panel navigation ──
     function goToPanel(index: number, animate = true) {
@@ -450,7 +587,6 @@
           requestAnimationFrame(() => track!.classList.remove('dragging'));
         });
       }
-      // Update overlay tabs
       document.querySelectorAll<HTMLElement>('.work-overlay-tab').forEach((tab) => {
         const active = Number(tab.dataset.index) === currentPanel;
         tab.classList.toggle('work-overlay-tab--active', active);
@@ -476,9 +612,7 @@
 
     // ── Preview block: tab clicks ──
     document.querySelectorAll<HTMLElement>('.work-tab').forEach((tab) => {
-      tab.addEventListener('click', () => {
-        openOverlay(Number(tab.dataset.target));
-      });
+      tab.addEventListener('click', () => openOverlay(Number(tab.dataset.target)));
     });
 
     // ── Preview block: video click ──
@@ -495,23 +629,29 @@
     backdrop?.addEventListener('click', closeOverlay);
     closeBtn?.addEventListener('click', closeOverlay);
 
-    // ── Pointer drag (swipe) ──
+    // ── Pointer drag (deferred capture so card clicks fire normally) ──
     let dragStartX = 0;
+    let pointerDown = false;
     let isDragging = false;
+    const DRAG_THRESHOLD = 8;
 
     track.addEventListener('pointerdown', (e: PointerEvent) => {
       dragStartX = e.clientX;
-      isDragging = true;
-      track.classList.add('dragging');
-      track.setPointerCapture(e.pointerId);
+      pointerDown = true;
+      isDragging = false;
     });
 
     track.addEventListener('pointermove', (e: PointerEvent) => {
-      if (!isDragging) return;
+      if (!pointerDown) return;
       const delta = e.clientX - dragStartX;
+      if (!isDragging && Math.abs(delta) > DRAG_THRESHOLD) {
+        isDragging = true;
+        track.classList.add('dragging');
+        track.setPointerCapture(e.pointerId);
+      }
+      if (!isDragging) return;
       const panelWidthPct = 100 / 3;
       const basePct = -currentPanel * panelWidthPct;
-      // Dampen drag at edges
       const maxEdge = 40;
       let offset = delta / track.offsetWidth * 100;
       if ((currentPanel === 0 && delta > 0) || (currentPanel === 2 && delta < 0)) {
@@ -522,7 +662,9 @@
     });
 
     track.addEventListener('pointerup', (e: PointerEvent) => {
-      if (!isDragging) return;
+      if (!pointerDown) return;
+      pointerDown = false;
+      if (!isDragging) return; // no drag — let the native click fire on the card
       isDragging = false;
       track.classList.remove('dragging');
       const delta = e.clientX - dragStartX;
@@ -533,106 +675,93 @@
       }
     });
 
-    // ── Keyboard navigation ──
+    track.addEventListener('pointercancel', () => {
+      pointerDown = false;
+      isDragging = false;
+      track.classList.remove('dragging');
+      goToPanel(currentPanel);
+    });
+
+    // ── Card click → open lightbox ──
+    document.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
+      card.addEventListener('click', () => openLightbox('motion', card.dataset.videoId!));
+    });
+    document.querySelectorAll<HTMLElement>('.editing-card:not([data-section="motion"])').forEach((card) => {
+      card.addEventListener('click', () => openLightbox('editing', card.dataset.videoId!));
+    });
+    document.querySelectorAll<HTMLElement>('.reel-card').forEach((card) => {
+      card.addEventListener('click', () => openLightbox('reels', card.dataset.videoId!));
+    });
+
+    // ── Lightbox backdrop clicks + swipe ──
+    function attachLightboxSwipe(key: SectionKey) {
+      const s = sections[key];
+      if (!s.lightboxEl) return;
+
+      let startX = 0, down = false, dragging = false;
+      const START = 8;
+      const COMMIT = 60;
+
+      s.lightboxEl.addEventListener('pointerdown', (e: PointerEvent) => {
+        if (e.button !== 0) return;
+        down = true; dragging = false; startX = e.clientX;
+      });
+      s.lightboxEl.addEventListener('pointermove', (e: PointerEvent) => {
+        if (!down) return;
+        if (!dragging && Math.abs(e.clientX - startX) > START) dragging = true;
+      });
+      s.lightboxEl.addEventListener('pointerup', (e: PointerEvent) => {
+        if (!down) return;
+        down = false;
+        if (!dragging) return;
+        dragging = false;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) >= COMMIT) navLightbox(key, dx < 0 ? 1 : -1);
+        // Suppress the synthesized click so backdrop/arrows don't fire post-swipe
+        const blocker = (ev: Event) => { ev.stopImmediatePropagation(); ev.preventDefault(); };
+        s.lightboxEl!.addEventListener('click', blocker, { capture: true, once: true } as any);
+        setTimeout(() => s.lightboxEl!.removeEventListener('click', blocker, { capture: true } as any), 50);
+      });
+      s.lightboxEl.addEventListener('pointercancel', () => { down = false; dragging = false; });
+
+      s.backdropEl?.addEventListener('click', () => closeLightbox(key));
+    }
+
+    (Object.keys(sections) as SectionKey[]).forEach((key) => {
+      attachLightboxSwipe(key);
+    });
+
+    // ── Lightbox arrow clicks ──
+    document.querySelectorAll<HTMLButtonElement>('.lightbox-arrow').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.section as SectionKey;
+        const dir = Number(btn.dataset.dir);
+        navLightbox(key, dir);
+      });
+    });
+
+    // ── Keyboard: Escape + lightbox/overlay arrow navigation ──
     document.addEventListener('keydown', (e: KeyboardEvent) => {
+      const keys = Object.keys(sections) as SectionKey[];
+      const openKey = keys.find((k) => sections[k].lightboxEl?.classList.contains('open'));
+
+      if (e.key === 'Escape') {
+        if (openKey) { closeLightbox(openKey); return; }
+        if (overlay.classList.contains('open')) closeOverlay();
+        return;
+      }
+
+      // Lightbox arrow nav (priority)
+      if (openKey) {
+        if (e.key === 'ArrowRight') navLightbox(openKey, 1);
+        if (e.key === 'ArrowLeft')  navLightbox(openKey, -1);
+        return;
+      }
+
+      // Overlay panel nav (only when no lightbox is open)
       if (!overlay.classList.contains('open')) return;
-      // Only handle if no lightbox is open
-      const lightboxOpen = document.querySelector('.reels-lightbox.open');
-      if (lightboxOpen) return;
       if (e.key === 'ArrowRight') goToPanel(currentPanel + 1);
       if (e.key === 'ArrowLeft')  goToPanel(currentPanel - 1);
-      if (e.key === 'Escape')     closeOverlay();
-    });
-
-    // ── Hover autoplay on grid cards ──
-    function addHoverAutoplay(card: HTMLElement) {
-      const iframe = card.querySelector<HTMLIFrameElement>('iframe');
-      if (!iframe) return;
-      const baseSrc = iframe.src;
-      card.addEventListener('mouseenter', () => {
-        iframe.src = baseSrc + '&autoplay=true&muted=true';
-      });
-      card.addEventListener('mouseleave', () => {
-        iframe.src = baseSrc;
-      });
-    }
-    document.querySelectorAll<HTMLElement>('.editing-card, .reel-card').forEach(addHoverAutoplay);
-
-    // ── Motion lightbox ──
-    const motionLightbox = document.getElementById('motion-lightbox');
-    const motionBackdrop = document.getElementById('motion-backdrop');
-    const motionIframe   = document.getElementById('motion-iframe') as HTMLIFrameElement | null;
-
-    function openMotionLightbox(videoId: string) {
-      if (!motionLightbox || !motionIframe) return;
-      motionIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true`;
-      motionLightbox.classList.add('open');
-      motionLightbox.setAttribute('aria-hidden', 'false');
-    }
-    function closeMotionLightbox() {
-      if (!motionLightbox || !motionIframe) return;
-      motionLightbox.classList.remove('open');
-      motionLightbox.setAttribute('aria-hidden', 'true');
-      motionIframe.src = '';
-    }
-
-    document.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
-      card.addEventListener('click', () => openMotionLightbox(card.dataset.videoId!));
-    });
-    motionBackdrop?.addEventListener('click', closeMotionLightbox);
-
-    // ── Editing lightbox ──
-    const editingLightbox = document.getElementById('editing-lightbox');
-    const editingBackdrop = document.getElementById('editing-backdrop');
-    const editingIframe   = document.getElementById('editing-iframe') as HTMLIFrameElement | null;
-
-    function openEditingLightbox(videoId: string) {
-      if (!editingLightbox || !editingIframe) return;
-      editingIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true`;
-      editingLightbox.classList.add('open');
-      editingLightbox.setAttribute('aria-hidden', 'false');
-    }
-    function closeEditingLightbox() {
-      if (!editingLightbox || !editingIframe) return;
-      editingLightbox.classList.remove('open');
-      editingLightbox.setAttribute('aria-hidden', 'true');
-      editingIframe.src = '';
-    }
-
-    document.querySelectorAll<HTMLElement>('.editing-card:not([data-section="motion"])').forEach((card) => {
-      card.addEventListener('click', () => openEditingLightbox(card.dataset.videoId!));
-    });
-    editingBackdrop?.addEventListener('click', closeEditingLightbox);
-
-    // ── Reels lightbox ──
-    const reelsLightbox = document.getElementById('reels-lightbox');
-    const reelsBackdrop = document.getElementById('reels-backdrop');
-    const reelsIframe   = document.getElementById('reels-iframe') as HTMLIFrameElement | null;
-
-    function openReelsLightbox(videoId: string) {
-      if (!reelsLightbox || !reelsIframe) return;
-      reelsIframe.src = `https://iframe.mediadelivery.net/embed/635173/${videoId}?autoplay=true&loop=true`;
-      reelsLightbox.classList.add('open');
-      reelsLightbox.setAttribute('aria-hidden', 'false');
-    }
-    function closeReelsLightbox() {
-      if (!reelsLightbox || !reelsIframe) return;
-      reelsLightbox.classList.remove('open');
-      reelsLightbox.setAttribute('aria-hidden', 'true');
-      reelsIframe.src = '';
-    }
-
-    document.querySelectorAll<HTMLElement>('.reel-card').forEach((card) => {
-      card.addEventListener('click', () => openReelsLightbox(card.dataset.videoId!));
-    });
-    reelsBackdrop?.addEventListener('click', closeReelsLightbox);
-
-    // ── Escape stacking (lightbox first, then overlay) ──
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      if (motionLightbox?.classList.contains('open'))  { closeMotionLightbox();  return; }
-      if (editingLightbox?.classList.contains('open')) { closeEditingLightbox(); return; }
-      if (reelsLightbox?.classList.contains('open'))   { closeReelsLightbox();   return; }
     });
   }
 
