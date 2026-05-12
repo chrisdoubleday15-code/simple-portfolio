@@ -185,6 +185,21 @@
   </div>
 </div>
 
+<!-- YouTube lightbox -->
+<div id="youtube-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
+  <div class="reels-lightbox-backdrop" id="youtube-backdrop"></div>
+  <div class="lightbox-inner">
+    <button class="lightbox-arrow" data-section="youtube" data-dir="-1" aria-label="Previous video">&#10094;</button>
+    <div class="youtube-lightbox-stack">
+      <div class="reels-lightbox-card editing-lightbox-card">
+        <iframe id="youtube-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+      </div>
+      <a id="youtube-yt-link" href="#" target="_blank" rel="noopener noreferrer" class="youtube-yt-link">Full video on YouTube &rarr;</a>
+    </div>
+    <button class="lightbox-arrow" data-section="youtube" data-dir="1" aria-label="Next video">&#10095;</button>
+  </div>
+</div>
+
 
 <!-- ══════════════════════════════════════════════
      GLOBAL STYLES (JS-toggled rules must be global)
@@ -390,6 +405,35 @@
     gap: 1rem;
   }
 
+  /* ── YouTube lightbox: stacked player + external link ── */
+  .youtube-lightbox-stack {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+  }
+  .youtube-yt-link {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    background: rgba(13, 13, 31, 0.5);
+    backdrop-filter: blur(6px);
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .youtube-yt-link:hover {
+    color: var(--color-accent-blue);
+    border-color: var(--color-accent-blue);
+    background: rgba(0, 200, 255, 0.08);
+  }
+
   /* ── Lightbox navigation arrows ── */
   .lightbox-arrow {
     flex-shrink: 0;
@@ -499,10 +543,11 @@
     let currentPanel = 0;
 
     // ── Section configs ──
-    type SectionKey = 'motion' | 'editing' | 'reels';
+    type SectionKey = 'motion' | 'editing' | 'reels' | 'youtube';
 
     const sections: Record<SectionKey, {
       ids: string[];
+      ytUrls?: (string | null)[];
       index: number;
       lightboxEl: HTMLElement | null;
       iframeEl: HTMLIFrameElement | null;
@@ -548,15 +593,48 @@
         backdropEl: document.getElementById('reels-backdrop'),
         buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true&loop=true`,
       },
+      // Order must match `YOUTUBE_CARDS` in src/pages/index.astro.
+      youtube: {
+        ids: [
+          '70a7ddcd-705d-42ea-9b36-540249c34b21',
+          '803e78f8-1c29-40fc-b8b1-2715adad10f3',
+          '1a1d745f-a25f-4ff2-9a78-45c95702c5e4',
+          '8cb25f67-087e-4008-9191-5e9bdd4f7c2c',
+          '00f82cdd-20d5-4ec0-91f1-1dc1e409de51',
+          'c30421a3-69a0-43f8-82e9-21f2ef864e90',
+        ],
+        ytUrls: [
+          'https://www.youtube.com/watch?v=fTTYubF6TZ0',
+          'https://www.youtube.com/watch?v=YbpH2dvh3Vk',
+          'https://www.youtube.com/watch?v=XuNUB9iyaAY',
+          'https://www.youtube.com/watch?v=PMNxhSZ9MzI',
+          null,
+          null,
+        ],
+        index: 0,
+        lightboxEl: document.getElementById('youtube-lightbox'),
+        iframeEl: document.getElementById('youtube-iframe') as HTMLIFrameElement | null,
+        backdropEl: document.getElementById('youtube-backdrop'),
+        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
+      },
     };
 
     // ── Lightbox helpers ──
+    function updateYoutubeLink() {
+      const link = document.getElementById('youtube-yt-link') as HTMLAnchorElement | null;
+      if (!link) return;
+      const url = sections.youtube.ytUrls?.[sections.youtube.index] ?? null;
+      if (url) { link.href = url; link.style.display = ''; }
+      else     { link.style.display = 'none'; }
+    }
+
     function openLightbox(key: SectionKey, videoId: string) {
       const s = sections[key];
       if (!s.lightboxEl || !s.iframeEl) return;
       const idx = s.ids.indexOf(videoId);
       s.index = idx >= 0 ? idx : 0;
       s.iframeEl.src = s.buildSrc(s.ids[s.index]);
+      if (key === 'youtube') updateYoutubeLink();
       s.lightboxEl.classList.add('open');
       s.lightboxEl.setAttribute('aria-hidden', 'false');
       s.lightboxEl.focus();
@@ -575,6 +653,7 @@
       if (!s.iframeEl) return;
       s.index = (s.index + dir + s.ids.length) % s.ids.length;
       s.iframeEl.src = s.buildSrc(s.ids[s.index]);
+      if (key === 'youtube') updateYoutubeLink();
     }
 
     // ── Panel navigation ──
@@ -686,7 +765,10 @@
     document.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
       card.addEventListener('click', () => openLightbox('motion', card.dataset.videoId!));
     });
-    document.querySelectorAll<HTMLElement>('.editing-card:not([data-section="motion"])').forEach((card) => {
+    document.querySelectorAll<HTMLElement>('.editing-card[data-section="youtube"]').forEach((card) => {
+      card.addEventListener('click', () => openLightbox('youtube', card.dataset.videoId!));
+    });
+    document.querySelectorAll<HTMLElement>('.editing-card:not([data-section="motion"]):not([data-section="youtube"])').forEach((card) => {
       card.addEventListener('click', () => openLightbox('editing', card.dataset.videoId!));
     });
     document.querySelectorAll<HTMLElement>('.reel-card').forEach((card) => {
