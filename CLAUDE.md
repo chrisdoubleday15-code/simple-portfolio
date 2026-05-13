@@ -202,7 +202,7 @@ Active state: `IntersectionObserver` adds `.active` → `color: var(--color-acce
 ```
 Card 0: a8690e6e-a04f-4b23-b12e-6a85fed5e559   Airrack Teaser
 Card 1: 12af665e-cacc-41ae-929b-81430ede21fa   Bali Recap
-Card 2: 14aa4474-bd9f-420d-8173-458083df44f5   Tom Brady Dynasty
+Card 2: 5c2d49c1-09e0-477c-9762-9eda11c363f7   Tom Brady Dynasty
 Card 3: 317bcbe4-b3a9-4307-ade6-02f4f1f4de5c   Cruise Recap
 Card 4: 5629d473-f7ce-49e2-9264-cba3e6fc68f0   Mark Rober Interview
 Card 5: 510b0d07-cd34-4daf-92d4-74bbac5e915b   President's Club

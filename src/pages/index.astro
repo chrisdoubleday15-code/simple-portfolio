@@ -59,7 +59,7 @@ const YOUTUBE_CARDS = [
     <div class="sticky top-[72px] z-10 border-y border-white/5 backdrop-blur-md" style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
       <nav class="container flex items-center justify-center gap-8 md:gap-16 py-4">
         <a href="#featured"  class="section-nav-link" data-section="featured">Featured</a>
-        <a href="#showreel"  class="section-nav-link" data-section="showreel">Showreel</a>
+        <a href="#showreel"  class="section-nav-link" data-section="showreel">Featured</a>
         <a href="#youtube"   class="section-nav-link" data-section="youtube">Long Form</a>
         <button             class="section-nav-link" id="nav-work-btn">Work</button>
       </nav>
@@ -71,19 +71,27 @@ const YOUTUBE_CARDS = [
     <section id="showreel" class="py-12 border-t border-white/5">
       <div class="mb-6">
         <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Featured</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Showreel</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">A full-cut overview of motion design and video editing work across brands and platforms.</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Hawaii 2026</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">A short travel edit shot and cut in Hawaii.</p></div>
       </div>
 
-      <div class="w-full max-w-4xl glow overflow-hidden">
+      <button
+        id="showreel-trigger"
+        class="editing-card w-full max-w-4xl glow"
+        data-section="showreel"
+        aria-label="Play Hawaii 2026"
+      >
         <iframe
-          src="https://iframe.mediadelivery.net/embed/635173/b7da40bf-36c4-45d2-9a4b-c2ccd82482a2"
+          src="https://iframe.mediadelivery.net/embed/635173/b7da40bf-36c4-45d2-9a4b-c2ccd82482a2?preload=true&responsive=true&muted=true&autoplay=false"
           loading="lazy"
-          style="border: none; width: 100%; aspect-ratio: 16/9;"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-          allowfullscreen
+          style="border: none; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;"
+          tabindex="-1"
+          allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
         ></iframe>
-      </div>
+        <div class="editing-play">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </button>
     </section>
 
     <!-- ==============================
