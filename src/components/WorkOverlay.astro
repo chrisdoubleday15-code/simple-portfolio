@@ -562,7 +562,7 @@ const REELS_IDS = [
     type SectionKey = 'motion' | 'editing' | 'reels' | 'youtube' | 'showreel';
 
     function panelIds(index: number): string[] {
-      const el = document.querySelector(`[data-panel="${index}"]`);
+      const el = document.querySelector(`[data-panel="${index}"]`) as HTMLElement | null;
       try { return JSON.parse(el?.dataset.ids ?? '[]'); } catch { return []; }
     }
 
