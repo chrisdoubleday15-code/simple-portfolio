@@ -10,12 +10,39 @@ import SkillCard from "./SkillCard.astro";
 
 // config import
 import { ME } from '@/config';
+
+const resume = "/" + ME.contactInfo.resumeDoc;
 ---
 
 <div class="flex flex-col gap-8 text-n200 py-4">
 
+  <!-- Profile header — headshot + name + resume download -->
+  <div class="animate-fade-in delay-[0ms] flex flex-col md:flex-row items-center md:items-start gap-8">
+    <img
+      src="/images/headshot.png"
+      alt="Chris Doubleday"
+      class="rounded-full object-cover flex-shrink-0 w-[120px] h-[120px] md:w-[160px] md:h-[160px]"
+      style="border: 3px solid var(--color-accent-blue); padding: 4px;"
+    />
+    <div class="flex flex-col gap-3 text-center md:text-left">
+      <div>
+        <h1 class="font-display tracking-display text-4xl md:text-5xl text-n200">{ME.name}</h1>
+        <p class="text-n500 text-sm tracking-wider uppercase mt-1">{ME.profession}</p>
+      </div>
+      <a
+        href={resume}
+        download
+        class="inline-flex items-center gap-2 px-6 py-3 rounded-md text-sm font-semibold tracking-wider uppercase transition-opacity hover:opacity-90 self-center md:self-start"
+        style="background: var(--color-accent-blue); color: #000;"
+      >
+        Download CV
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M13 10H18L12 16L6 10H11V3H13V10ZM4 19H20V17H4V19Z"/></svg>
+      </a>
+    </div>
+  </div>
+
   <!-- About Me -->
-  <div class="animate-fade-in delay-[0ms]">
+  <div class="animate-fade-in delay-[100ms]">
     <p class="text-sm tracking-widest uppercase mb-4" style="color: var(--color-accent-blue);">About</p>
     <p class="text-xl md:text-2xl leading-relaxed text-n200 font-light max-w-2xl">
       {ME.aboutMe}

@@ -138,9 +138,11 @@ import { ME } from '../config';
   }
 
   .submit-btn {
-    @apply bg-primary-dark text-white px-10 py-3 text-sm font-semibold tracking-widest uppercase
-           hover:bg-primary-hover-dark transition-all duration-200;
+    background: var(--color-accent-blue);
+    color: #000;
+    @apply px-10 py-3 text-sm font-semibold tracking-widest uppercase transition-all duration-200;
   }
+  .submit-btn:hover { opacity: 0.85; }
 
   #form-status.success { @apply text-green-400; }
   #form-status.error   { @apply text-primary-dark; }

@@ -61,7 +61,7 @@ const workExperience:WorkExperience[] = [
         startDate: "2024-03-10",
         endDate: "2024-09-23",
         company: "Not Enough Nelsons",
-        location: "Freelance, Utah",
+        location: "Utah",
         description: "High-volume family vlog editing for a 5.42M-subscriber channel. Boosted quality by blending video and motion techniques.",
         goals: [
             "Produced high-retention edits averaging 2.9M views per video across the channel.",

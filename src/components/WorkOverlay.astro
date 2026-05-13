@@ -107,7 +107,7 @@ const REELS_IDS = [
           <p class="work-panel-label">Video Editing</p>
           <div class="editing-grid">
             {EDITING_IDS.map((id) => (
-              <button class="editing-card" data-video-id={id} aria-label="Play clip">
+              <button class="editing-card" data-section="editing" data-video-id={id} aria-label="Play clip">
                 <iframe
                   src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true&autoplay=false`}
                   loading="lazy"
@@ -776,13 +776,13 @@ const REELS_IDS = [
     });
 
     // ── Card click → open lightbox ──
-    document.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
+    overlay.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
       card.addEventListener('click', () => openLightbox('motion', card.dataset.videoId!));
     });
     document.querySelectorAll<HTMLElement>('.editing-card[data-section="youtube"]').forEach((card) => {
       card.addEventListener('click', () => openLightbox('youtube', card.dataset.videoId!));
     });
-    document.querySelectorAll<HTMLElement>('.editing-card:not([data-section="motion"]):not([data-section="youtube"]):not([data-section="showreel"])').forEach((card) => {
+    overlay.querySelectorAll<HTMLElement>('.editing-card[data-section="editing"]').forEach((card) => {
       card.addEventListener('click', () => openLightbox('editing', card.dataset.videoId!));
     });
     document.querySelectorAll<HTMLElement>('.reel-card').forEach((card) => {

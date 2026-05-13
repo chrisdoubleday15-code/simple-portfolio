@@ -60,8 +60,8 @@ const YOUTUBE_CARDS = [
       <nav class="container flex items-center justify-center gap-8 md:gap-16 py-4">
         <a href="#featured"  class="section-nav-link" data-section="featured">Featured</a>
         <a href="#showreel"  class="section-nav-link" data-section="showreel">Featured</a>
-        <a href="#youtube"   class="section-nav-link" data-section="youtube">Long Form</a>
         <button             class="section-nav-link" id="nav-work-btn">Work</button>
+        <a href="#youtube"   class="section-nav-link" data-section="youtube">Long Form</a>
       </nav>
     </div>
 
@@ -93,6 +93,8 @@ const YOUTUBE_CARDS = [
         </div>
       </button>
     </section>
+
+    <WorkOverlay />
 
     <!-- ==============================
          YOUTUBE — Long Form Edits
@@ -132,8 +134,6 @@ const YOUTUBE_CARDS = [
         ))}
       </div>
     </section>
-
-    <WorkOverlay />
   </>
 </Layout>
 
