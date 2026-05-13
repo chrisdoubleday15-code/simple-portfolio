@@ -1,6 +1,29 @@
 ---
 // WorkOverlay — work preview block + fullscreen swipeable overlay
 // All JS-toggled CSS lives in <style is:global> to survive Astro's scoped hashing.
+
+// ── Single source of truth for video IDs ──
+// Edit here only — the HTML grid and JS lightbox both read from these arrays.
+const MOTION_IDS = [
+  'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
+  '30d66712-7faf-4719-aa57-a094e261e6e3',
+  'd588c3c9-8722-46c2-bc98-ce9d412cd237',
+  'f143afcd-46f0-478d-ac6d-1922cb6a2bcf',
+];
+
+const EDITING_IDS = [
+  '23d4f219-d53c-4d6a-ada3-4213d9904d66',
+  'cecc7cde-69fa-40e7-a2c7-ae15da37c852',
+  '6d4255ef-8984-49e7-9beb-a17f36a421b0',
+  'dfcfb265-cf70-46d2-a944-92ba1ee0b431',
+];
+
+const REELS_IDS = [
+  'd9e1da32-992e-481f-ba9b-ba69eeafa70d',
+  '0dd1a40a-3928-4f0a-bd66-7f5729395cb2',
+  '043cbe34-6d9e-447a-941d-863c3ba2d9d6',
+  'c8b72103-2fa9-4603-9ff9-04a8602fb449',
+];
 ---
 
 <!-- ══════════════════════════════════════════════
@@ -23,7 +46,7 @@
   <!-- Looping preview video -->
   <button class="work-preview-video" data-target="0" aria-label="Browse all work">
     <iframe
-      src="https://iframe.mediadelivery.net/embed/635173/e2a9c8f2-1429-4b94-a05c-2ad99da565c3?autoplay=true&loop=true&muted=true&preload=true&responsive=true"
+      src="https://iframe.mediadelivery.net/embed/635173/8ab58885-6eba-4960-965c-46452e78efcc?autoplay=true&loop=true&muted=true&preload=true&responsive=true"
       loading="lazy"
       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
       style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -59,18 +82,13 @@
       <div class="work-overlay-track" id="work-overlay-track">
 
         <!-- Panel 0: Motion Design -->
-        <div class="work-overlay-panel" data-panel="0">
+        <div class="work-overlay-panel" data-panel="0" data-ids={JSON.stringify(MOTION_IDS)}>
           <p class="work-panel-label">Motion Design</p>
           <div class="editing-grid">
-            {[
-              'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
-              '7125608a-fd3c-4047-8657-c8384556fefd',
-              'd588c3c9-8722-46c2-bc98-ce9d412cd237',
-              'f143afcd-46f0-478d-ac6d-1922cb6a2bcf',
-            ].map((id) => (
+            {MOTION_IDS.map((id) => (
               <button class="editing-card" data-video-id={id} data-section="motion" aria-label="Play clip">
                 <iframe
-                  src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
+                  src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true&autoplay=false`}
                   loading="lazy"
                   allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
                   style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -85,18 +103,13 @@
         </div>
 
         <!-- Panel 1: Video Editing -->
-        <div class="work-overlay-panel" data-panel="1">
+        <div class="work-overlay-panel" data-panel="1" data-ids={JSON.stringify(EDITING_IDS)}>
           <p class="work-panel-label">Video Editing</p>
           <div class="editing-grid">
-            {[
-              '23d4f219-d53c-4d6a-ada3-4213d9904d66',
-              'cecc7cde-69fa-40e7-a2c7-ae15da37c852',
-              '6d4255ef-8984-49e7-9beb-a17f36a421b0',
-              'dfcfb265-cf70-46d2-a944-92ba1ee0b431',
-            ].map((id) => (
+            {EDITING_IDS.map((id) => (
               <button class="editing-card" data-video-id={id} aria-label="Play clip">
                 <iframe
-                  src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
+                  src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true&autoplay=false`}
                   loading="lazy"
                   allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
                   style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -111,19 +124,14 @@
         </div>
 
         <!-- Panel 2: Short-form & Reels -->
-        <div class="work-overlay-panel" data-panel="2">
+        <div class="work-overlay-panel" data-panel="2" data-ids={JSON.stringify(REELS_IDS)}>
           <p class="work-panel-label">Short-form & Reels</p>
           <div class="reels-grid-wrap">
             <div class="reels-grid">
-              {[
-                'd9e1da32-992e-481f-ba9b-ba69eeafa70d',
-                '0dd1a40a-3928-4f0a-bd66-7f5729395cb2',
-                '043cbe34-6d9e-447a-941d-863c3ba2d9d6',
-                'c8b72103-2fa9-4603-9ff9-04a8602fb449',
-              ].map((id) => (
+              {REELS_IDS.map((id) => (
                 <button class="reel-card" data-video-id={id} aria-label="Play clip">
                   <iframe
-                    src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true`}
+                    src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true&autoplay=false`}
                     loading="lazy"
                     allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
                     style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -553,6 +561,11 @@
     // ── Section configs ──
     type SectionKey = 'motion' | 'editing' | 'reels' | 'youtube' | 'showreel';
 
+    function panelIds(index: number): string[] {
+      const el = document.querySelector(`[data-panel="${index}"]`);
+      try { return JSON.parse(el?.dataset.ids ?? '[]'); } catch { return []; }
+    }
+
     const sections: Record<SectionKey, {
       ids: string[];
       ytUrls?: (string | null)[];
@@ -563,12 +576,7 @@
       buildSrc: (id: string) => string;
     }> = {
       motion: {
-        ids: [
-          'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
-          '7125608a-fd3c-4047-8657-c8384556fefd',
-          'd588c3c9-8722-46c2-bc98-ce9d412cd237',
-          'f143afcd-46f0-478d-ac6d-1922cb6a2bcf',
-        ],
+        ids: panelIds(0),
         index: 0,
         lightboxEl: document.getElementById('motion-lightbox'),
         iframeEl: document.getElementById('motion-iframe') as HTMLIFrameElement | null,
@@ -576,12 +584,7 @@
         buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
       },
       editing: {
-        ids: [
-          '23d4f219-d53c-4d6a-ada3-4213d9904d66',
-          'cecc7cde-69fa-40e7-a2c7-ae15da37c852',
-          '6d4255ef-8984-49e7-9beb-a17f36a421b0',
-          'dfcfb265-cf70-46d2-a944-92ba1ee0b431',
-        ],
+        ids: panelIds(1),
         index: 0,
         lightboxEl: document.getElementById('editing-lightbox'),
         iframeEl: document.getElementById('editing-iframe') as HTMLIFrameElement | null,
@@ -589,12 +592,7 @@
         buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
       },
       reels: {
-        ids: [
-          'd9e1da32-992e-481f-ba9b-ba69eeafa70d',
-          '0dd1a40a-3928-4f0a-bd66-7f5729395cb2',
-          '043cbe34-6d9e-447a-941d-863c3ba2d9d6',
-          'c8b72103-2fa9-4603-9ff9-04a8602fb449',
-        ],
+        ids: panelIds(2),
         index: 0,
         lightboxEl: document.getElementById('reels-lightbox'),
         iframeEl: document.getElementById('reels-iframe') as HTMLIFrameElement | null,
