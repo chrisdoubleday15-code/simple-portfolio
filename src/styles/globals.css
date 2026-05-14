@@ -249,7 +249,9 @@ code {
   padding: 0;
   cursor: pointer;
 }
-.editing-lightbox-card {
+/* Compound selector beats the later `.reels-lightbox-card` rule on
+   specificity, so `height: auto` actually wins on narrow viewports. */
+.reels-lightbox-card.editing-lightbox-card {
   height: auto;
   max-width: 85vw;
   max-height: 85vh;

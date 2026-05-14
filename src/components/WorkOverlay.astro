@@ -160,11 +160,11 @@ const REELS_IDS = [
 <!-- Motion lightbox -->
 <div id="motion-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="motion-backdrop"></div>
-  <button class="lightbox-close" data-section="motion" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="motion" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="reels-lightbox-card editing-lightbox-card">
-      <iframe id="motion-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+      <button class="lightbox-close" data-section="motion" aria-label="Close video">&#10005;</button>
+      <iframe id="motion-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;position:relative;z-index:1;"></iframe>
     </div>
     <button class="lightbox-arrow" data-section="motion" data-dir="1" aria-label="Next video">&#10095;</button>
   </div>
@@ -173,11 +173,11 @@ const REELS_IDS = [
 <!-- Editing lightbox -->
 <div id="editing-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="editing-backdrop"></div>
-  <button class="lightbox-close" data-section="editing" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="editing" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="reels-lightbox-card editing-lightbox-card">
-      <iframe id="editing-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+      <button class="lightbox-close" data-section="editing" aria-label="Close video">&#10005;</button>
+      <iframe id="editing-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;position:relative;z-index:1;"></iframe>
     </div>
     <button class="lightbox-arrow" data-section="editing" data-dir="1" aria-label="Next video">&#10095;</button>
   </div>
@@ -186,11 +186,11 @@ const REELS_IDS = [
 <!-- Reels lightbox -->
 <div id="reels-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="reels-backdrop"></div>
-  <button class="lightbox-close" data-section="reels" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="reels" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="reels-lightbox-card">
-      <iframe id="reels-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+      <button class="lightbox-close" data-section="reels" aria-label="Close video">&#10005;</button>
+      <iframe id="reels-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;position:relative;z-index:1;"></iframe>
     </div>
     <button class="lightbox-arrow" data-section="reels" data-dir="1" aria-label="Next video">&#10095;</button>
   </div>
@@ -199,12 +199,12 @@ const REELS_IDS = [
 <!-- YouTube lightbox -->
 <div id="youtube-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="youtube-backdrop"></div>
-  <button class="lightbox-close" data-section="youtube" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="youtube" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="youtube-lightbox-stack">
       <div class="reels-lightbox-card editing-lightbox-card">
-        <iframe id="youtube-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+        <button class="lightbox-close" data-section="youtube" aria-label="Close video">&#10005;</button>
+        <iframe id="youtube-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;position:relative;z-index:1;"></iframe>
       </div>
       <a id="youtube-yt-link" href="#" target="_blank" rel="noopener noreferrer" class="youtube-yt-link">Full video on YouTube &rarr;</a>
     </div>
@@ -215,9 +215,9 @@ const REELS_IDS = [
 <!-- Showreel lightbox -->
 <div id="showreel-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="showreel-backdrop"></div>
-  <button class="lightbox-close" data-section="showreel" aria-label="Close video">&#10005;</button>
   <div class="reels-lightbox-card editing-lightbox-card">
-    <iframe id="showreel-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
+    <button class="lightbox-close" data-section="showreel" aria-label="Close video">&#10005;</button>
+    <iframe id="showreel-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;position:relative;z-index:1;"></iframe>
   </div>
 </div>
 
@@ -455,19 +455,19 @@ const REELS_IDS = [
     background: rgba(0, 200, 255, 0.08);
   }
 
-  /* ── Lightbox close button (mobile-friendly tap target, clears iOS notch) ── */
+  /* ── Lightbox close button — anchored to top-right of the video card ── */
   .lightbox-close {
     position: absolute;
-    top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
-    right: 1rem;
-    z-index: 10001;
-    width: 44px;
-    height: 44px;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2; /* above the iframe inside the card */
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.55);
     border: none;
     color: var(--color-text-primary);
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     line-height: 1;
     cursor: pointer;
     padding: 0;
