@@ -160,6 +160,7 @@ const REELS_IDS = [
 <!-- Motion lightbox -->
 <div id="motion-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="motion-backdrop"></div>
+  <button class="lightbox-close" data-section="motion" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="motion" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="reels-lightbox-card editing-lightbox-card">
@@ -172,6 +173,7 @@ const REELS_IDS = [
 <!-- Editing lightbox -->
 <div id="editing-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="editing-backdrop"></div>
+  <button class="lightbox-close" data-section="editing" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="editing" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="reels-lightbox-card editing-lightbox-card">
@@ -184,6 +186,7 @@ const REELS_IDS = [
 <!-- Reels lightbox -->
 <div id="reels-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="reels-backdrop"></div>
+  <button class="lightbox-close" data-section="reels" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="reels" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="reels-lightbox-card">
@@ -196,6 +199,7 @@ const REELS_IDS = [
 <!-- YouTube lightbox -->
 <div id="youtube-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="youtube-backdrop"></div>
+  <button class="lightbox-close" data-section="youtube" aria-label="Close video">&#10005;</button>
   <div class="lightbox-inner">
     <button class="lightbox-arrow" data-section="youtube" data-dir="-1" aria-label="Previous video">&#10094;</button>
     <div class="youtube-lightbox-stack">
@@ -211,6 +215,7 @@ const REELS_IDS = [
 <!-- Showreel lightbox -->
 <div id="showreel-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="showreel-backdrop"></div>
+  <button class="lightbox-close" data-section="showreel" aria-label="Close video">&#10005;</button>
   <div class="reels-lightbox-card editing-lightbox-card">
     <iframe id="showreel-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;"></iframe>
   </div>
@@ -450,6 +455,39 @@ const REELS_IDS = [
     background: rgba(0, 200, 255, 0.08);
   }
 
+  /* ── Lightbox close button (mobile-friendly tap target) ── */
+  .lightbox-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10001;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(13, 13, 31, 0.65);
+    border: 1.5px solid var(--color-accent-blue);
+    color: var(--color-accent-blue);
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .lightbox-close:hover {
+    background: var(--color-accent-blue);
+    color: #000;
+  }
+  @media (max-width: 480px) {
+    .lightbox-close {
+      top: 0.75rem;
+      right: 0.75rem;
+    }
+  }
+
   /* ── Lightbox navigation arrows ── */
   .lightbox-arrow {
     flex-shrink: 0;
@@ -558,12 +596,26 @@ const REELS_IDS = [
 
     let currentPanel = 0;
 
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
     // ── Section configs ──
     type SectionKey = 'motion' | 'editing' | 'reels' | 'youtube' | 'showreel';
 
     function panelIds(index: number): string[] {
       const el = document.querySelector(`[data-panel="${index}"]`) as HTMLElement | null;
       try { return JSON.parse(el?.dataset.ids ?? '[]'); } catch { return []; }
+    }
+
+    // iframe.mediadelivery.net does not play inline on iOS Safari (shows static
+    // thumbnail until a second tap launches the native fullscreen player).
+    // player.mediadelivery.net does play inline. We swap origins on iOS and turn
+    // on Bunny's native controls so users can toggle audio inside the lightbox.
+    function buildLightboxSrc(id: string, opts: { loop?: boolean } = {}): string {
+      const loopParam = opts.loop ? '&loop=true' : '';
+      if (isIOS) {
+        return `https://player.mediadelivery.net/embed/635173/${id}?autoplay=true&muted=true&controls=true${loopParam}&responsive=true`;
+      }
+      return `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true${loopParam}`;
     }
 
     const sections: Record<SectionKey, {
@@ -581,7 +633,7 @@ const REELS_IDS = [
         lightboxEl: document.getElementById('motion-lightbox'),
         iframeEl: document.getElementById('motion-iframe') as HTMLIFrameElement | null,
         backdropEl: document.getElementById('motion-backdrop'),
-        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
+        buildSrc: (id) => buildLightboxSrc(id),
       },
       editing: {
         ids: panelIds(1),
@@ -589,7 +641,7 @@ const REELS_IDS = [
         lightboxEl: document.getElementById('editing-lightbox'),
         iframeEl: document.getElementById('editing-iframe') as HTMLIFrameElement | null,
         backdropEl: document.getElementById('editing-backdrop'),
-        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
+        buildSrc: (id) => buildLightboxSrc(id),
       },
       reels: {
         ids: panelIds(2),
@@ -597,7 +649,7 @@ const REELS_IDS = [
         lightboxEl: document.getElementById('reels-lightbox'),
         iframeEl: document.getElementById('reels-iframe') as HTMLIFrameElement | null,
         backdropEl: document.getElementById('reels-backdrop'),
-        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true&loop=true`,
+        buildSrc: (id) => buildLightboxSrc(id, { loop: true }),
       },
       // Order must match `YOUTUBE_CARDS` in src/pages/index.astro.
       youtube: {
@@ -621,7 +673,7 @@ const REELS_IDS = [
         lightboxEl: document.getElementById('youtube-lightbox'),
         iframeEl: document.getElementById('youtube-iframe') as HTMLIFrameElement | null,
         backdropEl: document.getElementById('youtube-backdrop'),
-        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
+        buildSrc: (id) => buildLightboxSrc(id),
       },
       showreel: {
         ids: ['b7da40bf-36c4-45d2-9a4b-c2ccd82482a2'],
@@ -629,7 +681,7 @@ const REELS_IDS = [
         lightboxEl: document.getElementById('showreel-lightbox'),
         iframeEl: document.getElementById('showreel-iframe') as HTMLIFrameElement | null,
         backdropEl: document.getElementById('showreel-backdrop'),
-        buildSrc: (id) => `https://iframe.mediadelivery.net/embed/635173/${id}?autoplay=true`,
+        buildSrc: (id) => buildLightboxSrc(id),
       },
     };
 
@@ -836,6 +888,14 @@ const REELS_IDS = [
         const key = btn.dataset.section as SectionKey;
         const dir = Number(btn.dataset.dir);
         navLightbox(key, dir);
+      });
+    });
+
+    // ── Lightbox close button clicks ──
+    document.querySelectorAll<HTMLButtonElement>('.lightbox-close').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeLightbox(btn.dataset.section as SectionKey);
       });
     });
 

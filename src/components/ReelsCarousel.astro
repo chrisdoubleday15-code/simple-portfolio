@@ -256,6 +256,48 @@ const DEG   = 360 / TOTAL;         // 60
     const cylinder = document.getElementById('carousel-cylinder') as HTMLElement | null;
     if (!cylinder) return;
 
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    const PLAYER_ORIGIN = 'https://player.mediadelivery.net';
+    const readyIframes = new WeakSet<HTMLIFrameElement>();
+
+    function sendPlayerCommand(iframe: HTMLIFrameElement | null, method: 'mute' | 'unmute') {
+      if (!iframe?.contentWindow) return;
+      iframe.contentWindow.postMessage(JSON.stringify({
+        context: 'player.js',
+        version: '0.0.6',
+        method,
+      }), PLAYER_ORIGIN);
+    }
+
+    function applyMuteState(iframe: HTMLIFrameElement | null) {
+      if (!iframe) return;
+      // iOS Safari blocks cross-origin unmuted autoplay even via postMessage; users
+      // toggle audio via Bunny's native controls (controls=true URL param) instead.
+      if (isIOS) return;
+      const method = muted ? 'mute' : 'unmute';
+      if (readyIframes.has(iframe)) {
+        sendPlayerCommand(iframe, method);
+      }
+      // If not ready yet, the message handler below will call applyMuteState on ready.
+    }
+
+    function handleMessage(e: MessageEvent) {
+      if (e.origin !== PLAYER_ORIGIN) return;
+      let data: any;
+      try { data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data; } catch { return; }
+      if (data?.context !== 'player.js' || data?.event !== 'ready') return;
+      // Find which carousel iframe matches this source and mark ready.
+      const iframes = cylinder!.querySelectorAll<HTMLIFrameElement>('iframe.iframe-active');
+      iframes.forEach((iframe) => {
+        if (iframe.contentWindow === e.source) {
+          readyIframes.add(iframe);
+          applyMuteState(iframe);
+        }
+      });
+    }
+    window.addEventListener('message', handleMessage);
+
     // Read radius from CSS so --carousel-radius is the single source of truth
     const wrapper = cylinder.closest<HTMLElement>('.carousel-wrapper')!;
     const RADIUS  = parseInt(getComputedStyle(wrapper).getPropertyValue('--carousel-radius')) || 320;
@@ -300,8 +342,12 @@ const DEG   = 360 / TOTAL;         // 60
 
     function createIframe(id: string, autoplay: boolean): HTMLIFrameElement {
       const iframe = document.createElement('iframe');
+      // Always load muted=true so autoplay isn't blocked by cross-origin policy.
+      // Desktop: hidden controls; audio toggled in-place via player.js postMessage.
+      // iOS: native Bunny controls (controls=true) so users can unmute inline.
+      const controlsParam = isIOS && autoplay ? 'controls=true' : 'controls=false';
       iframe.src = autoplay
-        ? `https://player.mediadelivery.net/embed/${LIBRARY_ID}/${id}?autoplay=true&loop=true&muted=${muted}&preload=true&controls=false&responsive=true`
+        ? `https://player.mediadelivery.net/embed/${LIBRARY_ID}/${id}?autoplay=true&loop=true&muted=true&preload=true&${controlsParam}&responsive=true`
         : `https://player.mediadelivery.net/embed/${LIBRARY_ID}/${id}?autoplay=false&muted=true&preload=true&controls=false&responsive=true`;
       iframe.allow           = 'accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture';
       iframe.allowFullscreen = true;
@@ -329,6 +375,8 @@ const DEG   = 360 / TOTAL;         // 60
 
     const muteBtn = document.getElementById('carousel-mute') as HTMLElement | null;
 
+    if (isIOS && muteBtn) muteBtn.style.display = 'none';
+
     function updateMuteBtn() {
       if (!muteBtn) return;
       muteBtn.innerHTML = muted ? ICON_MUTED : ICON_SOUND;
@@ -339,7 +387,8 @@ const DEG   = 360 / TOTAL;         // 60
       e.stopPropagation();
       muted = !muted;
       updateMuteBtn();
-      playCard(cards[active]); // rebuild active iframe with new mute state
+      const activeIframe = cards[active].querySelector<HTMLIFrameElement>('.iframe-active');
+      applyMuteState(activeIframe);
     });
 
     function advance(dir: number) {
@@ -362,6 +411,7 @@ const DEG   = 360 / TOTAL;         // 60
     document.addEventListener('keydown', handleKeydown);
     document.addEventListener('astro:before-swap', () => {
       document.removeEventListener('keydown', handleKeydown);
+      window.removeEventListener('message', handleMessage);
     }, { once: true });
     dots.forEach((dot, i) => dot.addEventListener('click', () => {
       if (i === active) return;
