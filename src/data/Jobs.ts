@@ -50,9 +50,10 @@ const workExperience:WorkExperience[] = [
         location: "Provo, Utah",
         description: "Promoted to lead motion design for the marketing team.",
         goals: [
-            "Designed full event graphics packages, delivering cohesive motion branding across every screen.",
-            "Created sports arena graphics built for large-format displays and live audiences.",
-            "Oversaw motion projects from initial vision through final delivery.",
+            "Designed and delivered the Live It Awards 2026 package solo: 49 assets in 6 weeks, up from 18 the prior year.",
+            "Built 6 reusable 2.5D templates to produce 37 award animations, plus 12 bespoke stage and show assets.",
+            "Created sports arena graphics shown on the big screens at Delta Center and Lenovo Center.",
+            "Oversaw projects from initial vision through final delivery, owning visual direction end to end.",
         ],
         currentJob: true,
     },
