@@ -1,6 +1,6 @@
 # CLAUDE.md
 _chrisdoubleday.com — Claude Code project context_
-_Last updated: April 2026_
+_Last updated: October 2026_
 
 ---
 
@@ -46,7 +46,7 @@ src/
     SkillCard.astro              ← Skills section cards
     JobDetails.astro             ← Experience section rows
     EduDetail.astro              ← Education badge
-    ProjectsCC.astro             ← Projects grid
+    WorkOverlay.astro            ← Work preview block, fullscreen overlay, all lightboxes + their JS
     BackBtn.astro                ← Back button (red CTA)
     Footer.astro
   styles/
@@ -73,7 +73,7 @@ astro.config.mjs
 --color-bg-surface:   #141418;   /* cards, nav surface, form inputs */
 --color-bg-elevated:  #1a1a20;   /* lightbox/modal backdrop */
 --color-accent-blue:  #00c8ff;   /* primary accent — all non-CTA highlights */
---color-accent-red:   #ff2d2d;   /* CTA accent — buttons only */
+--color-accent-red:   #ff2d2d;   /* CTA accent — Contact + Back buttons */
 --color-text-primary: #f0f0f0;
 --color-text-muted:   #888899;
 ```
@@ -103,8 +103,8 @@ dark-theme: #0a0a0a  legacy — mismatches --color-bg-base intentionally, do not
 | Profile image border | `var(--color-accent-blue)` |
 | Skill card icons | `var(--color-accent-blue)` |
 | Contact button | `var(--color-accent-red)` / Tailwind `primary-dark` |
-| CV download button | `var(--color-accent-red)` / Tailwind `primary-dark` |
-| Form submit button | `var(--color-accent-red)` / Tailwind `primary-dark` |
+| CV download button | `var(--color-accent-blue)` (intentional) |
+| Form submit button | `var(--color-accent-blue)` (intentional) |
 | Back button | `var(--color-accent-red)` / Tailwind `primary-dark` |
 
 ---
@@ -172,10 +172,9 @@ Section order:
 1. **Hero** — `<section class="text-center relative pt-8 pb-4">`
 2. **Featured** — `<section id="featured" class="py-4">` → `<ReelsCarousel />`
 3. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
-4. **Showreel** — `<section id="showreel" class="py-12 border-t border-white/5">`
-5. **Motion Design** — `<section id="motion-design" class="py-12 border-t border-white/5">`
-6. **Video Editing** — `<section id="video-editing" class="py-12 border-t border-white/5">`
-7. **Short-form & Reels** — `<section id="reels" class="py-12 border-t border-white/5">`
+4. **Showreel** — `<section id="showreel" class="py-12 border-t border-white/5">` (titled "Hawaii 2026", opens `#showreel-lightbox`)
+5. **Work** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Motion / Editing / Short Form panels
+6. **Long Form** — `<section id="youtube" class="py-12 border-t border-white/5">`, driven by `YOUTUBE_CARDS` in `index.astro`
 
 ### Sticky nav
 
@@ -184,7 +183,7 @@ Section order:
      style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
 ```
 
-Links: `Featured | Showreel | Motion Design | Video Editing | Short-form & Reels`
+Links: `Featured | Showreel | Work | Long Form` (`Work` is a button that opens the overlay)
 Active state: `IntersectionObserver` adds `.active` → `color: var(--color-accent-blue)`
 
 ### JS conventions (`index.astro`)
@@ -214,34 +213,15 @@ Card 5: 510b0d07-cd34-4daf-92d4-74bbac5e915b   President's Club
 b7da40bf-36c4-45d2-9a4b-c2ccd82482a2
 ```
 
-### Motion Design grid — uses `iframe.mediadelivery.net`
+### Work overlay grids — uses `iframe.mediadelivery.net`
 
-```
-e2a9c8f2-1429-4b94-a05c-2ad99da565c3
-7125608a-fd3c-4047-8657-c8384556fefd
-d588c3c9-8722-46c2-bc98-ce9d412cd237
-f143afcd-46f0-478d-ac6d-1922cb6a2bcf
-```
+Source of truth: `MOTION_IDS`, `EDITING_IDS`, `REELS_IDS` at the top of `WorkOverlay.astro`. Panels expose them via `data-ids`; the lightbox JS reads them back, so edit the arrays only.
 
-Cards carry `data-section="motion"` → routed to `#motion-lightbox`. **Do not remove this attribute.**
+Motion cards carry `data-section="motion"` → routed to `#motion-lightbox`. **Do not remove this attribute.**
 
-### Video Editing grid — uses `iframe.mediadelivery.net`
+### Long Form (YouTube) grid — uses `iframe.mediadelivery.net`
 
-```
-23d4f219-d53c-4d6a-ada3-4213d9904d66
-cecc7cde-69fa-40e7-a2c7-ae15da37c852
-6d4255ef-8984-49e7-9beb-a17f36a421b0
-dfcfb265-cf70-46d2-a944-92ba1ee0b431
-```
-
-### Short-Form & Reels grid (9:16) — uses `iframe.mediadelivery.net`
-
-```
-d9e1da32-992e-481f-ba9b-ba69eeafa70d
-0dd1a40a-3928-4f0a-bd66-7f5729395cb2
-043cbe34-6d9e-447a-941d-863c3ba2d9d6
-c8b72103-2fa9-4603-9ff9-04a8602fb449
-```
+Source of truth: `YOUTUBE_CARDS` in `index.astro` (`id`, captions, optional `ytUrl`). The `.youtube-grid` exposes `data-ids` / `data-yt-urls` for the lightbox; a `null` `ytUrl` hides the "Full video on YouTube" link.
 
 ### Embed URL formats
 
@@ -331,30 +311,27 @@ Arrow glyphs: `&#10094;` / `&#10095;` — not `&#8592;`/`&#8594;`
 - **Do not change the `-0.1` multiplier**
 - **Do not remove the parallax script** — X-axis jitter from CSS still runs; removing the script breaks the full system
 
-### Grid Cards — hover autoplay pattern
+### Grid Cards
 
-Wired in `index.astro` `<script>`:
-
-```js
-card.addEventListener('mouseenter', () => { iframe.src = baseSrc + '&autoplay=true&muted=true'; });
-card.addEventListener('mouseleave', () => { iframe.src = baseSrc; });
-```
-
-Grid iframes always carry `pointer-events: none` and `tabindex="-1"`.
+Static first frame only — hover autoplay was removed. Grid iframes always carry `pointer-events: none` and `tabindex="-1"`.
 
 ### Lightboxes
 
-Three independent lightboxes in `index.astro`:
+Five lightboxes in `WorkOverlay.astro`, driven by one `sections` table (`openLightbox` / `closeLightbox` / `navLightbox`):
 
-| Lightbox | ID | Iframe ID | Backdrop ID | Triggered by |
-|---|---|---|---|---|
-| Reels | `reels-lightbox` | `reels-iframe` | `reels-backdrop` | `.reel-card` |
-| Video Editing | `editing-lightbox` | `editing-iframe` | `editing-backdrop` | `.editing-card:not([data-section="motion"])` |
-| Motion Design | `motion-lightbox` | `motion-iframe` | `motion-backdrop` | `.editing-card[data-section="motion"]` |
+| Key | Lightbox ID | Triggered by |
+|---|---|---|
+| `motion` | `motion-lightbox` | `.editing-card[data-section="motion"]` |
+| `editing` | `editing-lightbox` | `.editing-card[data-section="editing"]` |
+| `reels` | `reels-lightbox` | `.reel-card` |
+| `youtube` | `youtube-lightbox` | `.editing-card[data-section="youtube"]` |
+| `showreel` | `showreel-lightbox` | `#showreel-trigger` |
+
+Each lightbox has prev/next arrows, ←/→ keys and swipe. On iOS, lightboxes swap to `player.mediadelivery.net` so video plays inline.
 
 - Open: add `.open`, set `aria-hidden="false"`, set `iframe.src`
 - Close: remove `.open`, set `aria-hidden="true"`, clear `iframe.src`
-- Close triggers: backdrop click, `Escape` key
+- Close triggers: backdrop click, close button, `Escape` key
 
 Lightbox dimensions:
 - Reels: `height: 85vh; aspect-ratio: 9/16`
@@ -405,7 +382,7 @@ Hero entrance: `.hero-word` animates via `hero-rise` keyframe (translateY 110% �
 ```
 
 `IntersectionObserver` adds `.is-visible` to parent section.
-Sections observed: `#showreel`, `#reels`, `#motion-design`, `#video-editing`
+Sections observed: `#showreel`, `#youtube`
 
 ### Card stagger
 

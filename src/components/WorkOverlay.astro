@@ -579,6 +579,9 @@ const REELS_IDS = [
      SCRIPT
 ══════════════════════════════════════════════ -->
 <script>
+  // Aborted on each re-init so document-level listeners don't pile up across view transitions.
+  let docListeners: AbortController | null = null;
+
   function initWorkOverlay() {
     // ── Elements ──
     const overlay  = document.getElementById('work-overlay') as HTMLElement | null;
@@ -595,9 +598,13 @@ const REELS_IDS = [
     // ── Section configs ──
     type SectionKey = 'motion' | 'editing' | 'reels' | 'youtube' | 'showreel';
 
+    function dataJson<T>(selector: string, key: string): T {
+      const el = document.querySelector(selector) as HTMLElement | null;
+      try { return JSON.parse(el?.dataset[key] ?? '[]'); } catch { return [] as T; }
+    }
+
     function panelIds(index: number): string[] {
-      const el = document.querySelector(`[data-panel="${index}"]`) as HTMLElement | null;
-      try { return JSON.parse(el?.dataset.ids ?? '[]'); } catch { return []; }
+      return dataJson<string[]>(`[data-panel="${index}"]`, 'ids');
     }
 
     // iframe.mediadelivery.net does not play inline on iOS Safari (shows static
@@ -645,24 +652,9 @@ const REELS_IDS = [
         backdropEl: document.getElementById('reels-backdrop'),
         buildSrc: (id) => buildLightboxSrc(id, { loop: true }),
       },
-      // Order must match `YOUTUBE_CARDS` in src/pages/index.astro.
       youtube: {
-        ids: [
-          '70a7ddcd-705d-42ea-9b36-540249c34b21',
-          '803e78f8-1c29-40fc-b8b1-2715adad10f3',
-          '1a1d745f-a25f-4ff2-9a78-45c95702c5e4',
-          'ada7c0a4-6dce-4698-9ac0-aed47fa58963',
-          '00f82cdd-20d5-4ec0-91f1-1dc1e409de51',
-          '427b6293-d770-48f6-8fa2-e473b9af1735',
-        ],
-        ytUrls: [
-          'https://www.youtube.com/watch?v=fTTYubF6TZ0',
-          'https://www.youtube.com/watch?v=YbpH2dvh3Vk',
-          'https://www.youtube.com/watch?v=XuNUB9iyaAY',
-          'https://www.youtube.com/watch?v=PMNxhSZ9MzI',
-          null,
-          null,
-        ],
+        ids: dataJson<string[]>('.youtube-grid', 'ids'),
+        ytUrls: dataJson<(string | null)[]>('.youtube-grid', 'ytUrls'),
         index: 0,
         lightboxEl: document.getElementById('youtube-lightbox'),
         iframeEl: document.getElementById('youtube-iframe') as HTMLIFrameElement | null,
@@ -894,6 +886,8 @@ const REELS_IDS = [
     });
 
     // ── Keyboard: Escape + lightbox/overlay arrow navigation ──
+    docListeners?.abort();
+    docListeners = new AbortController();
     document.addEventListener('keydown', (e: KeyboardEvent) => {
       const keys = Object.keys(sections) as SectionKey[];
       const openKey = keys.find((k) => sections[k].lightboxEl?.classList.contains('open'));
@@ -915,7 +909,7 @@ const REELS_IDS = [
       if (!overlay.classList.contains('open')) return;
       if (e.key === 'ArrowRight') goToPanel(currentPanel + 1);
       if (e.key === 'ArrowLeft')  goToPanel(currentPanel - 1);
-    });
+    }, { signal: docListeners.signal });
   }
 
   document.addEventListener('astro:page-load', initWorkOverlay);

@@ -3,14 +3,14 @@ import Layout from '../layouts/Layout.astro';
 import ReelsCarousel from '../components/ReelsCarousel.astro';
 import WorkOverlay from '../components/WorkOverlay.astro';
 
-// Order must match WorkOverlay.astro `sections.youtube.ids` / `ytUrls`.
+// WorkOverlay's YouTube lightbox reads ids/ytUrls from the grid's data attributes.
 const YOUTUBE_CARDS = [
-  { id: '70a7ddcd-705d-42ea-9b36-540249c34b21', line1: 'Not Enough Nelsons', line2: 'Food Truck Challenge' },
-  { id: '803e78f8-1c29-40fc-b8b1-2715adad10f3', line1: 'Not Enough Nelsons', line2: 'Back to School' },
-  { id: '1a1d745f-a25f-4ff2-9a78-45c95702c5e4', line1: 'Not Enough Nelsons', line2: '17th Birthday' },
-  { id: 'ada7c0a4-6dce-4698-9ac0-aed47fa58963', line1: 'Not Enough Nelsons', line2: 'First Cheer' },
-  { id: '00f82cdd-20d5-4ec0-91f1-1dc1e409de51', line1: 'Boxing Bullies',     line2: 'Jake Paul Day in the Life' },
-  { id: '427b6293-d770-48f6-8fa2-e473b9af1735', line1: 'Rose Anvil',         line2: 'M1917' },
+  { id: '70a7ddcd-705d-42ea-9b36-540249c34b21', line1: 'Not Enough Nelsons', line2: 'Food Truck Challenge', ytUrl: 'https://www.youtube.com/watch?v=fTTYubF6TZ0' },
+  { id: '803e78f8-1c29-40fc-b8b1-2715adad10f3', line1: 'Not Enough Nelsons', line2: 'Back to School', ytUrl: 'https://www.youtube.com/watch?v=YbpH2dvh3Vk' },
+  { id: '1a1d745f-a25f-4ff2-9a78-45c95702c5e4', line1: 'Not Enough Nelsons', line2: '17th Birthday', ytUrl: 'https://www.youtube.com/watch?v=XuNUB9iyaAY' },
+  { id: 'ada7c0a4-6dce-4698-9ac0-aed47fa58963', line1: 'Not Enough Nelsons', line2: 'First Cheer', ytUrl: 'https://www.youtube.com/watch?v=PMNxhSZ9MzI' },
+  { id: '00f82cdd-20d5-4ec0-91f1-1dc1e409de51', line1: 'Boxing Bullies',     line2: 'Jake Paul Day in the Life', ytUrl: null },
+  { id: '427b6293-d770-48f6-8fa2-e473b9af1735', line1: 'Rose Anvil',         line2: 'M1917', ytUrl: null },
 ];
 ---
 
@@ -59,7 +59,7 @@ const YOUTUBE_CARDS = [
     <div class="sticky top-[72px] z-10 border-y border-white/5 backdrop-blur-md" style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
       <nav class="container flex items-center justify-center gap-8 md:gap-16 py-4">
         <a href="#featured"  class="section-nav-link" data-section="featured">Featured</a>
-        <a href="#showreel"  class="section-nav-link" data-section="showreel">Featured</a>
+        <a href="#showreel"  class="section-nav-link" data-section="showreel">Showreel</a>
         <button             class="section-nav-link" id="nav-work-btn">Work</button>
         <a href="#youtube"   class="section-nav-link" data-section="youtube">Long Form</a>
       </nav>
@@ -106,7 +106,11 @@ const YOUTUBE_CARDS = [
         <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Episodic vlogs and day-in-the-life cuts — full-length edits built for YouTube.</p></div>
       </div>
 
-      <div class="card-grid youtube-grid">
+      <div
+        class="card-grid youtube-grid"
+        data-ids={JSON.stringify(YOUTUBE_CARDS.map((c) => c.id))}
+        data-yt-urls={JSON.stringify(YOUTUBE_CARDS.map((c) => c.ytUrl))}
+      >
         {YOUTUBE_CARDS.map((c, i) => (
           <figure class="youtube-card-wrap stagger-card" style={`--card-delay: ${i * 80}ms`}>
             <button

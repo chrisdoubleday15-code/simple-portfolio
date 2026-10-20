@@ -1,29 +1,14 @@
 {
-  "name": "astro-simple-portfolio",
+  "name": "chrisdoubleday-portfolio",
   "type": "module",
   "version": "1.1.0",
-  "description": "free and open-source portfolio template site built with Astro.",
+  "description": "Portfolio site for Christopher Doubleday, motion designer and video editor.",
   "license": "MIT",
   "private": true,
   "author": {
-    "name": "Victor Alvarado"
+    "name": "Christopher Doubleday"
   },
-  "homepage": "https://simple-portfolio.vicbox.dev",
-  "contributors": [
-    {
-      "name": "Victor Alvarado",
-      "email": "victoralvarado.dev@gmail.com",
-      "url": "https://victoralvarado.dev"
-    }
-  ],
-  "keywords": [
-    "portfolio",
-    "Astro",
-    "react",
-    "tailwindcss",
-    "typescript",
-    "shadCn"
-  ],
+  "homepage": "https://chrisdoubleday.com",
   "repository": {
     "type": "git",
     "url": ""
@@ -60,5 +45,10 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15"
+  },
+  "allowScripts": {
+    "esbuild@0.25.11": true,
+    "sharp@0.34.4": true,
+    "fsevents@2.3.3": true
   }
 }
