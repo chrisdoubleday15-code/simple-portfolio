@@ -42,14 +42,10 @@ src/
     Navbar.astro                 ← Fixed nav, CD monogram SVG inlined, mobile hamburger
     ReelsCarousel.astro          ← 3D hexagonal carousel (6 cards, 9:16)
     Layout.astro                 ← Root layout: film grain overlay, body bg, main padding
-    ProfileInfo.astro            ← Avatar + profile details
-    ProfileActionButton.astro    ← CV download button (red CTA)
     SkillCard.astro              ← Skills section cards
     JobDetails.astro             ← Experience section rows
-    EduDetail.astro              ← Education badge
     MediaSlot.astro              ← Case-study media frame: Bunny clip via player.mediadelivery.net, or labelled placeholder
     WorkOverlay.astro            ← Work preview block, fullscreen overlay, all lightboxes + their JS
-    BackBtn.astro                ← Back button (red CTA)
   styles/
     globals.css                  ← CSS variables (:root), keyframes, global utility classes
   data/
@@ -58,7 +54,8 @@ src/
 public/
   images/
     film-grain.png               ← Texturelabs_Grunge_318XL texture
-    cd-logo-black.svg            ← Favicon
+    cd-favicon.svg               ← Favicon (fill flips for light/dark browser chrome)
+  og-image.png                   ← 1200×630 share image
 tailwind.config.mjs
 astro.config.mjs
 ```
@@ -106,7 +103,7 @@ dark-theme: #0a0a0a  legacy — mismatches --color-bg-base intentionally, do not
 | Contact button | `var(--color-accent-red)` / Tailwind `primary-dark` |
 | CV download button | `var(--color-accent-blue)` (intentional) |
 | Form submit button | `var(--color-accent-blue)` (intentional) |
-| Back button | `var(--color-accent-red)` / Tailwind `primary-dark` |
+| Home contact CTA (`.cta-btn`) | `var(--color-accent-red)` |
 
 ---
 
@@ -404,7 +401,7 @@ placeholder-pulse Fallback card shimmer
 | `.fade-overlay` has hardcoded `rgba(10,10,10,...)` | Leave unless specifically tasked |
 | `.prose` link colors use `primary-light`/`primary-dark` (red) | Not converted to blue. Leave unless specifically tasked |
 | Tailwind tokens `dark-theme: #0a0a0a`, `n700: #111111` mismatch CSS variable values | Legacy. Do not rename. |
-| `SOCIALS` in `config.ts` have placeholder URLs | Out of scope |
+| `SOCIALS` in `config.ts` have placeholder URLs | Not rendered anywhere (Social component removed). Out of scope |
 | `ReelsCarouselBackup.astro` exists as dead code | Not rendered anywhere. Do not delete or reference. |
 | Film grain Y-axis: scroll parallax JS overrides CSS animation Y | Known. X-axis still works. Acceptable. Do not fix. |
 | Mobile nav uses legacy `border-gray-100 / dark:border-gray-700` | Not converted to CSS variables |

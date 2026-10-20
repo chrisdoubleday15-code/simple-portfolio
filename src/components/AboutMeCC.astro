@@ -17,7 +17,7 @@ const resume = "/" + ME.contactInfo.resumeDoc;
 <div class="flex flex-col gap-8 text-n200 py-4">
 
   <!-- Profile header — headshot + name + resume download -->
-  <div class="animate-fade-in delay-[0ms] flex flex-col md:flex-row items-center md:items-start gap-8">
+  <div class="animate-fade-in flex flex-col md:flex-row items-center md:items-start gap-8" style="animation-delay: 0ms;">
     <img
       src="/images/headshot.webp"
       alt="Chris Doubleday"
@@ -42,7 +42,7 @@ const resume = "/" + ME.contactInfo.resumeDoc;
   </div>
 
   <!-- About Me -->
-  <div class="animate-fade-in delay-[100ms]">
+  <div class="animate-fade-in" style="animation-delay: 100ms;">
     <p class="text-sm tracking-widest uppercase mb-4" style="color: var(--color-accent-blue);">About</p>
     <p class="text-xl md:text-2xl leading-relaxed text-n200 font-light max-w-2xl">
       {ME.aboutMe}
@@ -50,7 +50,7 @@ const resume = "/" + ME.contactInfo.resumeDoc;
   </div>
 
   <!-- Work Experience -->
-  <div class="animate-fade-in delay-[100ms]">
+  <div class="animate-fade-in" style="animation-delay: 100ms;">
     <p class="text-sm tracking-widest uppercase mb-6" style="color: var(--color-accent-blue);">Experience</p>
     <h2 class="font-display tracking-display text-4xl md:text-5xl text-n200 mb-4">Work Experience</h2>
     <div class="flex flex-col divide-y divide-white/5">
@@ -61,7 +61,7 @@ const resume = "/" + ME.contactInfo.resumeDoc;
   </div>
 
   <!-- Hard Skills -->
-  <div class="animate-fade-in delay-[200ms]">
+  <div class="animate-fade-in" style="animation-delay: 200ms;">
     <p class="text-sm tracking-widest uppercase mb-6" style="color: var(--color-accent-blue);">Toolkit</p>
     <h2 class="font-display tracking-display text-4xl md:text-5xl text-n200 mb-4">Hard Skills</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -72,7 +72,7 @@ const resume = "/" + ME.contactInfo.resumeDoc;
   </div>
 
   <!-- Soft Skills -->
-  <div class="animate-fade-in delay-[300ms]">
+  <div class="animate-fade-in" style="animation-delay: 300ms;">
     <h2 class="font-display tracking-display text-4xl md:text-5xl text-n200 mb-4">Soft Skills</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       {softSkills.map((skill) => (

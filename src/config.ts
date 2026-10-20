@@ -3,11 +3,11 @@ export const SITE = {
     title: "Christopher Doubleday | Senior Motion Designer",
     description: "Senior motion designer creating bold, high-energy content for brands.",
     tags: ["portfolio", "Motion Design", "Motion Graphics", "Video Editor"],
-    ogImage: "/og-image.webp",
+    ogImage: "/og-image.png",
     logo: "logo",
     logoText: "Christopher Doubleday",
     lang: "en",
-    favicon: "/images/cd-logo-black.svg",
+    favicon: "/images/cd-favicon.svg",
     repository: "https://github.com/chrisdoubleday/simple-portfolio.git",
     author: "Christopher Doubleday",
     profile: "https://chrisdoubleday.com",
@@ -35,6 +35,8 @@ export const ME = {
         email: "chrisdoubleday15@gmail.com",
         linkedin: "https://www.linkedin.com/in/christopher-doubleday-986bb4241",
         resumeDoc: "resume.pdf",
+        // Paste your Formspree URL (e.g. https://formspree.io/f/abcdefgh) to show the contact form.
+        formspreeEndpoint: "",
     },
     aboutMe: "I'm Chris, a Senior Motion Designer. I build bold, high-energy motion graphics that help brands get noticed: animated systems, templates, and campaign pieces. After Effects is home base, backed by years of editing in Premiere Pro."
 }

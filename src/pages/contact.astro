@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { ME } from '../config';
+
+const formEndpoint = ME.contactInfo.formspreeEndpoint;
 ---
 
 <Layout
@@ -17,7 +19,7 @@ import { ME } from '../config';
         Let's Work Together
       </h1>
       <p class="text-n500 text-lg leading-relaxed max-w-lg">
-        Have a project in mind? Reach out directly or use the form below and I'll get back to you.
+        Have a project in mind? Reach out directly{formEndpoint && ' or use the form below'} and I'll get back to you.
       </p>
     </div>
 
@@ -48,16 +50,10 @@ import { ME } from '../config';
       </a>
     </div>
 
-    <!-- Contact form -->
-    <!--
-      To activate this form:
-      1. Sign up at https://formspree.io (free)
-      2. Create a new form and copy your endpoint URL
-      3. Replace "YOUR_FORMSPREE_ENDPOINT" below with your URL
-         e.g. https://formspree.io/f/abcdefgh
-    -->
+    <!-- Contact form: hidden until ME.contactInfo.formspreeEndpoint is set in src/config.ts -->
+    {formEndpoint && (
     <form
-      action="YOUR_FORMSPREE_ENDPOINT"
+      action={formEndpoint}
       method="POST"
       class="flex flex-col gap-6"
       id="contact-form"
@@ -117,6 +113,7 @@ import { ME } from '../config';
       <!-- Success/error feedback -->
       <p id="form-status" class="text-sm tracking-wide hidden"></p>
     </form>
+    )}
 
   </div>
 </Layout>
@@ -156,12 +153,6 @@ import { ME } from '../config';
     e.preventDefault();
 
     const action = form.getAttribute('action') ?? '';
-    if (action === 'YOUR_FORMSPREE_ENDPOINT') {
-      status.textContent = 'Form not yet connected — add your Formspree endpoint to activate.';
-      status.className = 'text-sm tracking-wide error';
-      status.classList.remove('hidden');
-      return;
-    }
 
     const data = new FormData(form);
     const res  = await fetch(action, {

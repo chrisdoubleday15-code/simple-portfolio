@@ -43,7 +43,7 @@ const MOTION_IDS = [
          STICKY SECTION NAV
     ============================== -->
     <div class="sticky top-[72px] z-10 border-y border-white/5 backdrop-blur-md" style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
-      <nav class="container flex items-center justify-center gap-6 md:gap-14 py-4">
+      <nav class="container flex items-center justify-center gap-5 md:gap-14 py-4">
         <a href="#case-study" class="section-nav-link" data-section="case-study">Case Study</a>
         <a href="#motion"     class="section-nav-link" data-section="motion">Motion</a>
         <button              class="section-nav-link" id="nav-work-btn" data-section="work">Editing</button>
@@ -248,11 +248,12 @@ const MOTION_IDS = [
 
   .motion-carousel {
     margin-bottom: 2.5rem;
+    overflow-x: clip; /* 3D side cards overhang the viewport on phones */
   }
 
   /* ── Section nav ── */
   .section-nav-link {
-    @apply text-n500 text-xs tracking-widest uppercase transition-colors duration-200 hover:text-n200 py-1;
+    @apply text-n500 text-xs tracking-widest uppercase whitespace-nowrap transition-colors duration-200 hover:text-n200 py-1;
   }
   .section-nav-link.active {
     color: var(--color-accent-blue);
