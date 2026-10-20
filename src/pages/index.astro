@@ -46,7 +46,6 @@ const MOTION_IDS = [
       <nav class="container flex items-center justify-center gap-6 md:gap-14 py-4">
         <a href="#case-study" class="section-nav-link" data-section="case-study">Case Study</a>
         <a href="#motion"     class="section-nav-link" data-section="motion">Motion</a>
-        <a href="#in-motion"  class="section-nav-link" data-section="in-motion">In Motion</a>
         <button              class="section-nav-link" id="nav-work-btn" data-section="work">Editing</button>
       </nav>
     </div>
@@ -92,6 +91,10 @@ const MOTION_IDS = [
         <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Motion graphics and animation for brands.</p></div>
       </div>
 
+      <div class="motion-carousel">
+        <ReelsCarousel />
+      </div>
+
       <div class="card-grid editing-grid motion-grid" data-ids={JSON.stringify(MOTION_IDS)}>
         {MOTION_IDS.map((id, i) => (
           <div class="stagger-card" style={`--card-delay: ${i * 80}ms`}>
@@ -110,18 +113,6 @@ const MOTION_IDS = [
           </div>
         ))}
       </div>
-    </section>
-
-    <!-- ==============================
-         IN MOTION — 3D carousel
-    ============================== -->
-    <section id="in-motion" class="py-12 border-t border-white/5">
-      <div class="mb-6">
-        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Highlights</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">In Motion</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Vertical motion pieces, cut for 9:16.</p></div>
-      </div>
-      <ReelsCarousel />
     </section>
 
     <WorkOverlay />
@@ -255,6 +246,10 @@ const MOTION_IDS = [
     opacity: 0.85;
   }
 
+  .motion-carousel {
+    margin-bottom: 2.5rem;
+  }
+
   /* ── Section nav ── */
   .section-nav-link {
     @apply text-n500 text-xs tracking-widest uppercase transition-colors duration-200 hover:text-n200 py-1;
@@ -306,7 +301,7 @@ const MOTION_IDS = [
 <script>
   function init() {
     // ── Active section nav highlight ──
-    const sections = ['case-study', 'motion', 'in-motion', 'work', 'contact-cta'];
+    const sections = ['case-study', 'motion', 'work', 'contact-cta'];
     const links = document.querySelectorAll('.section-nav-link');
 
     const navObserver = new IntersectionObserver(
@@ -343,7 +338,7 @@ const MOTION_IDS = [
       { rootMargin: '0px 0px -10% 0px' }
     );
 
-    document.querySelectorAll('#case-study, #motion, #in-motion, #contact-cta').forEach((section) => {
+    document.querySelectorAll('#case-study, #motion, #contact-cta').forEach((section) => {
       revealObserver.observe(section);
     });
 
