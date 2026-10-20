@@ -3,6 +3,8 @@ import Layout from '../layouts/Layout.astro';
 import ReelsCarousel from '../components/ReelsCarousel.astro';
 import WorkOverlay from '../components/WorkOverlay.astro';
 
+const CASE_STUDY_ID = 'e2a9c8f2-1429-4b94-a05c-2ad99da565c3'; // Live It Awards loop
+
 // WorkOverlay's motion lightbox reads these from the grid's data-ids.
 const MOTION_IDS = [
   'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
@@ -38,51 +40,46 @@ const MOTION_IDS = [
     </section>
 
     <!-- ==============================
-         FEATURED — 3D carousel
-    ============================== -->
-    <section id="featured" class="py-4">
-      <ReelsCarousel />
-    </section>
-
-    <!-- ==============================
          STICKY SECTION NAV
     ============================== -->
     <div class="sticky top-[72px] z-10 border-y border-white/5 backdrop-blur-md" style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
-      <nav class="container flex items-center justify-center gap-8 md:gap-16 py-4">
-        <a href="#featured"  class="section-nav-link" data-section="featured">Highlights</a>
-        <a href="#showreel"  class="section-nav-link" data-section="showreel">Featured</a>
-        <a href="#motion"    class="section-nav-link" data-section="motion">Motion</a>
-        <button             class="section-nav-link" id="nav-work-btn">Editing</button>
+      <nav class="container flex items-center justify-center gap-6 md:gap-14 py-4">
+        <a href="#case-study" class="section-nav-link" data-section="case-study">Case Study</a>
+        <a href="#motion"     class="section-nav-link" data-section="motion">Motion</a>
+        <a href="#short-form" class="section-nav-link" data-section="short-form">Short Form</a>
+        <button              class="section-nav-link" id="nav-work-btn" data-section="work">Editing</button>
       </nav>
     </div>
 
     <!-- ==============================
-         SHOWREEL
+         CASE STUDY — Live It Awards 2026
     ============================== -->
-    <section id="showreel" class="py-12 border-t border-white/5">
+    <section id="case-study" class="py-12">
       <div class="mb-6">
-        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Featured</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Hawaii 2026</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">A short travel edit shot and cut in Hawaii.</p></div>
+        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Case Study</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Live It Awards 2026</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">A full event package for Moxie's annual awards night, designed and delivered solo.</p></div>
       </div>
 
-      <button
-        id="showreel-trigger"
-        class="editing-card w-full max-w-4xl glow"
-        data-section="showreel"
-        aria-label="Play Hawaii 2026"
-      >
-        <iframe
-          src="https://iframe.mediadelivery.net/embed/635173/b7da40bf-36c4-45d2-9a4b-c2ccd82482a2?preload=true&responsive=true&muted=true&autoplay=false"
-          loading="lazy"
-          style="border: none; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;"
-          tabindex="-1"
-          allow="accelerometer; gyroscope; encrypted-media; picture-in-picture"
-        ></iframe>
-        <div class="editing-play">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path d="M8 5v14l11-7z"/></svg>
+      <a href="/work/live-it-awards" class="case-card glow" aria-label="View the Live It Awards 2026 case study">
+        <div class="case-card-media">
+          <iframe
+            src={`https://player.mediadelivery.net/embed/635173/${CASE_STUDY_ID}?autoplay=true&loop=true&muted=true&preload=true&responsive=true`}
+            loading="lazy"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+            style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+            tabindex="-1"
+          ></iframe>
         </div>
-      </button>
+        <div class="case-card-footer">
+          <dl class="case-card-stats">
+            <div><dt>49</dt><dd>Assets</dd></div>
+            <div><dt>6</dt><dd>Weeks</dd></div>
+            <div><dt>1</dt><dd>Designer</dd></div>
+          </dl>
+          <span class="case-card-cta">View case study &rarr;</span>
+        </div>
+      </a>
     </section>
 
     <!-- ==============================
@@ -115,7 +112,29 @@ const MOTION_IDS = [
       </div>
     </section>
 
+    <!-- ==============================
+         SHORT FORM — 3D carousel
+    ============================== -->
+    <section id="short-form" class="py-12 border-t border-white/5">
+      <div class="mb-6">
+        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Short Form</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Short Form</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Vertical edits for social, from creator teasers to event recaps.</p></div>
+      </div>
+      <ReelsCarousel />
+    </section>
+
     <WorkOverlay />
+
+    <!-- ==============================
+         CONTACT CTA
+    ============================== -->
+    <section id="contact-cta" class="py-16 border-t border-white/5 text-center">
+      <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Contact</p></div>
+      <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Let's Work Together</h2></div>
+      <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg mx-auto" style="--reveal-delay: 220ms">Have a project that needs motion? I'd like to hear about it.</p></div>
+      <a href="/contact" class="cta-btn mt-8">Get in touch</a>
+    </section>
   </>
 </Layout>
 
@@ -155,6 +174,85 @@ const MOTION_IDS = [
     color: transparent;
     -webkit-text-stroke-color: var(--color-accent-blue);
     text-shadow: 0 0 20px rgba(0, 200, 255, 0.4), 0 0 60px rgba(0, 200, 255, 0.2), 0 0 100px rgba(0, 200, 255, 0.08);
+  }
+
+  /* ── Case study card ── */
+  .case-card {
+    display: block;
+    max-width: 56rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--color-bg-surface);
+    transition: border-color 0.25s ease;
+  }
+  .case-card:hover {
+    border-color: var(--color-accent-blue);
+  }
+  .case-card-media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+  }
+  .case-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .case-card-stats {
+    display: flex;
+    gap: 1.75rem;
+    margin: 0;
+  }
+  .case-card-stats div {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .case-card-stats dt {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--color-accent-blue);
+  }
+  .case-card-stats dd {
+    margin: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+  .case-card-cta {
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+  .case-card:hover .case-card-cta {
+    color: var(--color-accent-blue);
+  }
+  @media (max-width: 480px) {
+    .case-card-footer { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ── Contact CTA (red per CTA rule) ── */
+  .cta-btn {
+    display: inline-block;
+    padding: 0.85rem 2.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--color-accent-red);
+    transition: opacity 0.2s ease;
+  }
+  .cta-btn:hover {
+    opacity: 0.85;
   }
 
   /* ── Section nav ── */
@@ -208,7 +306,7 @@ const MOTION_IDS = [
 <script>
   function init() {
     // ── Active section nav highlight ──
-    const sections = ['featured', 'showreel', 'motion'];
+    const sections = ['case-study', 'motion', 'short-form', 'work', 'contact-cta'];
     const links = document.querySelectorAll('.section-nav-link');
 
     const navObserver = new IntersectionObserver(
@@ -245,7 +343,7 @@ const MOTION_IDS = [
       { rootMargin: '0px 0px -10% 0px' }
     );
 
-    document.querySelectorAll('#showreel, #motion').forEach((section) => {
+    document.querySelectorAll('#case-study, #motion, #short-form, #contact-cta').forEach((section) => {
       revealObserver.observe(section);
     });
 

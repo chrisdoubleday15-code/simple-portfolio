@@ -172,11 +172,12 @@ Section divider: border-t border-white/5
 Section order:
 
 1. **Hero** — `<section class="text-center relative pt-8 pb-4">`
-2. **Highlights** (nav label) — `<section id="featured" class="py-4">` → `<ReelsCarousel />`
-3. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
-4. **Featured** (nav label) — `<section id="showreel" class="py-12 border-t border-white/5">` (titled "Hawaii 2026", opens `#showreel-lightbox`)
-5. **Motion** — `<section id="motion" class="py-12 border-t border-white/5">`, 2×2 grid driven by `MOTION_IDS` in `index.astro`; cards open `#motion-lightbox`
-6. **Editing & Short Form** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Editing / Short Form panels
+2. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
+3. **Case Study** — `<section id="case-study" class="py-12">`: `.case-card` link to `/work/live-it-awards`, looping `CASE_STUDY_ID` (player.mediadelivery.net) + stats footer
+4. **Motion** — `<section id="motion" class="py-12 border-t border-white/5">`, 2×2 grid driven by `MOTION_IDS` in `index.astro`; cards open `#motion-lightbox`
+5. **Short Form** — `<section id="short-form" class="py-12 border-t border-white/5">` → heading + `<ReelsCarousel />` (move back up once it holds 9:16 motion pieces)
+6. **Editing & Short Form** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Editing / Short Form panels. Hawaii 2026 is the first Editing clip.
+7. **Contact CTA** — `<section id="contact-cta">`, red `.cta-btn` → `/contact`
 
 ### Sticky nav
 
@@ -185,7 +186,7 @@ Section order:
      style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
 ```
 
-Links: `Highlights | Featured | Motion | Editing` (`Editing` is a button that opens the overlay)
+Links: `Case Study | Motion | Short Form | Editing` (`Editing` is a button with `data-section="work"` that opens the overlay)
 Active state: `IntersectionObserver` adds `.active` → `color: var(--color-accent-blue)`
 
 ### JS conventions (`index.astro`)
@@ -207,12 +208,6 @@ Card 2: 5c2d49c1-09e0-477c-9762-9eda11c363f7   Tom Brady Dynasty
 Card 3: 317bcbe4-b3a9-4307-ade6-02f4f1f4de5c   Cruise Recap
 Card 4: 5629d473-f7ce-49e2-9264-cba3e6fc68f0   Mark Rober Interview
 Card 5: 510b0d07-cd34-4daf-92d4-74bbac5e915b   President's Club
-```
-
-### Showreel — uses `iframe.mediadelivery.net`
-
-```
-b7da40bf-36c4-45d2-9a4b-c2ccd82482a2
 ```
 
 ### Motion + Work overlay grids — uses `iframe.mediadelivery.net`
@@ -315,14 +310,13 @@ Static first frame only — hover autoplay was removed. Grid iframes always carr
 
 ### Lightboxes
 
-Four lightboxes in `WorkOverlay.astro`, driven by one `sections` table (`openLightbox` / `closeLightbox` / `navLightbox`):
+Three lightboxes in `WorkOverlay.astro`, driven by one `sections` table (`openLightbox` / `closeLightbox` / `navLightbox`):
 
 | Key | Lightbox ID | Triggered by |
 |---|---|---|
 | `motion` | `motion-lightbox` | `.editing-card[data-section="motion"]` |
 | `editing` | `editing-lightbox` | `.editing-card[data-section="editing"]` |
 | `reels` | `reels-lightbox` | `.reel-card` |
-| `showreel` | `showreel-lightbox` | `#showreel-trigger` |
 
 Each lightbox has prev/next arrows, ←/→ keys and swipe. On iOS, lightboxes swap to `player.mediadelivery.net` so video plays inline.
 
@@ -379,7 +373,7 @@ Hero entrance: `.hero-word` animates via `hero-rise` keyframe (translateY 110% �
 ```
 
 `IntersectionObserver` adds `.is-visible` to parent section.
-Sections observed: `#showreel`, `#motion`
+Sections observed: `#case-study`, `#motion`, `#short-form`, `#contact-cta`
 
 ### Card stagger
 
