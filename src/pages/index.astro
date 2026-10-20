@@ -2,16 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import ReelsCarousel from '../components/ReelsCarousel.astro';
 import WorkOverlay from '../components/WorkOverlay.astro';
-
-// WorkOverlay's YouTube lightbox reads ids/ytUrls from the grid's data attributes.
-const YOUTUBE_CARDS = [
-  { id: '70a7ddcd-705d-42ea-9b36-540249c34b21', line1: 'Not Enough Nelsons', line2: 'Food Truck Challenge', ytUrl: 'https://www.youtube.com/watch?v=fTTYubF6TZ0' },
-  { id: '803e78f8-1c29-40fc-b8b1-2715adad10f3', line1: 'Not Enough Nelsons', line2: 'Back to School', ytUrl: 'https://www.youtube.com/watch?v=YbpH2dvh3Vk' },
-  { id: '1a1d745f-a25f-4ff2-9a78-45c95702c5e4', line1: 'Not Enough Nelsons', line2: '17th Birthday', ytUrl: 'https://www.youtube.com/watch?v=XuNUB9iyaAY' },
-  { id: 'ada7c0a4-6dce-4698-9ac0-aed47fa58963', line1: 'Not Enough Nelsons', line2: 'First Cheer', ytUrl: 'https://www.youtube.com/watch?v=PMNxhSZ9MzI' },
-  { id: '00f82cdd-20d5-4ec0-91f1-1dc1e409de51', line1: 'Boxing Bullies',     line2: 'Jake Paul Day in the Life', ytUrl: null },
-  { id: '427b6293-d770-48f6-8fa2-e473b9af1735', line1: 'Rose Anvil',         line2: 'M1917', ytUrl: null },
-];
 ---
 
 <Layout
@@ -61,7 +51,6 @@ const YOUTUBE_CARDS = [
         <a href="#featured"  class="section-nav-link" data-section="featured">Highlights</a>
         <a href="#showreel"  class="section-nav-link" data-section="showreel">Featured</a>
         <button             class="section-nav-link" id="nav-work-btn">Work</button>
-        <a href="#youtube"   class="section-nav-link" data-section="youtube">Long Form</a>
       </nav>
     </div>
 
@@ -95,49 +84,6 @@ const YOUTUBE_CARDS = [
     </section>
 
     <WorkOverlay />
-
-    <!-- ==============================
-         YOUTUBE — Long Form Edits
-    ============================== -->
-    <section id="youtube" class="py-12 border-t border-white/5">
-      <div class="mb-6">
-        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">YouTube</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Long Form Edits</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Episodic vlogs and day-in-the-life cuts — full-length edits built for YouTube.</p></div>
-      </div>
-
-      <div
-        class="card-grid youtube-grid"
-        data-ids={JSON.stringify(YOUTUBE_CARDS.map((c) => c.id))}
-        data-yt-urls={JSON.stringify(YOUTUBE_CARDS.map((c) => c.ytUrl))}
-      >
-        {YOUTUBE_CARDS.map((c, i) => (
-          <figure class="youtube-card-wrap stagger-card" style={`--card-delay: ${i * 80}ms`}>
-            <button
-              class="editing-card"
-              data-section="youtube"
-              data-video-id={c.id}
-              aria-label={`Play ${c.line1} — ${c.line2}`}
-            >
-              <iframe
-                src={`https://iframe.mediadelivery.net/embed/635173/${c.id}?preload=true&responsive=true&muted=true&autoplay=false`}
-                loading="lazy"
-                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-                tabindex="-1"
-              ></iframe>
-              <div class="editing-play">
-                <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
-              </div>
-            </button>
-            <figcaption class="youtube-card-caption">
-              <span class="caption-line1">{c.line1}</span>
-              <span class="caption-line2">{c.line2}</span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </section>
   </>
 </Layout>
 
@@ -225,49 +171,12 @@ const YOUTUBE_CARDS = [
     opacity: 1;
     animation: none;
   }
-
-  /* ── YouTube / Long Form grid ── */
-  .youtube-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px 12px;
-    max-width: 880px;
-  }
-  .youtube-card-wrap {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    margin: 0;
-  }
-  .youtube-card-caption {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 0 2px;
-  }
-  .caption-line1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-  }
-  .caption-line2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.25rem;
-    letter-spacing: 0.05em;
-    color: var(--color-text-primary);
-    line-height: 1.1;
-  }
-  @media (max-width: 640px) {
-    .youtube-grid { grid-template-columns: 1fr; max-width: 480px; }
-  }
 </style>
 
 <script>
   function init() {
     // ── Active section nav highlight ──
-    const sections = ['featured', 'showreel', 'youtube'];
+    const sections = ['featured', 'showreel'];
     const links = document.querySelectorAll('.section-nav-link');
 
     const navObserver = new IntersectionObserver(
@@ -304,7 +213,7 @@ const YOUTUBE_CARDS = [
       { rootMargin: '0px 0px -10% 0px' }
     );
 
-    document.querySelectorAll('#showreel, #youtube').forEach((section) => {
+    document.querySelectorAll('#showreel').forEach((section) => {
       revealObserver.observe(section);
     });
 

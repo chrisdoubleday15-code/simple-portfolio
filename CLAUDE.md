@@ -174,7 +174,6 @@ Section order:
 3. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
 4. **Featured** (nav label) — `<section id="showreel" class="py-12 border-t border-white/5">` (titled "Hawaii 2026", opens `#showreel-lightbox`)
 5. **Work** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Motion / Editing / Short Form panels
-6. **Long Form** — `<section id="youtube" class="py-12 border-t border-white/5">`, driven by `YOUTUBE_CARDS` in `index.astro`
 
 ### Sticky nav
 
@@ -183,7 +182,7 @@ Section order:
      style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
 ```
 
-Links: `Highlights | Featured | Work | Long Form` (`Work` is a button that opens the overlay)
+Links: `Highlights | Featured | Work` (`Work` is a button that opens the overlay)
 Active state: `IntersectionObserver` adds `.active` → `color: var(--color-accent-blue)`
 
 ### JS conventions (`index.astro`)
@@ -218,10 +217,6 @@ b7da40bf-36c4-45d2-9a4b-c2ccd82482a2
 Source of truth: `MOTION_IDS`, `EDITING_IDS`, `REELS_IDS` at the top of `WorkOverlay.astro`. Panels expose them via `data-ids`; the lightbox JS reads them back, so edit the arrays only.
 
 Motion cards carry `data-section="motion"` → routed to `#motion-lightbox`. **Do not remove this attribute.**
-
-### Long Form (YouTube) grid — uses `iframe.mediadelivery.net`
-
-Source of truth: `YOUTUBE_CARDS` in `index.astro` (`id`, captions, optional `ytUrl`). The `.youtube-grid` exposes `data-ids` / `data-yt-urls` for the lightbox; a `null` `ytUrl` hides the "Full video on YouTube" link.
 
 ### Embed URL formats
 
@@ -317,14 +312,13 @@ Static first frame only — hover autoplay was removed. Grid iframes always carr
 
 ### Lightboxes
 
-Five lightboxes in `WorkOverlay.astro`, driven by one `sections` table (`openLightbox` / `closeLightbox` / `navLightbox`):
+Four lightboxes in `WorkOverlay.astro`, driven by one `sections` table (`openLightbox` / `closeLightbox` / `navLightbox`):
 
 | Key | Lightbox ID | Triggered by |
 |---|---|---|
 | `motion` | `motion-lightbox` | `.editing-card[data-section="motion"]` |
 | `editing` | `editing-lightbox` | `.editing-card[data-section="editing"]` |
 | `reels` | `reels-lightbox` | `.reel-card` |
-| `youtube` | `youtube-lightbox` | `.editing-card[data-section="youtube"]` |
 | `showreel` | `showreel-lightbox` | `#showreel-trigger` |
 
 Each lightbox has prev/next arrows, ←/→ keys and swipe. On iOS, lightboxes swap to `player.mediadelivery.net` so video plays inline.
@@ -382,7 +376,7 @@ Hero entrance: `.hero-word` animates via `hero-rise` keyframe (translateY 110% �
 ```
 
 `IntersectionObserver` adds `.is-visible` to parent section.
-Sections observed: `#showreel`, `#youtube`
+Sections observed: `#showreel`
 
 ### Card stagger
 

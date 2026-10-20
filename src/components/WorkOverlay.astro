@@ -196,22 +196,6 @@ const REELS_IDS = [
   </div>
 </div>
 
-<!-- YouTube lightbox -->
-<div id="youtube-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
-  <div class="reels-lightbox-backdrop" id="youtube-backdrop"></div>
-  <div class="lightbox-inner">
-    <button class="lightbox-arrow" data-section="youtube" data-dir="-1" aria-label="Previous video">&#10094;</button>
-    <div class="youtube-lightbox-stack">
-      <div class="reels-lightbox-card editing-lightbox-card">
-        <button class="lightbox-close" data-section="youtube" aria-label="Close video">&#10005;</button>
-        <iframe id="youtube-iframe" src="" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen style="border:none;width:100%;height:100%;position:relative;z-index:1;"></iframe>
-      </div>
-      <a id="youtube-yt-link" href="#" target="_blank" rel="noopener noreferrer" class="youtube-yt-link">Full video on YouTube &rarr;</a>
-    </div>
-    <button class="lightbox-arrow" data-section="youtube" data-dir="1" aria-label="Next video">&#10095;</button>
-  </div>
-</div>
-
 <!-- Showreel lightbox -->
 <div id="showreel-lightbox" class="reels-lightbox" aria-hidden="true" tabindex="-1">
   <div class="reels-lightbox-backdrop" id="showreel-backdrop"></div>
@@ -426,35 +410,6 @@ const REELS_IDS = [
     gap: 1rem;
   }
 
-  /* ── YouTube lightbox: stacked player + external link ── */
-  .youtube-lightbox-stack {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.85rem;
-  }
-  .youtube-yt-link {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
-    text-decoration: none;
-    padding: 8px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 999px;
-    background: rgba(13, 13, 31, 0.5);
-    backdrop-filter: blur(6px);
-    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-  }
-  .youtube-yt-link:hover {
-    color: var(--color-accent-blue);
-    border-color: var(--color-accent-blue);
-    background: rgba(0, 200, 255, 0.08);
-  }
-
   /* ── Lightbox close button — anchored to top-right of the video card ── */
   .lightbox-close {
     position: absolute;
@@ -596,7 +551,7 @@ const REELS_IDS = [
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
     // ── Section configs ──
-    type SectionKey = 'motion' | 'editing' | 'reels' | 'youtube' | 'showreel';
+    type SectionKey = 'motion' | 'editing' | 'reels' | 'showreel';
 
     function dataJson<T>(selector: string, key: string): T {
       const el = document.querySelector(selector) as HTMLElement | null;
@@ -621,7 +576,6 @@ const REELS_IDS = [
 
     const sections: Record<SectionKey, {
       ids: string[];
-      ytUrls?: (string | null)[];
       index: number;
       lightboxEl: HTMLElement | null;
       iframeEl: HTMLIFrameElement | null;
@@ -652,15 +606,6 @@ const REELS_IDS = [
         backdropEl: document.getElementById('reels-backdrop'),
         buildSrc: (id) => buildLightboxSrc(id, { loop: true }),
       },
-      youtube: {
-        ids: dataJson<string[]>('.youtube-grid', 'ids'),
-        ytUrls: dataJson<(string | null)[]>('.youtube-grid', 'ytUrls'),
-        index: 0,
-        lightboxEl: document.getElementById('youtube-lightbox'),
-        iframeEl: document.getElementById('youtube-iframe') as HTMLIFrameElement | null,
-        backdropEl: document.getElementById('youtube-backdrop'),
-        buildSrc: (id) => buildLightboxSrc(id),
-      },
       showreel: {
         ids: ['b7da40bf-36c4-45d2-9a4b-c2ccd82482a2'],
         index: 0,
@@ -672,21 +617,12 @@ const REELS_IDS = [
     };
 
     // ── Lightbox helpers ──
-    function updateYoutubeLink() {
-      const link = document.getElementById('youtube-yt-link') as HTMLAnchorElement | null;
-      if (!link) return;
-      const url = sections.youtube.ytUrls?.[sections.youtube.index] ?? null;
-      if (url) { link.href = url; link.style.display = ''; }
-      else     { link.style.display = 'none'; }
-    }
-
     function openLightbox(key: SectionKey, videoId: string) {
       const s = sections[key];
       if (!s.lightboxEl || !s.iframeEl) return;
       const idx = s.ids.indexOf(videoId);
       s.index = idx >= 0 ? idx : 0;
       s.iframeEl.src = s.buildSrc(s.ids[s.index]);
-      if (key === 'youtube') updateYoutubeLink();
       s.lightboxEl.classList.add('open');
       s.lightboxEl.setAttribute('aria-hidden', 'false');
       s.lightboxEl.focus();
@@ -705,7 +641,6 @@ const REELS_IDS = [
       if (!s.iframeEl) return;
       s.index = (s.index + dir + s.ids.length) % s.ids.length;
       s.iframeEl.src = s.buildSrc(s.ids[s.index]);
-      if (key === 'youtube') updateYoutubeLink();
     }
 
     // ── Panel navigation ──
@@ -816,9 +751,6 @@ const REELS_IDS = [
     // ── Card click → open lightbox ──
     overlay.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
       card.addEventListener('click', () => openLightbox('motion', card.dataset.videoId!));
-    });
-    document.querySelectorAll<HTMLElement>('.editing-card[data-section="youtube"]').forEach((card) => {
-      card.addEventListener('click', () => openLightbox('youtube', card.dataset.videoId!));
     });
     overlay.querySelectorAll<HTMLElement>('.editing-card[data-section="editing"]').forEach((card) => {
       card.addEventListener('click', () => openLightbox('editing', card.dataset.videoId!));
