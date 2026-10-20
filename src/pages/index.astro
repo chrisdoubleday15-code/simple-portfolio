@@ -46,7 +46,7 @@ const MOTION_IDS = [
       <nav class="container flex items-center justify-center gap-6 md:gap-14 py-4">
         <a href="#case-study" class="section-nav-link" data-section="case-study">Case Study</a>
         <a href="#motion"     class="section-nav-link" data-section="motion">Motion</a>
-        <a href="#short-form" class="section-nav-link" data-section="short-form">Short Form</a>
+        <a href="#in-motion"  class="section-nav-link" data-section="in-motion">In Motion</a>
         <button              class="section-nav-link" id="nav-work-btn" data-section="work">Editing</button>
       </nav>
     </div>
@@ -113,13 +113,13 @@ const MOTION_IDS = [
     </section>
 
     <!-- ==============================
-         SHORT FORM — 3D carousel
+         IN MOTION — 3D carousel
     ============================== -->
-    <section id="short-form" class="py-12 border-t border-white/5">
+    <section id="in-motion" class="py-12 border-t border-white/5">
       <div class="mb-6">
-        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Short Form</p></div>
-        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Short Form</h2></div>
-        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Vertical edits for social, from creator teasers to event recaps.</p></div>
+        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Highlights</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">In Motion</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Vertical motion pieces, cut for 9:16.</p></div>
       </div>
       <ReelsCarousel />
     </section>
@@ -306,7 +306,7 @@ const MOTION_IDS = [
 <script>
   function init() {
     // ── Active section nav highlight ──
-    const sections = ['case-study', 'motion', 'short-form', 'work', 'contact-cta'];
+    const sections = ['case-study', 'motion', 'in-motion', 'work', 'contact-cta'];
     const links = document.querySelectorAll('.section-nav-link');
 
     const navObserver = new IntersectionObserver(
@@ -343,7 +343,7 @@ const MOTION_IDS = [
       { rootMargin: '0px 0px -10% 0px' }
     );
 
-    document.querySelectorAll('#case-study, #motion, #short-form, #contact-cta').forEach((section) => {
+    document.querySelectorAll('#case-study, #motion, #in-motion, #contact-cta').forEach((section) => {
       revealObserver.observe(section);
     });
 

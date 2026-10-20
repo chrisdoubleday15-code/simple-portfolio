@@ -175,8 +175,8 @@ Section order:
 2. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
 3. **Case Study** — `<section id="case-study" class="py-12">`: `.case-card` link to `/work/live-it-awards`, looping `CASE_STUDY_ID` (player.mediadelivery.net) + stats footer
 4. **Motion** — `<section id="motion" class="py-12 border-t border-white/5">`, 2×2 grid driven by `MOTION_IDS` in `index.astro`; cards open `#motion-lightbox`
-5. **Short Form** — `<section id="short-form" class="py-12 border-t border-white/5">` → heading + `<ReelsCarousel />` (move back up once it holds 9:16 motion pieces)
-6. **Editing & Short Form** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Editing / Short Form panels. Hawaii 2026 is the first Editing clip.
+5. **In Motion** — `<section id="in-motion" class="py-12 border-t border-white/5">` → "Highlights / In Motion" heading + `<ReelsCarousel />` (meant for 9:16 motion pieces; still holds short-form edits until they're swapped in)
+6. **Editing & Short Form** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Editing / Short Form panels. Hawaii 2026 is the first Editing clip and the preview loop.
 7. **Contact CTA** — `<section id="contact-cta">`, red `.cta-btn` → `/contact`
 
 ### Sticky nav
@@ -186,7 +186,7 @@ Section order:
      style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
 ```
 
-Links: `Case Study | Motion | Short Form | Editing` (`Editing` is a button with `data-section="work"` that opens the overlay)
+Links: `Case Study | Motion | In Motion | Editing` (`Editing` is a button with `data-section="work"` that opens the overlay)
 Active state: `IntersectionObserver` adds `.active` → `color: var(--color-accent-blue)`
 
 ### JS conventions (`index.astro`)
@@ -373,7 +373,7 @@ Hero entrance: `.hero-word` animates via `hero-rise` keyframe (translateY 110% �
 ```
 
 `IntersectionObserver` adds `.is-visible` to parent section.
-Sections observed: `#case-study`, `#motion`, `#short-form`, `#contact-cta`
+Sections observed: `#case-study`, `#motion`, `#in-motion`, `#contact-cta`
 
 ### Card stagger
 
