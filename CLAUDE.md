@@ -16,6 +16,29 @@ No tests in this project.
 
 ---
 
+## Current Status & Workflow
+
+**Positioning:** Chris was promoted to Senior Motion Designer at Moxie (Oct 2026) after the Live It Awards 2026. The site is being reshaped to read motion-first; editing is secondary.
+
+**Waiting on Chris** — the live checklist is `../TODO.txt` (outside the repo). Read it at the start of a session and tick items off as they land.
+- Live It case study (`/work/live-it-awards`): `MediaSlot` placeholders until assets arrive as Bunny IDs / image files.
+- Motion carousel: still holds the old short-form edits until ~6 vertical (9:16) motion clips arrive; swap the 6 IDs in `ReelsCarousel.astro`.
+- Contact form hidden until `formspreeEndpoint` is set in `src/config.ts`.
+- `public/resume.pdf` still shows the old title.
+
+**Planned: arena case study.** Source project is `/Volumes/Crucial 4TB/Delta Center LED 2627/` (three.js previs viewer, single HTML file; read its `SESSION_NOTES_*.md` first). Plan: recorded flyover on Bunny as the hero clip, plus a copy of the viewer in this repo with a showcase mode (hide production tools, load board videos from URLs with CORS, mobile falls back to the flyover). Blocked on Moxie approval and web-size video exports. Never copy the team spec decks or AE templates into the site. Lenovo Center isn't modeled yet.
+
+**Sensitive content:** Moxie-branded and team sponsor work needs Moxie's OK before publishing. Don't quote Jason Walton (Moxie founder) by name without his OK. One award animation shows a colleague's name and sales figures.
+
+**Git:** remote `origin` = `github.com/chrisdoubleday15-code/simple-portfolio`, branch `master`; Vercel deploys on push. Commit as `Christopher Doubleday <chrisdoubleday15@gmail.com>` (set in repo config). Commit freely, but push only when Chris says so; the HTTPS token is in Keychain, so `git push` works non-interactively. `gh` isn't installed (Homebrew is broken on this Mac).
+
+**Gotchas**
+- Tailwind sometimes misses classes in a brand-new folder/file until the dev server rescans: `touch src/styles/globals.css`.
+- The project was copied off a FAT32 USB once; keep files LF (`core.fileMode false` is set).
+- Chris isn't a developer: give terminal commands one per block, explain briefly, and verify changes in the browser before reporting.
+
+---
+
 ## Stack
 
 - **Framework:** Astro v5 (static, view transitions enabled)
