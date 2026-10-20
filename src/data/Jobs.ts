@@ -49,8 +49,11 @@ const workExperience:WorkExperience[] = [
         company: "Moxie Pest Control",
         location: "Provo, Utah",
         description: "Promoted to lead motion design for the marketing team.",
-        // TODO: add 2–3 bullets for the senior role.
-        goals: [],
+        goals: [
+            "Designed full event graphics packages, delivering cohesive motion branding across every screen.",
+            "Created sports arena graphics built for large-format displays and live audiences.",
+            "Oversaw motion projects from initial vision through final delivery.",
+        ],
         currentJob: true,
     },
     {
