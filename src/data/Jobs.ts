@@ -44,8 +44,19 @@ interface WorkExperience {
  */
 const workExperience:WorkExperience[] = [
     {
+        title: "Senior Motion Designer",
+        startDate: "2026-10-01",
+        company: "Moxie Pest Control",
+        location: "Provo, Utah",
+        description: "Promoted to lead motion design for the marketing team.",
+        // TODO: add 2–3 bullets for the senior role.
+        goals: [],
+        currentJob: true,
+    },
+    {
         title: "Video Editor/Motion Designer",
         startDate: "2025-01-20",
+        endDate: "2026-10-01",
         company: "Moxie Pest Control",
         location: "Provo, Utah",
         description: "Worked with the marketing team to create eye-catching content.",
@@ -54,7 +65,7 @@ const workExperience:WorkExperience[] = [
             "Designed and built over 10 mogrt templates enabling data-driven, scalable video production.",
             "Collaborated with corporate teams to maintain consistent branding across all video output.",
         ],
-        currentJob: true,
+        currentJob: false,
     },
     {
         title: "Video Editor",

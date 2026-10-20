@@ -2,11 +2,19 @@
 import Layout from '../layouts/Layout.astro';
 import ReelsCarousel from '../components/ReelsCarousel.astro';
 import WorkOverlay from '../components/WorkOverlay.astro';
+
+// WorkOverlay's motion lightbox reads these from the grid's data-ids.
+const MOTION_IDS = [
+  'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
+  '30d66712-7faf-4719-aa57-a094e261e6e3',
+  'd588c3c9-8722-46c2-bc98-ce9d412cd237',
+  '8ab58885-6eba-4960-965c-46452e78efcc',
+];
 ---
 
 <Layout
-  title="Christopher Doubleday | Motion Designer"
-  description="Motion designer and video editor creating bold, high-energy content for brands."
+  title="Christopher Doubleday | Senior Motion Designer"
+  description="Senior motion designer creating bold, high-energy content for brands."
   scrollSmooth={true}
 >
   <>
@@ -18,7 +26,7 @@ import WorkOverlay from '../components/WorkOverlay.astro';
 
         <div class="hero-clip">
           <p class="hero-word font-sans text-sm tracking-widest uppercase mb-8" style="animation-delay: 0ms; color: var(--color-accent-blue);">
-            Motion Designer & Video Editor
+            Senior Motion Designer
           </p>
         </div>
 
@@ -50,7 +58,8 @@ import WorkOverlay from '../components/WorkOverlay.astro';
       <nav class="container flex items-center justify-center gap-8 md:gap-16 py-4">
         <a href="#featured"  class="section-nav-link" data-section="featured">Highlights</a>
         <a href="#showreel"  class="section-nav-link" data-section="showreel">Featured</a>
-        <button             class="section-nav-link" id="nav-work-btn">Work</button>
+        <a href="#motion"    class="section-nav-link" data-section="motion">Motion</a>
+        <button             class="section-nav-link" id="nav-work-btn">Editing</button>
       </nav>
     </div>
 
@@ -81,6 +90,36 @@ import WorkOverlay from '../components/WorkOverlay.astro';
           <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48"><path d="M8 5v14l11-7z"/></svg>
         </div>
       </button>
+    </section>
+
+    <!-- ==============================
+         MOTION DESIGN
+    ============================== -->
+    <section id="motion" class="py-12 border-t border-white/5">
+      <div class="mb-6">
+        <div class="reveal-clip"><p class="reveal-word text-sm tracking-widest uppercase mb-3" style="--reveal-delay: 0ms; color: var(--color-accent-blue);">Motion</p></div>
+        <div class="reveal-clip"><h2 class="reveal-word font-display tracking-display text-5xl md:text-7xl text-n200" style="--reveal-delay: 120ms">Motion Design</h2></div>
+        <div class="reveal-clip"><p class="reveal-word text-n500 mt-4 max-w-lg" style="--reveal-delay: 220ms">Motion graphics and animation for brands.</p></div>
+      </div>
+
+      <div class="card-grid editing-grid motion-grid" data-ids={JSON.stringify(MOTION_IDS)}>
+        {MOTION_IDS.map((id, i) => (
+          <div class="stagger-card" style={`--card-delay: ${i * 80}ms`}>
+            <button class="editing-card w-full" data-video-id={id} data-section="motion" aria-label="Play motion clip">
+              <iframe
+                src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true&autoplay=false`}
+                loading="lazy"
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+                style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
+                tabindex="-1"
+              ></iframe>
+              <div class="editing-play">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </button>
+          </div>
+        ))}
+      </div>
     </section>
 
     <WorkOverlay />
@@ -176,7 +215,7 @@ import WorkOverlay from '../components/WorkOverlay.astro';
 <script>
   function init() {
     // ── Active section nav highlight ──
-    const sections = ['featured', 'showreel'];
+    const sections = ['featured', 'showreel', 'motion'];
     const links = document.querySelectorAll('.section-nav-link');
 
     const navObserver = new IntersectionObserver(
@@ -213,7 +252,7 @@ import WorkOverlay from '../components/WorkOverlay.astro';
       { rootMargin: '0px 0px -10% 0px' }
     );
 
-    document.querySelectorAll('#showreel').forEach((section) => {
+    document.querySelectorAll('#showreel, #motion').forEach((section) => {
       revealObserver.observe(section);
     });
 

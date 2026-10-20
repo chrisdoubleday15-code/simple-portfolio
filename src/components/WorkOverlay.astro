@@ -4,13 +4,7 @@
 
 // ── Single source of truth for video IDs ──
 // Edit here only — the HTML grid and JS lightbox both read from these arrays.
-const MOTION_IDS = [
-  'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
-  '30d66712-7faf-4719-aa57-a094e261e6e3',
-  'd588c3c9-8722-46c2-bc98-ce9d412cd237',
-  '8ab58885-6eba-4960-965c-46452e78efcc',
-];
-
+// Motion IDs live in src/pages/index.astro (MOTION_IDS) with the Motion section.
 const EDITING_IDS = [
   '23d4f219-d53c-4d6a-ada3-4213d9904d66',
   'cecc7cde-69fa-40e7-a2c7-ae15da37c852',
@@ -31,22 +25,21 @@ const REELS_IDS = [
 ══════════════════════════════════════════════ -->
 <section id="work" class="py-12 border-t border-white/5">
   <div class="mb-6">
-    <p class="text-sm tracking-widest uppercase mb-3" style="color: var(--color-accent-blue);">Selected</p>
-    <h2 class="font-display tracking-display text-5xl md:text-7xl text-n200">The Work</h2>
-    <p class="text-n500 mt-4 max-w-lg">Motion design, video editing, and short-form content.</p>
+    <p class="text-sm tracking-widest uppercase mb-3" style="color: var(--color-accent-blue);">Editing</p>
+    <h2 class="font-display tracking-display text-5xl md:text-7xl text-n200">Editing & Short Form</h2>
+    <p class="text-n500 mt-4 max-w-lg">Video editing and short-form content.</p>
   </div>
 
   <!-- Tab row -->
   <div class="work-tabs">
-    <button class="work-tab work-tab--active" data-target="0" aria-label="Open Motion Design work">Motion</button>
-    <button class="work-tab" data-target="1" aria-label="Open Video Editing work">Editing</button>
-    <button class="work-tab" data-target="2" aria-label="Open Short-form work">Short Form</button>
+    <button class="work-tab work-tab--active" data-target="0" aria-label="Open Video Editing work">Editing</button>
+    <button class="work-tab" data-target="1" aria-label="Open Short-form work">Short Form</button>
   </div>
 
   <!-- Looping preview video -->
   <button class="work-preview-video" data-target="0" aria-label="Browse all work">
     <iframe
-      src="https://player.mediadelivery.net/embed/635173/8ab58885-6eba-4960-965c-46452e78efcc?autoplay=true&loop=true&muted=true&preload=true&controls=true&responsive=true"
+      src="https://player.mediadelivery.net/embed/635173/23d4f219-d53c-4d6a-ada3-4213d9904d66?autoplay=true&loop=true&muted=true&preload=true&controls=true&responsive=true"
       loading="lazy"
       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
       style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
@@ -72,38 +65,16 @@ const REELS_IDS = [
 
     <!-- Tab bar -->
     <div class="work-overlay-tabs" role="tablist">
-      <button class="work-overlay-tab work-overlay-tab--active" data-index="0" role="tab" aria-selected="true">Motion</button>
-      <button class="work-overlay-tab" data-index="1" role="tab" aria-selected="false">Editing</button>
-      <button class="work-overlay-tab" data-index="2" role="tab" aria-selected="false">Short Form</button>
+      <button class="work-overlay-tab work-overlay-tab--active" data-index="0" role="tab" aria-selected="true">Editing</button>
+      <button class="work-overlay-tab" data-index="1" role="tab" aria-selected="false">Short Form</button>
     </div>
 
     <!-- Sliding track -->
     <div class="work-overlay-track-wrap">
       <div class="work-overlay-track" id="work-overlay-track">
 
-        <!-- Panel 0: Motion Design -->
-        <div class="work-overlay-panel" data-panel="0" data-ids={JSON.stringify(MOTION_IDS)}>
-          <p class="work-panel-label">Motion Design</p>
-          <div class="editing-grid">
-            {MOTION_IDS.map((id) => (
-              <button class="editing-card" data-video-id={id} data-section="motion" aria-label="Play clip">
-                <iframe
-                  src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true&autoplay=false`}
-                  loading="lazy"
-                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                  style="position:absolute;inset:0;width:100%;height:100%;border:none;pointer-events:none;"
-                  tabindex="-1"
-                ></iframe>
-                <div class="editing-play">
-                  <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <!-- Panel 1: Video Editing -->
-        <div class="work-overlay-panel" data-panel="1" data-ids={JSON.stringify(EDITING_IDS)}>
+        <!-- Panel 0: Video Editing -->
+        <div class="work-overlay-panel" data-panel="0" data-ids={JSON.stringify(EDITING_IDS)}>
           <p class="work-panel-label">Video Editing</p>
           <div class="editing-grid">
             {EDITING_IDS.map((id) => (
@@ -123,8 +94,8 @@ const REELS_IDS = [
           </div>
         </div>
 
-        <!-- Panel 2: Short-form & Reels -->
-        <div class="work-overlay-panel" data-panel="2" data-ids={JSON.stringify(REELS_IDS)}>
+        <!-- Panel 1: Short-form & Reels -->
+        <div class="work-overlay-panel" data-panel="1" data-ids={JSON.stringify(REELS_IDS)}>
           <p class="work-panel-label">Short-form & Reels</p>
           <div class="reels-grid-wrap">
             <div class="reels-grid">
@@ -368,7 +339,7 @@ const REELS_IDS = [
   }
   .work-overlay-track {
     display: flex;
-    width: 300%;
+    width: 200%;
     height: 100%;
     transform: translateX(0%);
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -378,7 +349,7 @@ const REELS_IDS = [
     transition: none;
   }
   .work-overlay-panel {
-    flex: 0 0 33.3333%;
+    flex: 0 0 50%;
     height: 100%;
     overflow-y: auto;
     padding: 1rem 1.5rem;
@@ -396,7 +367,7 @@ const REELS_IDS = [
   }
 
   /* ── Short-form panel: 4-column single row ── */
-  .work-overlay-panel[data-panel="2"] .reels-grid {
+  .work-overlay-panel[data-panel="1"] .reels-grid {
     grid-template-columns: repeat(4, 1fr);
     max-width: 100%;
   }
@@ -491,7 +462,7 @@ const REELS_IDS = [
     .work-overlay-panel {
       padding: 1rem;
     }
-    .work-overlay-panel[data-panel="2"] .reels-grid {
+    .work-overlay-panel[data-panel="1"] .reels-grid {
       grid-template-columns: repeat(2, 1fr);
       max-width: 480px;
     }
@@ -547,6 +518,8 @@ const REELS_IDS = [
     if (!overlay || !track) return;
 
     let currentPanel = 0;
+    const lastPanel = track.children.length - 1;
+    const panelWidthPct = 100 / track.children.length;
 
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
@@ -583,7 +556,7 @@ const REELS_IDS = [
       buildSrc: (id: string) => string;
     }> = {
       motion: {
-        ids: panelIds(0),
+        ids: dataJson<string[]>('.motion-grid', 'ids'),
         index: 0,
         lightboxEl: document.getElementById('motion-lightbox'),
         iframeEl: document.getElementById('motion-iframe') as HTMLIFrameElement | null,
@@ -591,7 +564,7 @@ const REELS_IDS = [
         buildSrc: (id) => buildLightboxSrc(id),
       },
       editing: {
-        ids: panelIds(1),
+        ids: panelIds(0),
         index: 0,
         lightboxEl: document.getElementById('editing-lightbox'),
         iframeEl: document.getElementById('editing-iframe') as HTMLIFrameElement | null,
@@ -599,7 +572,7 @@ const REELS_IDS = [
         buildSrc: (id) => buildLightboxSrc(id),
       },
       reels: {
-        ids: panelIds(2),
+        ids: panelIds(1),
         index: 0,
         lightboxEl: document.getElementById('reels-lightbox'),
         iframeEl: document.getElementById('reels-iframe') as HTMLIFrameElement | null,
@@ -645,9 +618,9 @@ const REELS_IDS = [
 
     // ── Panel navigation ──
     function goToPanel(index: number, animate = true) {
-      currentPanel = Math.max(0, Math.min(2, index));
+      currentPanel = Math.max(0, Math.min(lastPanel, index));
       if (!animate) track!.classList.add('dragging');
-      track!.style.transform = `translateX(${-currentPanel * (100 / 3)}%)`;
+      track!.style.transform = `translateX(${-currentPanel * panelWidthPct}%)`;
       if (!animate) {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => track!.classList.remove('dragging'));
@@ -716,11 +689,10 @@ const REELS_IDS = [
         track.setPointerCapture(e.pointerId);
       }
       if (!isDragging) return;
-      const panelWidthPct = 100 / 3;
       const basePct = -currentPanel * panelWidthPct;
       const maxEdge = 40;
       let offset = delta / track.offsetWidth * 100;
-      if ((currentPanel === 0 && delta > 0) || (currentPanel === 2 && delta < 0)) {
+      if ((currentPanel === 0 && delta > 0) || (currentPanel === lastPanel && delta < 0)) {
         offset = offset * 0.2;
         offset = Math.sign(offset) * Math.min(Math.abs(offset), maxEdge / track.offsetWidth * 100);
       }
@@ -749,7 +721,7 @@ const REELS_IDS = [
     });
 
     // ── Card click → open lightbox ──
-    overlay.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
+    document.querySelectorAll<HTMLElement>('.editing-card[data-section="motion"]').forEach((card) => {
       card.addEventListener('click', () => openLightbox('motion', card.dataset.videoId!));
     });
     overlay.querySelectorAll<HTMLElement>('.editing-card[data-section="editing"]').forEach((card) => {

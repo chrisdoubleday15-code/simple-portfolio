@@ -1,8 +1,8 @@
 export const SITE = {
     website: "chrisdoubleday.com", // replace this with your deployed domain
-    title: "Christopher Doubleday | Motion Designer",
-    description: "Motion designer and video editor creating bold, high-energy content for brands.",
-    tags: ["portfolio", "Motion Graphics", "Video Editor"],
+    title: "Christopher Doubleday | Senior Motion Designer",
+    description: "Senior motion designer creating bold, high-energy content for brands.",
+    tags: ["portfolio", "Motion Design", "Motion Graphics", "Video Editor"],
     ogImage: "/og-image.webp",
     logo: "logo",
     logoText: "Christopher Doubleday",
@@ -15,7 +15,7 @@ export const SITE = {
 
 export const ME = {
     name: "Christopher Doubleday",
-    profession: "Motion Designer | Video Editor",
+    profession: "Senior Motion Designer",
     profileImage: "chris.jpg",
     profileFacts: [
         {
@@ -36,7 +36,7 @@ export const ME = {
         linkedin: "https://www.linkedin.com/in/christopher-doubleday-986bb4241",
         resumeDoc: "resume.pdf",
     },
-    aboutMe: "I'm Chris - video editor and motion designer. I help brands create content that gets noticed, engagement and results. I work with Premiere Pro + After Effects, focusing on quick turnarounds, with head turning visuals."
+    aboutMe: "I'm Chris, a Senior Motion Designer. I build bold, high-energy motion graphics that help brands get noticed: animated systems, templates, and campaign pieces. After Effects is home base, backed by years of editing in Premiere Pro."
 }
 
 export const SOCIALS = [

@@ -173,7 +173,8 @@ Section order:
 2. **Highlights** (nav label) — `<section id="featured" class="py-4">` → `<ReelsCarousel />`
 3. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
 4. **Featured** (nav label) — `<section id="showreel" class="py-12 border-t border-white/5">` (titled "Hawaii 2026", opens `#showreel-lightbox`)
-5. **Work** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Motion / Editing / Short Form panels
+5. **Motion** — `<section id="motion" class="py-12 border-t border-white/5">`, 2×2 grid driven by `MOTION_IDS` in `index.astro`; cards open `#motion-lightbox`
+6. **Editing & Short Form** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Editing / Short Form panels
 
 ### Sticky nav
 
@@ -182,7 +183,7 @@ Section order:
      style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
 ```
 
-Links: `Highlights | Featured | Work` (`Work` is a button that opens the overlay)
+Links: `Highlights | Featured | Motion | Editing` (`Editing` is a button that opens the overlay)
 Active state: `IntersectionObserver` adds `.active` → `color: var(--color-accent-blue)`
 
 ### JS conventions (`index.astro`)
@@ -212,9 +213,9 @@ Card 5: 510b0d07-cd34-4daf-92d4-74bbac5e915b   President's Club
 b7da40bf-36c4-45d2-9a4b-c2ccd82482a2
 ```
 
-### Work overlay grids — uses `iframe.mediadelivery.net`
+### Motion + Work overlay grids — uses `iframe.mediadelivery.net`
 
-Source of truth: `MOTION_IDS`, `EDITING_IDS`, `REELS_IDS` at the top of `WorkOverlay.astro`. Panels expose them via `data-ids`; the lightbox JS reads them back, so edit the arrays only.
+Source of truth: `EDITING_IDS`, `REELS_IDS` at the top of `WorkOverlay.astro`; `MOTION_IDS` in `index.astro` (Motion section). Panels and `.motion-grid` expose them via `data-ids`; the lightbox JS reads them back, so edit the arrays only. Overlay panel count is derived from the track's children.
 
 Motion cards carry `data-section="motion"` → routed to `#motion-lightbox`. **Do not remove this attribute.**
 
@@ -376,7 +377,7 @@ Hero entrance: `.hero-word` animates via `hero-rise` keyframe (translateY 110% �
 ```
 
 `IntersectionObserver` adds `.is-visible` to parent section.
-Sections observed: `#showreel`
+Sections observed: `#showreel`, `#motion`
 
 ### Card stagger
 

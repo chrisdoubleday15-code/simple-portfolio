@@ -23,5 +23,6 @@ export const formatDatetime = (datetime: any) => {
   return d.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
+    timeZone: 'UTC', // YYYY-MM-DD strings parse as UTC; keep the 1st from rendering as the previous month
   });
 };
