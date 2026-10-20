@@ -37,6 +37,7 @@ src/
   pages/
     index.astro                  ← Main portfolio page (all sections)
     contact.astro                ← Contact form
+    work/live-it-awards.astro    ← Case study page (MediaSlot placeholders until assets land)
   components/
     Navbar.astro                 ← Fixed nav, CD monogram SVG inlined, mobile hamburger
     ReelsCarousel.astro          ← 3D hexagonal carousel (6 cards, 9:16)
@@ -46,6 +47,7 @@ src/
     SkillCard.astro              ← Skills section cards
     JobDetails.astro             ← Experience section rows
     EduDetail.astro              ← Education badge
+    MediaSlot.astro              ← Case-study media frame: Bunny clip via player.mediadelivery.net, or labelled placeholder
     WorkOverlay.astro            ← Work preview block, fullscreen overlay, all lightboxes + their JS
     BackBtn.astro                ← Back button (red CTA)
     Footer.astro

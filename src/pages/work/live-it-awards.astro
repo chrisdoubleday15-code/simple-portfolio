@@ -1,0 +1,173 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import MediaSlot from '../../components/MediaSlot.astro';
+
+// Bunny Stream IDs already in the library (same clips as the home Motion grid).
+const HERO_ID  = 'e2a9c8f2-1429-4b94-a05c-2ad99da565c3'; // Live It recognition award
+const AWARD_ID = 'd588c3c9-8722-46c2-bc98-ce9d412cd237'; // Rookie of the Year award animation
+
+const META = [
+  { label: 'Client',   value: 'Moxie Pest Control' },
+  { label: 'Role',     value: 'Sole motion designer' },
+  { label: 'Timeline', value: '6 weeks, incl. render' },
+  { label: 'Tools',    value: 'After Effects' },
+];
+
+const STATS = [
+  { value: '49', label: 'Motion assets delivered' },
+  { value: '2.7×', label: 'Output vs. 2025 (18 assets)' },
+  { value: '6', label: 'Reusable 2.5D templates' },
+  { value: '37', label: 'Award animations from those templates' },
+];
+
+const BESPOKE = [
+  { title: 'Event intro',  label: 'Event intro render' },
+  { title: 'Event close',  label: 'Event close render' },
+  { title: 'Facade',       label: 'Facade render or still' },
+  { title: 'Stage',        label: 'Stage background + foreground stills (9)' },
+];
+---
+
+<Layout
+  title="Live It Awards 2026 | Christopher Doubleday"
+  description="Case study: 49 motion graphics assets for Moxie's Live It Awards 2026, designed solo in six weeks."
+  scrollSmooth={true}
+>
+  <article class="flex flex-col gap-16 py-8">
+
+    <!-- Hero -->
+    <header class="flex flex-col gap-6 animate-fade-in">
+      <a href="/#motion" class="case-back text-n500 text-xs tracking-widest uppercase self-start">&larr; Back to work</a>
+      <div>
+        <p class="text-sm tracking-widest uppercase mb-3" style="color: var(--color-accent-blue);">Case Study</p>
+        <h1 class="font-display tracking-display text-6xl md:text-8xl text-n200 leading-none">Live It Awards 2026</h1>
+        <p class="text-n500 text-lg leading-relaxed mt-6 max-w-2xl">
+          A full event package for Moxie's annual awards night: 49 motion graphics assets, up from 18 the year before, designed and delivered solo in six weeks.
+        </p>
+      </div>
+      <MediaSlot videoId={HERO_ID} label="Live It Awards 2026" loop />
+      <dl class="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/5 pt-6">
+        {META.map((m) => (
+          <div>
+            <dt class="text-n500 text-xs tracking-widest uppercase mb-1">{m.label}</dt>
+            <dd class="text-n200 text-sm">{m.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </header>
+
+    <!-- Brief -->
+    <section class="case-section">
+      <p class="case-label">The Brief</p>
+      <h2 class="case-heading">More than double, same team of one</h2>
+      <p class="case-body">
+        The 2025 show ran on 18 assets. For 2026, the event needed 49: every award, every stage surface, and the moments that open and close the night. I was the only designer on it, and the six-week window had to include render time for all 49 pieces.
+      </p>
+    </section>
+
+    <!-- Stats -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-px bg-white/5 border border-white/5">
+      {STATS.map((s) => (
+        <div class="flex flex-col gap-2 p-5" style="background: var(--color-bg-base);">
+          <span class="font-display tracking-display text-5xl md:text-6xl leading-none" style="color: var(--color-accent-blue);">{s.value}</span>
+          <span class="text-n500 text-xs tracking-wide">{s.label}</span>
+        </div>
+      ))}
+    </section>
+
+    <!-- Visual direction -->
+    <section class="case-section">
+      <p class="case-label">Visual Direction</p>
+      <h2 class="case-heading">A Western theme, carried through all 49</h2>
+      <p class="case-body">
+        I developed the visual direction around the event's Western theme and held it across every asset, from the stage backgrounds to the award animations, so the night read as one piece instead of 49.
+      </p>
+      <div class="grid grid-cols-2 gap-3 mt-6">
+        <MediaSlot label="Style frame 1" />
+        <MediaSlot label="Style frame 2" />
+        <MediaSlot label="Style frame 3" />
+        <MediaSlot label="Palette + type sheet" />
+      </div>
+    </section>
+
+    <!-- The system -->
+    <section class="case-section">
+      <p class="case-label">The System</p>
+      <h2 class="case-heading">6 templates, 37 award animations</h2>
+      <p class="case-body">
+        Hand-building 37 award animations wasn't possible in the window, so I built 6 reusable 2.5D templates instead: camera-driven parallax with text reveals placed in z-space. Each award became a matter of swapping in names and footage, which left the time for the pieces that needed to be bespoke.
+      </p>
+      <div class="grid md:grid-cols-2 gap-3 mt-6">
+        <MediaSlot videoId={AWARD_ID} label="Award animation" />
+        <MediaSlot label="After Effects camera / z-space setup screenshot" />
+      </div>
+    </section>
+
+    <!-- Bespoke -->
+    <section class="case-section">
+      <p class="case-label">Bespoke Pieces</p>
+      <h2 class="case-heading">The 12 that had to be one-offs</h2>
+      <p class="case-body">
+        The remaining 12 assets were built from scratch: the event intro, the event close, the facade, and 9 stage backgrounds and foregrounds.
+      </p>
+      <div class="grid md:grid-cols-2 gap-x-3 gap-y-6 mt-6">
+        {BESPOKE.map((b) => (
+          <div class="flex flex-col gap-2">
+            <MediaSlot label={b.label} />
+            <p class="text-n200 text-sm tracking-wide">{b.title}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- On the day -->
+    <section class="case-section">
+      <p class="case-label">On the Night</p>
+      <h2 class="case-heading">In the room</h2>
+      <div class="grid md:grid-cols-3 gap-3 mt-2">
+        <MediaSlot label="Event photo: stage" aspect="4 / 3" />
+        <MediaSlot label="Event photo: award on screen" aspect="4 / 3" />
+        <MediaSlot label="Event photo: audience / facade" aspect="4 / 3" />
+      </div>
+    </section>
+
+    <!-- Outcome -->
+    <section class="case-section">
+      <p class="case-label">Outcome</p>
+      <h2 class="case-heading">The best one yet</h2>
+      <p class="case-body">
+        All 49 assets shipped on time. After the event, Moxie's leadership called it the best Live It Awards yet, and the work led directly to my promotion to Senior Motion Designer.
+      </p>
+      <!-- Founder quote goes here once Jason Walton OKs being quoted by name. -->
+    </section>
+
+    <!-- Next -->
+    <footer class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-t border-white/5 pt-8">
+      <a href="/#motion" class="case-back text-n500 text-xs tracking-widest uppercase">&larr; Back to work</a>
+      <a href="/contact" class="case-back text-n500 text-xs tracking-widest uppercase">Start a project &rarr;</a>
+    </footer>
+
+  </article>
+</Layout>
+
+<style>
+  .case-section {
+    @apply flex flex-col;
+  }
+  .case-label {
+    @apply text-sm tracking-widest uppercase mb-3;
+    color: var(--color-accent-blue);
+  }
+  .case-heading {
+    @apply font-display tracking-display text-4xl md:text-5xl text-n200 leading-none;
+  }
+  .case-body {
+    @apply text-n500 leading-relaxed mt-4 max-w-2xl;
+  }
+  .case-back {
+    transition: color 0.2s ease;
+  }
+  .case-back:hover {
+    color: var(--color-accent-blue);
+  }
+</style>
