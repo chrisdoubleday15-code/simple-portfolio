@@ -20,8 +20,12 @@ const STATS = [
   { value: '37', label: 'Award animations from those templates' },
 ];
 
-const BESPOKE = [
-  { title: 'Event intro',  label: 'Event intro render' },
+// Screen renders are 5120×1536 (10:3); those run full width so they don't shrink to slivers.
+const SCREEN = '10 / 3';
+
+const BESPOKE: { title: string; label: string; videoId?: string; aspect?: string }[] = [
+  { title: 'Event intro',  label: 'Event intro render', videoId: '8424deb3-1689-4bb2-b2d1-c09171207b58', aspect: SCREEN },
+  { title: '$100k intro',  label: '$100k intro render', videoId: '1fd6be6f-85fd-4928-8099-9a17567e5bea', aspect: SCREEN },
   { title: 'Event close',  label: 'Event close render' },
   { title: 'Facade',       label: 'Facade render or still' },
   { title: 'Stage',        label: 'Stage background + foreground stills (9)' },
@@ -112,8 +116,8 @@ const BESPOKE = [
       </p>
       <div class="grid md:grid-cols-2 gap-x-3 gap-y-6 mt-6">
         {BESPOKE.map((b) => (
-          <div class="flex flex-col gap-2">
-            <MediaSlot label={b.label} />
+          <div class:list={['flex flex-col gap-2', { 'md:col-span-2': b.aspect === SCREEN }]}>
+            <MediaSlot videoId={b.videoId} label={b.label} aspect={b.aspect} />
             <p class="text-n200 text-sm tracking-wide">{b.title}</p>
           </div>
         ))}
