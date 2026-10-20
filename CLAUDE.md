@@ -50,7 +50,6 @@ src/
     MediaSlot.astro              ← Case-study media frame: Bunny clip via player.mediadelivery.net, or labelled placeholder
     WorkOverlay.astro            ← Work preview block, fullscreen overlay, all lightboxes + their JS
     BackBtn.astro                ← Back button (red CTA)
-    Footer.astro
   styles/
     globals.css                  ← CSS variables (:root), keyframes, global utility classes
   data/
