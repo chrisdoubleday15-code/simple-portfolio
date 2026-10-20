@@ -170,9 +170,9 @@ Section divider: border-t border-white/5
 Section order:
 
 1. **Hero** — `<section class="text-center relative pt-8 pb-4">`
-2. **Featured** — `<section id="featured" class="py-4">` → `<ReelsCarousel />`
+2. **Highlights** (nav label) — `<section id="featured" class="py-4">` → `<ReelsCarousel />`
 3. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
-4. **Showreel** — `<section id="showreel" class="py-12 border-t border-white/5">` (titled "Hawaii 2026", opens `#showreel-lightbox`)
+4. **Featured** (nav label) — `<section id="showreel" class="py-12 border-t border-white/5">` (titled "Hawaii 2026", opens `#showreel-lightbox`)
 5. **Work** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Motion / Editing / Short Form panels
 6. **Long Form** — `<section id="youtube" class="py-12 border-t border-white/5">`, driven by `YOUTUBE_CARDS` in `index.astro`
 
@@ -183,7 +183,7 @@ Section order:
      style="background: color-mix(in srgb, var(--color-bg-base) 90%, transparent);">
 ```
 
-Links: `Featured | Showreel | Work | Long Form` (`Work` is a button that opens the overlay)
+Links: `Highlights | Featured | Work | Long Form` (`Work` is a button that opens the overlay)
 Active state: `IntersectionObserver` adds `.active` → `color: var(--color-accent-blue)`
 
 ### JS conventions (`index.astro`)
