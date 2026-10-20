@@ -12,8 +12,17 @@
  * @property {string[]} goals - A list of professional goals achieved or targeted during the position.
  * @property {boolean} currentJob - Indicates whether the position is the current job.
  */
+interface Role {
+    title: string;
+    startDate: string;
+    endDate?: string;
+    note?: string;
+}
+
 interface WorkExperience {
     title: string;
+    /** Title progression at one company, newest first. Rendered instead of `title`. */
+    roles?: Role[];
     startDate: string;
     endDate?: string;
     company: string;
@@ -45,31 +54,23 @@ interface WorkExperience {
 const workExperience:WorkExperience[] = [
     {
         title: "Senior Motion Designer",
-        startDate: "2026-10-01",
+        roles: [
+            { title: "Senior Motion Designer", startDate: "2026-10-01", note: "Promoted following Live It Awards 2026" },
+            { title: "Video Editor/Motion Designer", startDate: "2025-01-20", endDate: "2026-10-01" },
+        ],
+        startDate: "2025-01-20",
         company: "Moxie Pest Control",
         location: "Provo, Utah",
-        description: "Promoted to lead motion design for the marketing team.",
+        description: "Leads motion design for the marketing team.",
         goals: [
             "Designed and delivered the Live It Awards 2026 package solo: 49 assets in 6 weeks, up from 18 the prior year.",
             "Built 6 reusable 2.5D templates to produce 37 award animations, plus 12 bespoke stage and show assets.",
             "Created sports arena graphics shown on the big screens at Delta Center and Lenovo Center.",
             "Oversaw projects from initial vision through final delivery, owning visual direction end to end.",
+            "Designed and built over 10 mogrt templates enabling data-driven, scalable video production.",
+            "Produced 2-3 videos per week including a weekly top-10 sales leaderboard series.",
         ],
         currentJob: true,
-    },
-    {
-        title: "Video Editor/Motion Designer",
-        startDate: "2025-01-20",
-        endDate: "2026-10-01",
-        company: "Moxie Pest Control",
-        location: "Provo, Utah",
-        description: "Worked with the marketing team to create eye-catching content.",
-        goals: [
-            "Produced 2-3 videos per week including a weekly top-10 sales leaderboard series.",
-            "Designed and built over 10 mogrt templates enabling data-driven, scalable video production.",
-            "Collaborated with corporate teams to maintain consistent branding across all video output.",
-        ],
-        currentJob: false,
     },
     {
         title: "Video Editor",

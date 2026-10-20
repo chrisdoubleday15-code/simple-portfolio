@@ -1,8 +1,16 @@
 ---
 import {formatDatetime} from "../lib/utils";
 
+interface Role {
+    title: string;
+    startDate: string;
+    endDate?: string;
+    note?: string;
+}
+
 interface Job {
     title: string;
+    roles?: Role[];
     company: string;
     location: string;
     startDate: string;
@@ -12,17 +20,44 @@ interface Job {
 }
 
 const {jobData} = Astro.props;
-const { title, company, location, startDate, endDate, goals, currentJob } = jobData as Job;
+const { title, roles, company, location, startDate, endDate, goals, currentJob } = jobData as Job;
 ---
 
 <div class="flex flex-col gap-3 py-4">
-    <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
-        <h3 class="text-xl font-semibold text-n200">{title}</h3>
-        <span class="text-n500 text-sm tracking-widest uppercase whitespace-nowrap">
-            {formatDatetime(startDate)} — {currentJob ? "Present" : formatDatetime(endDate)}
-        </span>
-    </div>
-    <p class="text-n500 text-sm tracking-wide">{company} <span class="mx-1" style="color: var(--color-accent-blue);">/</span> {location}</p>
+    {roles ? (
+        <>
+            <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
+                <h3 class="text-xl font-semibold text-n200">{company}</h3>
+                <span class="text-n500 text-sm tracking-widest uppercase whitespace-nowrap">
+                    {formatDatetime(startDate)} — {currentJob ? "Present" : formatDatetime(endDate)}
+                </span>
+            </div>
+            <p class="text-n500 text-sm tracking-wide -mt-2">{location}</p>
+            <ol class="role-timeline flex flex-col gap-3 mt-1">
+                {roles.map((role, i) => (
+                    <li class="role-step relative pl-5">
+                        <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
+                            <p class:list={["font-semibold", i === 0 ? "text-n200" : "text-n500"]}>{role.title}</p>
+                            <span class="text-n500 text-xs tracking-widest uppercase whitespace-nowrap">
+                                {formatDatetime(role.startDate)} — {role.endDate ? formatDatetime(role.endDate) : "Present"}
+                            </span>
+                        </div>
+                        {role.note && <p class="role-note text-xs tracking-wide mt-0.5">{role.note}</p>}
+                    </li>
+                ))}
+            </ol>
+        </>
+    ) : (
+        <>
+            <div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-1">
+                <h3 class="text-xl font-semibold text-n200">{title}</h3>
+                <span class="text-n500 text-sm tracking-widest uppercase whitespace-nowrap">
+                    {formatDatetime(startDate)} — {currentJob ? "Present" : formatDatetime(endDate)}
+                </span>
+            </div>
+            <p class="text-n500 text-sm tracking-wide">{company} <span class="mx-1" style="color: var(--color-accent-blue);">/</span> {location}</p>
+        </>
+    )}
     <ul class="flex flex-col gap-1 mt-1">
         {goals.map((goal: string) => (
             <li class="job-bullet text-n500 text-sm pl-4 relative before:content-['—'] before:absolute before:left-0">{goal}</li>
@@ -32,6 +67,32 @@ const { title, company, location, startDate, endDate, goals, currentJob } = jobD
 
 <style>
   .job-bullet::before {
+    color: var(--color-accent-blue);
+  }
+  /* Promotion timeline: dot per role, line connecting them */
+  .role-step::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-accent-blue);
+  }
+  .role-step:first-child::before {
+    background: var(--color-accent-blue);
+  }
+  .role-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: calc(0.5em + 9px);
+    bottom: calc(-0.75rem - 0.5em + 2px);
+    width: 1px;
+    background: color-mix(in srgb, var(--color-accent-blue) 40%, transparent);
+  }
+  .role-note {
     color: var(--color-accent-blue);
   }
 </style>
