@@ -21,7 +21,7 @@ No tests in this project.
 **Positioning:** Chris was promoted to Senior Motion Designer at Moxie (Oct 2026) after the Live It Awards 2026. The site is being reshaped to read motion-first; editing is secondary.
 
 **Waiting on Chris** — the live checklist is `../TODO.txt` (outside the repo). Read it at the start of a session and tick items off as they land.
-- Live It case study (`/work/live-it-awards`): `MediaSlot` placeholders until assets arrive as Bunny IDs / image files.
+- Live It case study (`/work/live-it-awards`): order is Brief, Stats, Tier Awards, Rep of the Year, Visual Direction, On the Night, Outcome. Award clips are 5120×1536 screen renders (`SCREEN = '10 / 3'`, full width). Tier Awards and Rep of the Year are visuals only; Chris will write their copy later. Next up: event photos for On the Night (to show the screen's scale), then style frames. The "5 Award templates" stat stays until Chris reworks the text.
 - Motion carousel: still holds the old short-form edits until ~6 vertical (9:16) motion clips arrive; swap the 6 IDs in `ReelsCarousel.astro`.
 - Contact form hidden until `formspreeEndpoint` is set in `src/config.ts`.
 - `public/resume.pdf` still shows the old title.
@@ -60,7 +60,7 @@ src/
   pages/
     index.astro                  ← Main portfolio page (all sections)
     contact.astro                ← Contact form
-    work/live-it-awards.astro    ← Case study page (MediaSlot placeholders until assets land)
+    work/live-it-awards.astro    ← Case study page (some MediaSlot placeholders still waiting on assets)
   components/
     Navbar.astro                 ← Fixed nav, CD monogram SVG inlined, mobile hamburger
     ReelsCarousel.astro          ← 3D hexagonal carousel (6 cards, 9:16)
