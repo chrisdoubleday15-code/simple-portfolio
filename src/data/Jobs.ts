@@ -64,7 +64,7 @@ const workExperience:WorkExperience[] = [
         description: "Leads motion design for the marketing team.",
         goals: [
             "Designed and delivered the Live It Awards 2026 package solo: 49 assets in 6 weeks, up from 18 the prior year.",
-            "Built 4 tier backgrounds in 2.5D that carried all 37 award animations, plus the intro, close, facade and stage assets.",
+            "Built 5 reusable 2.5D award templates (4 tier backgrounds plus Salesman of the Year) to produce 37 award animations, plus the intro, close, facade and stage assets.",
             "Created sports arena graphics shown on the big screens at Delta Center and Lenovo Center.",
             "Oversaw projects from initial vision through final delivery, owning visual direction end to end.",
             "Designed and built over 10 mogrt templates enabling data-driven, scalable video production.",
