@@ -23,7 +23,7 @@ const STATS = [
 // Screen renders are 5120×1536 (10:3); those run full width so they don't shrink to slivers.
 const SCREEN = '10 / 3';
 
-// Each award ran on the background for its tier.
+// The award templates: one background per tier; each award swapped in its own text/logo.
 const BACKGROUNDS: { tier: string; title: string; videoId?: string }[] = [
   { tier: '$100k–$250k', title: 'Background 1', videoId: '1fd6be6f-85fd-4928-8099-9a17567e5bea' },
   { tier: '$300k–$450k', title: 'Background 2' },
@@ -106,20 +106,7 @@ const BESPOKE: { title: string; label: string; videoId?: string; aspect?: string
       <p class="case-label">The System</p>
       <h2 class="case-heading">6 templates, 37 award animations</h2>
       <p class="case-body">
-        Hand-building 37 award animations wasn't possible in the window, so I built 6 reusable 2.5D templates instead: camera-driven parallax with text reveals placed in z-space. Each award became a matter of swapping in names and footage, which left the time for the pieces that needed to be bespoke.
-      </p>
-      <div class="grid md:grid-cols-2 gap-3 mt-6">
-        <MediaSlot videoId={AWARD_ID} label="Award animation" />
-        <MediaSlot label="After Effects camera / z-space setup screenshot" />
-      </div>
-    </section>
-
-    <!-- Backgrounds -->
-    <section class="case-section">
-      <p class="case-label">The Backgrounds</p>
-      <h2 class="case-heading">Four backgrounds, one per tier</h2>
-      <p class="case-body">
-        Every award sat on one of four backgrounds, matched to the tier it recognised: $100k–$250k, $300k–$450k, $500k and up, and accounts. Each one was built from scratch for the screen, then carried every award in its tier.
+        Hand-building 37 award animations wasn't possible in the window, so I built reusable 2.5D templates instead: one background per award tier, with camera-driven parallax and text reveals placed in z-space. Each award was then a matter of editing the text and logo for its tier, which left the time for the pieces that needed to be bespoke.
       </p>
       <div class="flex flex-col gap-6 mt-6">
         {BACKGROUNDS.map((b) => (
@@ -131,6 +118,10 @@ const BESPOKE: { title: string; label: string; videoId?: string; aspect?: string
             </p>
           </div>
         ))}
+      </div>
+      <div class="grid md:grid-cols-2 gap-3 mt-6">
+        <MediaSlot videoId={AWARD_ID} label="Award animation" />
+        <MediaSlot label="After Effects camera / z-space setup screenshot" />
       </div>
     </section>
 
