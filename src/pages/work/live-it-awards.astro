@@ -16,19 +16,20 @@ const META = [
 const STATS = [
   { value: '49', label: 'Motion assets delivered' },
   { value: '2.7×', label: 'Output vs. 2025 (18 assets)' },
-  { value: '4', label: 'Tier backgrounds' },
+  { value: '5', label: 'Award templates' },
   { value: '37', label: 'Award animations' },
 ];
 
 // Screen renders are 5120×1536 (10:3); those run full width so they don't shrink to slivers.
 const SCREEN = '10 / 3';
 
-// One background per award tier; each award edited the text/logo on its tier's background.
+// The award templates: one background per tier, plus Salesman of the Year. Each award edited the text/logo on its background.
 const BACKGROUNDS: { tier: string; title: string; videoId?: string }[] = [
   { tier: '$100k–$250k', title: 'Background 1', videoId: '1fd6be6f-85fd-4928-8099-9a17567e5bea' },
   { tier: '$300k–$450k', title: 'Background 2', videoId: 'c8c34576-9fb1-4be1-b051-45142aa7c166' },
   { tier: '$500k+',      title: 'Background 3', videoId: 'a833ab9e-7e0c-4944-9486-543c552bd1a1' },
   { tier: 'Accounts',    title: 'Background 4', videoId: '34af9a55-7d63-40f7-9fe4-88d2abcff85c' },
+  { tier: 'Salesman of the Year', title: 'Background 5' },
 ];
 
 const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[] = [
@@ -89,9 +90,9 @@ const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[
     <!-- Set the stage -->
     <section class="case-section">
       <p class="case-label">Set the Stage</p>
-      <h2 class="case-heading">Four backgrounds, one per tier</h2>
+      <h2 class="case-heading">Five backgrounds, 37 awards</h2>
       <p class="case-body">
-        Every award played on one of four backgrounds, each built for the 5120 &times; 1536 stage screen and matched to the tier it recognised. For each award I edited the text and logo on its tier's background, so the whole night ran on four looks instead of 37.
+        Every award played on one of five backgrounds, each built for the 5120 &times; 1536 stage screen: four matched to the tier an award recognised, and one built for Salesman of the Year. For each award I edited the text and logo on its background, so the whole night ran on five looks instead of 37.
       </p>
       <div class="flex flex-col gap-6 mt-6">
         {BACKGROUNDS.map((b) => (
@@ -126,7 +127,7 @@ const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[
       <p class="case-label">The Awards</p>
       <h2 class="case-heading">37 awards, built in z-space</h2>
       <p class="case-body">
-        Each background was built in 2.5D: camera-driven parallax with text reveals placed in z-space. Building that once per tier meant every award came down to editing its text and logo, which left time for the rest of the show.
+        Each background was built in 2.5D: camera-driven parallax with text reveals placed in z-space. Building that once per background meant every award came down to editing its text and logo, which left time for the rest of the show.
       </p>
       <div class="grid md:grid-cols-2 gap-3 mt-6">
         <MediaSlot videoId={AWARD_ID} label="Award animation" />
