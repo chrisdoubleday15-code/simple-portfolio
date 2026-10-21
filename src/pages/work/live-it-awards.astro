@@ -4,7 +4,6 @@ import MediaSlot from '../../components/MediaSlot.astro';
 
 // Bunny Stream IDs already in the library (same clips as the home Motion grid).
 const HERO_ID  = 'e2a9c8f2-1429-4b94-a05c-2ad99da565c3'; // Live It recognition award
-const AWARD_ID = 'd588c3c9-8722-46c2-bc98-ce9d412cd237'; // Rookie of the Year award animation
 
 const META = [
   { label: 'Client',   value: 'Moxie Pest Control' },
@@ -29,7 +28,13 @@ const BACKGROUNDS: { tier: string; title: string; videoId?: string }[] = [
   { tier: '$300k–$450k', title: 'Background 2', videoId: 'c8c34576-9fb1-4be1-b051-45142aa7c166' },
   { tier: '$500k+',      title: 'Background 3', videoId: 'a833ab9e-7e0c-4944-9486-543c552bd1a1' },
   { tier: 'Accounts',    title: 'Background 4', videoId: '34af9a55-7d63-40f7-9fe4-88d2abcff85c' },
-  { tier: 'Salesman of the Year', title: 'Background 5' },
+  { tier: 'Salesman of the Year', title: 'Background 5', videoId: 'a17b54e7-90c9-4022-aab7-6347e67f00ab' },
+];
+
+// 2026 award renders, full screen format.
+const AWARDS = [
+  { title: 'Rookie of the Year',    videoId: 'de11b1ad-fd7f-49fe-af8f-ddd0e90e007c' },
+  { title: 'Sophomore of the Year', videoId: 'f9fa9116-884e-44d1-a0b0-7f1e23795a71' },
 ];
 
 const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[] = [
@@ -129,8 +134,13 @@ const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[
       <p class="case-body">
         Each background was built in 2.5D: camera-driven parallax with text reveals placed in z-space. Building that once per background meant every award came down to editing its text and logo, which left time for the rest of the show.
       </p>
-      <div class="grid md:grid-cols-2 gap-3 mt-6">
-        <MediaSlot videoId={AWARD_ID} label="Award animation" />
+      <div class="flex flex-col gap-6 mt-6">
+        {AWARDS.map((a) => (
+          <div class="flex flex-col gap-2">
+            <MediaSlot videoId={a.videoId} label={a.title} aspect={SCREEN} />
+            <p class="text-n200 text-sm tracking-wide">{a.title}</p>
+          </div>
+        ))}
         <MediaSlot label="After Effects camera / z-space setup screenshot" />
       </div>
     </section>
