@@ -35,13 +35,6 @@ const REPS = [
   { title: 'Sophomore of the Year', videoId: 'f9fa9116-884e-44d1-a0b0-7f1e23795a71' },
   { title: 'Salesman of the Year',  videoId: 'a17b54e7-90c9-4022-aab7-6347e67f00ab' },
 ];
-
-const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[] = [
-  { title: 'Event intro',  label: 'Event intro render', videoId: '8424deb3-1689-4bb2-b2d1-c09171207b58', aspect: SCREEN },
-  { title: 'Event close',  label: 'Event close render', videoId: '9bd37603-d812-4b01-8d94-72ebcfae4efc', aspect: SCREEN },
-  { title: 'Facade',       label: 'Facade render or still' },
-  { title: 'Stage',        label: 'Stage background + foreground stills (9)' },
-];
 ---
 
 <Layout
@@ -131,23 +124,6 @@ const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[
         <MediaSlot label="Style frame 2" />
         <MediaSlot label="Style frame 3" />
         <MediaSlot label="Palette + type sheet" />
-      </div>
-    </section>
-
-    <!-- Rest of the show -->
-    <section class="case-section">
-      <p class="case-label">The Rest of the Show</p>
-      <h2 class="case-heading">Open, close, and everything around it</h2>
-      <p class="case-body">
-        The rest of the package covered the moments around the awards: the event intro, the event close, the facade, and 9 stage backgrounds and foregrounds.
-      </p>
-      <div class="grid md:grid-cols-2 gap-x-3 gap-y-6 mt-6">
-        {SHOW.map((b) => (
-          <div class:list={['flex flex-col gap-2', { 'md:col-span-2': b.aspect === SCREEN }]}>
-            <MediaSlot videoId={b.videoId} label={b.label} aspect={b.aspect} />
-            <p class="text-n200 text-sm tracking-wide">{b.title}</p>
-          </div>
-        ))}
       </div>
     </section>
 
