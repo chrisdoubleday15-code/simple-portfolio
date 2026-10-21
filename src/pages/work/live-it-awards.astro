@@ -2,8 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import MediaSlot from '../../components/MediaSlot.astro';
 
-// Bunny Stream IDs already in the library (same clips as the home Motion grid).
-const HERO_ID  = 'e2a9c8f2-1429-4b94-a05c-2ad99da565c3'; // Live It recognition award
+// Same clip as the home case study card.
+const HERO_ID  = '9bd37603-d812-4b01-8d94-72ebcfae4efc'; // Live It logo burn (event close loop, 10:3)
 
 const META = [
   { label: 'Client',   value: 'Moxie Pest Control' },
@@ -61,7 +61,7 @@ const SHOW: { title: string; label: string; videoId?: string; aspect?: string }[
           A full event package for Moxie's annual awards night: 49 motion graphics assets, up from 18 the year before, designed and delivered solo in six weeks.
         </p>
       </div>
-      <MediaSlot videoId={HERO_ID} label="Live It Awards 2026" loop />
+      <MediaSlot videoId={HERO_ID} label="Live It Awards 2026" aspect={SCREEN} loop />
       <dl class="grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-white/5 pt-6">
         {META.map((m) => (
           <div>
