@@ -138,7 +138,7 @@ const REPS = [
     <section class="case-section">
       <p class="case-label">On the Night</p>
       <h2 class="case-heading">In the room</h2>
-      <div class="grid md:grid-cols-3 gap-3 mt-2">
+      <div class="flex flex-col gap-6 mt-6">
         {ROOM.map((r) => (
           <MediaSlot videoId={r.videoId} label={r.title} loop />
         ))}
