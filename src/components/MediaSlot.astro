@@ -1,20 +1,25 @@
 ---
 // Case-study media frame. Pass `videoId` for a Bunny Stream clip, or leave it out
 // to render a labelled placeholder for an asset that hasn't been exported yet.
+// `loop` autoplays muted on repeat; `autoplay` plays muted once when scrolled into view
+// and holds the last frame (clicking replays it).
 interface Props {
   videoId?: string;
   label: string;
   aspect?: string;
   loop?: boolean;
+  autoplay?: boolean;
 }
 
-const { videoId, label, aspect = '16 / 9', loop = false } = Astro.props;
+const { videoId, label, aspect = '16 / 9', loop = false, autoplay = false } = Astro.props;
 
 // player.mediadelivery.net plays inline on iOS; iframe.mediadelivery.net does not.
 const src = videoId
   ? loop
     ? `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=true&loop=true&muted=true&preload=true&responsive=true`
-    : `https://player.mediadelivery.net/embed/635173/${videoId}?preload=true&responsive=true`
+    : autoplay
+      ? `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=false&muted=true&preload=true&responsive=true`
+      : `https://player.mediadelivery.net/embed/635173/${videoId}?preload=true&responsive=true`
   : null;
 ---
 
@@ -22,6 +27,7 @@ const src = videoId
   {src ? (
     <iframe
       src={src}
+      data-play-in-view={autoplay && !loop ? '' : undefined}
       loading="lazy"
       title={label}
       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
@@ -35,6 +41,38 @@ const src = videoId
     </figcaption>
   )}
 </figure>
+
+<script>
+  // Play-once clips: start each one (via Bunny's player.js API) the first time it is
+  // mostly on screen, once its player has reported ready.
+  function initPlayInView() {
+    const frames = [...document.querySelectorAll<HTMLIFrameElement>('iframe[data-play-in-view]')];
+    if (!frames.length) return;
+    const state = new Map(frames.map((f) => [f, { ready: false, seen: false, played: false }]));
+    const play = (f: HTMLIFrameElement) => {
+      const st = state.get(f)!;
+      if (!st.ready || !st.seen || st.played) return;
+      st.played = true;
+      f.contentWindow?.postMessage(JSON.stringify({ context: 'player.js', version: '0.0.11', method: 'play' }), '*');
+    };
+    window.addEventListener('message', (e) => {
+      if (typeof e.data !== 'string' || !e.data.includes('"ready"')) return;
+      const f = frames.find((fr) => fr.contentWindow === e.source);
+      if (f) { state.get(f)!.ready = true; play(f); }
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const f = en.target as HTMLIFrameElement;
+        state.get(f)!.seen = true;
+        io.unobserve(f);
+        play(f);
+      });
+    }, { threshold: 0.6 });
+    frames.forEach((f) => io.observe(f));
+  }
+  document.addEventListener('astro:page-load', initPlayInView);
+</script>
 
 <style>
   .media-slot {
