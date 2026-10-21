@@ -30,6 +30,13 @@ const TIERS = [
   { title: 'Accounts',    videoId: '34af9a55-7d63-40f7-9fe4-88d2abcff85c' },
 ];
 
+// Short 16:9 clips of the screens in the room on the night.
+const ROOM = [
+  { title: 'Logo',   videoId: 'df476d33-94e3-4719-970d-d48bbd01800c' },
+  { title: 'Facade', videoId: 'f4a2b401-37b2-4138-b3d2-be4f5775978b' },
+  { title: 'Stage',  videoId: '77185fb9-8e54-42ad-9259-0f4704837cd5' },
+];
+
 const REPS = [
   { title: 'Rookie of the Year',    videoId: 'de11b1ad-fd7f-49fe-af8f-ddd0e90e007c' },
   { title: 'Sophomore of the Year', videoId: 'f9fa9116-884e-44d1-a0b0-7f1e23795a71' },
@@ -132,9 +139,9 @@ const REPS = [
       <p class="case-label">On the Night</p>
       <h2 class="case-heading">In the room</h2>
       <div class="grid md:grid-cols-3 gap-3 mt-2">
-        <MediaSlot label="Event photo: stage" aspect="4 / 3" />
-        <MediaSlot label="Event photo: award on screen" aspect="4 / 3" />
-        <MediaSlot label="Event photo: audience / facade" aspect="4 / 3" />
+        {ROOM.map((r) => (
+          <MediaSlot videoId={r.videoId} label={r.title} loop />
+        ))}
       </div>
     </section>
 
