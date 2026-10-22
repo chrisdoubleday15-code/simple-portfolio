@@ -154,7 +154,9 @@ const src = videoId
     --lit: 0;
     filter: brightness(calc(0.3 + 0.7 * var(--lit))) saturate(calc(0.4 + 0.6 * var(--lit)));
     border-color: color-mix(in srgb, var(--color-accent-blue) calc(var(--lit) * 35%), rgba(255, 255, 255, 0.08));
-    transition: filter 120ms linear, border-color 120ms linear;
+    /* Grows from 94% to full width as it lights, so it never spills past the column. */
+    transform: scale(calc(0.94 + 0.06 * var(--lit)));
+    transition: filter 120ms linear, border-color 120ms linear, transform 200ms ease-out;
   }
   .media-slot-placeholder {
     position: absolute;
