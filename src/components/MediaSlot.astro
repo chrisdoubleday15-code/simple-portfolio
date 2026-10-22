@@ -1,33 +1,33 @@
 ---
 // Case-study media frame. Pass `videoId` for a Bunny Stream clip, or leave it out
 // to render a labelled placeholder for an asset that hasn't been exported yet.
-// `loop` autoplays muted on repeat; `autoplay` plays muted once when scrolled into view
-// and holds the last frame (clicking replays it).
+// `loop` autoplays muted on repeat. `spotlight` clips follow the scroll: each one brightens
+// as it nears the middle of the screen, plays from the start when it gets there, and holds
+// its last frame; the rest stay dimmed and paused. Bunny autoplays unless told not to.
 interface Props {
   videoId?: string;
   label: string;
   aspect?: string;
   loop?: boolean;
-  autoplay?: boolean;
+  spotlight?: boolean;
 }
 
-const { videoId, label, aspect = '16 / 9', loop = false, autoplay = false } = Astro.props;
+const { videoId, label, aspect = '16 / 9', loop = false, spotlight = false } = Astro.props;
 
 // player.mediadelivery.net plays inline on iOS; iframe.mediadelivery.net does not.
 const src = videoId
   ? loop
     ? `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=true&loop=true&muted=true&preload=true&responsive=true`
-    : autoplay
+    : spotlight
       ? `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=false&muted=true&preload=true&responsive=true`
-      : `https://player.mediadelivery.net/embed/635173/${videoId}?preload=true&responsive=true`
+      : `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=false&preload=true&responsive=true`
   : null;
 ---
 
-<figure class="media-slot" style={`aspect-ratio: ${aspect};`}>
+<figure class="media-slot" data-spotlight={spotlight && src && !loop ? '' : undefined} style={`aspect-ratio: ${aspect};`}>
   {src ? (
     <iframe
       src={src}
-      data-play-in-view={autoplay && !loop ? '' : undefined}
       loading="lazy"
       title={label}
       allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
@@ -43,35 +43,77 @@ const src = videoId
 </figure>
 
 <script>
-  // Play-once clips: start each one (via Bunny's player.js API) the first time it is
-  // mostly on screen, once its player has reported ready.
-  function initPlayInView() {
-    const frames = [...document.querySelectorAll<HTMLIFrameElement>('iframe[data-play-in-view]')];
-    if (!frames.length) return;
-    const state = new Map(frames.map((f) => [f, { ready: false, seen: false, played: false }]));
-    const play = (f: HTMLIFrameElement) => {
-      const st = state.get(f)!;
-      if (!st.ready || !st.seen || st.played) return;
-      st.played = true;
-      f.contentWindow?.postMessage(JSON.stringify({ context: 'player.js', version: '0.0.11', method: 'play' }), '*');
+  // Spotlight: brightness tracks each clip's distance from the middle of the viewport
+  // (--lit, 0–1). The clip closest to the middle, if near enough, is the active one: it
+  // restarts and plays via Bunny's player.js API; the previous active clip pauses.
+  let controller: AbortController | null = null;
+
+  function initSpotlight() {
+    controller?.abort();
+    const slots = [...document.querySelectorAll<HTMLElement>('[data-spotlight]')];
+    if (!slots.length) return;
+    controller = new AbortController();
+    const { signal } = controller;
+
+    const frames = slots.map((s) => s.querySelector('iframe')!);
+    const ready = new Set<HTMLIFrameElement>();
+    let active: HTMLIFrameElement | null = null;
+    let started = false;
+
+    const send = (f: HTMLIFrameElement, method: string, value?: number) =>
+      f.contentWindow?.postMessage(JSON.stringify({ context: 'player.js', version: '0.0.11', method, value }), '*');
+
+    const start = () => {
+      if (!active || started || !ready.has(active)) return;
+      started = true;
+      send(active, 'setCurrentTime', 0);
+      send(active, 'play');
     };
-    window.addEventListener('message', (e) => {
-      if (typeof e.data !== 'string' || !e.data.includes('"ready"')) return;
-      const f = frames.find((fr) => fr.contentWindow === e.source);
-      if (f) { state.get(f)!.ready = true; play(f); }
-    });
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((en) => {
-        if (!en.isIntersecting) return;
-        const f = en.target as HTMLIFrameElement;
-        state.get(f)!.seen = true;
-        io.unobserve(f);
-        play(f);
+
+    const update = () => {
+      const mid = window.innerHeight / 2;
+      let best: HTMLIFrameElement | null = null;
+      let bestD = Infinity;
+      slots.forEach((slot, i) => {
+        const r = slot.getBoundingClientRect();
+        const d = Math.abs(r.top + r.height / 2 - mid) / mid;  // 0 at centre, 1 at the edge
+        slot.style.setProperty('--lit', String(Math.min(1, Math.max(0, 1 - (d - 0.15) / 0.6))));
+        if (d < bestD) { bestD = d; best = frames[i]; }
       });
-    }, { threshold: 0.6 });
-    frames.forEach((f) => io.observe(f));
+      const next = bestD < 0.4 ? best : null;
+      if (next === active) return;
+      if (active) send(active, 'pause');
+      active = next;
+      started = false;
+      start();
+    };
+
+    let queued = false;
+    const onScroll = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => { queued = false; update(); });
+    };
+
+    // Players announce "ready" once loaded, but that can be missed, so unready ones are
+    // also pinged until they answer.
+    window.addEventListener('message', (e) => {
+      if (typeof e.data !== 'string' || !/"(ready|getDuration)"/.test(e.data)) return;
+      const f = frames.find((fr) => fr.contentWindow === e.source);
+      if (f) { ready.add(f); start(); }
+    }, { signal });
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
+    window.addEventListener('resize', onScroll, { signal });
+    const ping = () => frames.forEach((f) => {
+      if (!ready.has(f)) f.contentWindow?.postMessage(
+        JSON.stringify({ context: 'player.js', version: '0.0.11', method: 'getDuration', listener: 'getDuration' }), '*');
+    });
+    const pinger = setInterval(() => (ready.size === frames.length ? clearInterval(pinger) : ping()), 500);
+    signal.addEventListener('abort', () => clearInterval(pinger));
+    ping();
+    update();
   }
-  document.addEventListener('astro:page-load', initPlayInView);
+  document.addEventListener('astro:page-load', initSpotlight);
 </script>
 
 <style>
@@ -83,6 +125,12 @@ const src = videoId
     border-radius: 3px;
     background: var(--color-bg-surface);
     border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .media-slot[data-spotlight] {
+    --lit: 0;
+    filter: brightness(calc(0.3 + 0.7 * var(--lit))) saturate(calc(0.4 + 0.6 * var(--lit)));
+    border-color: color-mix(in srgb, var(--color-accent-blue) calc(var(--lit) * 35%), rgba(255, 255, 255, 0.08));
+    transition: filter 120ms linear, border-color 120ms linear;
   }
   .media-slot-placeholder {
     position: absolute;
