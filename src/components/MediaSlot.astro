@@ -3,28 +3,31 @@
 // to render a labelled placeholder for an asset that hasn't been exported yet.
 // `loop` autoplays muted on repeat. `spotlight` clips follow the scroll: each one brightens
 // as it nears the middle of the screen, plays from the start when it gets there, and holds
-// its last frame; the rest stay dimmed and paused. Bunny autoplays unless told not to.
+// its last frame; the rest stay dimmed and paused. `autoplay` clips play once when they
+// scroll into view and hold the last frame. Bunny autoplays unless told not to.
 interface Props {
   videoId?: string;
   label: string;
   aspect?: string;
   loop?: boolean;
   spotlight?: boolean;
+  autoplay?: boolean;
 }
 
-const { videoId, label, aspect = '16 / 9', loop = false, spotlight = false } = Astro.props;
+const { videoId, label, aspect = '16 / 9', loop = false, spotlight = false, autoplay = false } = Astro.props;
+const mode = !videoId || loop ? undefined : spotlight ? 'spotlight' : autoplay ? 'once' : undefined;
 
 // player.mediadelivery.net plays inline on iOS; iframe.mediadelivery.net does not.
 const src = videoId
   ? loop
     ? `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=true&loop=true&muted=true&preload=true&responsive=true`
-    : spotlight
+    : mode
       ? `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=false&muted=true&preload=true&responsive=true`
       : `https://player.mediadelivery.net/embed/635173/${videoId}?autoplay=false&preload=true&responsive=true`
   : null;
 ---
 
-<figure class="media-slot" data-spotlight={spotlight && src && !loop ? '' : undefined} style={`aspect-ratio: ${aspect};`}>
+<figure class="media-slot" data-spotlight={mode === 'spotlight' ? '' : undefined} data-play-once={mode === 'once' ? '' : undefined} style={`aspect-ratio: ${aspect};`}>
   {src ? (
     <iframe
       src={src}
@@ -46,16 +49,21 @@ const src = videoId
   // Spotlight: brightness tracks each clip's distance from the middle of the viewport
   // (--lit, 0–1). The clip closest to the middle, if near enough, is the active one: it
   // restarts and plays via Bunny's player.js API; the previous active clip pauses.
+  // Play-once clips start the first time they are mostly on screen.
   let controller: AbortController | null = null;
 
   function initSpotlight() {
     controller?.abort();
     const slots = [...document.querySelectorAll<HTMLElement>('[data-spotlight]')];
-    if (!slots.length) return;
+    const onceFrames = [...document.querySelectorAll<HTMLElement>('[data-play-once]')].map((s) => s.querySelector('iframe')!);
+    if (!slots.length && !onceFrames.length) return;
     controller = new AbortController();
     const { signal } = controller;
 
-    const frames = slots.map((s) => s.querySelector('iframe')!);
+    const spotFrames = slots.map((s) => s.querySelector('iframe')!);
+    const frames = [...spotFrames, ...onceFrames];
+    const seen = new Set<HTMLIFrameElement>();
+    const played = new Set<HTMLIFrameElement>();
     const ready = new Set<HTMLIFrameElement>();
     let active: HTMLIFrameElement | null = null;
     let started = false;
@@ -70,7 +78,14 @@ const src = videoId
       send(active, 'play');
     };
 
+    const playOnce = (f: HTMLIFrameElement) => {
+      if (!seen.has(f) || played.has(f) || !ready.has(f)) return;
+      played.add(f);
+      send(f, 'play');
+    };
+
     const update = () => {
+      if (!slots.length) return;
       const mid = window.innerHeight / 2;
       let best: HTMLIFrameElement | null = null;
       let bestD = Infinity;
@@ -78,7 +93,7 @@ const src = videoId
         const r = slot.getBoundingClientRect();
         const d = Math.abs(r.top + r.height / 2 - mid) / mid;  // 0 at centre, 1 at the edge
         slot.style.setProperty('--lit', String(Math.min(1, Math.max(0, 1 - (d - 0.15) / 0.6))));
-        if (d < bestD) { bestD = d; best = frames[i]; }
+        if (d < bestD) { bestD = d; best = spotFrames[i]; }
       });
       const next = bestD < 0.4 ? best : null;
       if (next === active) return;
@@ -100,7 +115,7 @@ const src = videoId
     window.addEventListener('message', (e) => {
       if (typeof e.data !== 'string' || !/"(ready|getDuration)"/.test(e.data)) return;
       const f = frames.find((fr) => fr.contentWindow === e.source);
-      if (f) { ready.add(f); start(); }
+      if (f) { ready.add(f); start(); playOnce(f); }
     }, { signal });
     window.addEventListener('scroll', onScroll, { passive: true, signal });
     window.addEventListener('resize', onScroll, { signal });
@@ -110,6 +125,15 @@ const src = videoId
     });
     const pinger = setInterval(() => (ready.size === frames.length ? clearInterval(pinger) : ping()), 500);
     signal.addEventListener('abort', () => clearInterval(pinger));
+    const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+      if (!en.isIntersecting) return;
+      const f = en.target as HTMLIFrameElement;
+      seen.add(f);
+      io.unobserve(f);
+      playOnce(f);
+    }), { threshold: 0.6 });
+    onceFrames.forEach((f) => io.observe(f));
+    signal.addEventListener('abort', () => io.disconnect());
     ping();
     update();
   }
