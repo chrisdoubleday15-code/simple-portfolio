@@ -255,8 +255,9 @@ code {
   height: auto;
   max-width: 85vw;
   max-height: 85vh;
-  width: min(85vw, calc(85vh * 16 / 9));
-  aspect-ratio: 16 / 9;
+  /* --lb-ratio (width / height) is set per clip by the motion lightbox; default 16:9. */
+  width: min(85vw, calc(85vh * var(--lb-ratio, 1.7778)));
+  aspect-ratio: var(--lb-ratio, 16 / 9);
 }
 .editing-play {
   position: absolute;

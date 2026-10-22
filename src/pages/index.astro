@@ -5,14 +5,16 @@ import WorkOverlay from '../components/WorkOverlay.astro';
 
 const CASE_STUDY_ID = '9bd37603-d812-4b01-8d94-72ebcfae4efc'; // Live It logo burn (event close loop, 10:3)
 
-// WorkOverlay's motion lightbox reads these from the grid's data-ids.
-const MOTION_IDS = [
-  'e2a9c8f2-1429-4b94-a05c-2ad99da565c3',
-  '30d66712-7faf-4719-aa57-a094e261e6e3',
-  'd588c3c9-8722-46c2-bc98-ce9d412cd237',
-  '8ab58885-6eba-4960-965c-46452e78efcc',
-];
----
+// Motion grid clips, in order. `ratio` is width / height, so the justified rows keep each
+// clip's true shape. WorkOverlay's motion lightbox reads ids + ratios from the grid's data-*.
+const MOTION_CLIPS = [
+  { id: 'e2a9c8f2-1429-4b94-a05c-2ad99da565c3', ratio: 16 / 9 },  // Live It recognition award
+  { id: '39c97a87-8aa9-4719-b1cf-9fec0e44cc0c', ratio: 1 },       // Inverted Rep (1:1)
+  { id: '30d66712-7faf-4719-aa57-a094e261e6e3', ratio: 16 / 9 },
+  { id: '6ac6c3c8-d3de-4554-b513-c2a0e351b392', ratio: 16 / 9 },  // In The Dark Teaser
+  { id: 'd588c3c9-8722-46c2-bc98-ce9d412cd237', ratio: 16 / 9 },
+  { id: '8ab58885-6eba-4960-965c-46452e78efcc', ratio: 16 / 9 },
+];---
 
 <Layout
   title="Christopher Doubleday | Senior Motion Designer"
@@ -95,9 +97,13 @@ const MOTION_IDS = [
         <ReelsCarousel />
       </div>
 
-      <div class="card-grid editing-grid motion-grid" data-ids={JSON.stringify(MOTION_IDS)}>
-        {MOTION_IDS.map((id, i) => (
-          <div class="stagger-card" style={`--card-delay: ${i * 80}ms`}>
+      <div
+        class="card-grid motion-grid"
+        data-ids={JSON.stringify(MOTION_CLIPS.map((c) => c.id))}
+        data-ratios={JSON.stringify(MOTION_CLIPS.map((c) => c.ratio))}
+      >
+        {MOTION_CLIPS.map(({ id, ratio }, i) => (
+          <div class="stagger-card motion-tile" style={`--card-delay: ${i * 80}ms; --ratio: ${ratio};`}>
             <button class="editing-card w-full" data-video-id={id} data-section="motion" aria-label="Play motion clip">
               <iframe
                 src={`https://iframe.mediadelivery.net/embed/635173/${id}?preload=true&responsive=true&muted=true&autoplay=false`}
@@ -165,6 +171,27 @@ const MOTION_IDS = [
     color: transparent;
     -webkit-text-stroke-color: var(--color-accent-blue);
     text-shadow: 0 0 20px rgba(0, 200, 255, 0.4), 0 0 60px rgba(0, 200, 255, 0.2), 0 0 100px rgba(0, 200, 255, 0.08);
+  }
+
+  /* ── Motion grid: justified rows ──
+     Each tile grows in proportion to its ratio from a basis of ratio × --row-h, so every
+     row shares one height and fills the width without cropping. --row-h sets roughly how
+     tall a row is before it stretches (and so how many tiles fit per row). */
+  .motion-grid {
+    --row-h: 140px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .motion-tile {
+    flex: var(--ratio) 1 calc(var(--ratio) * var(--row-h));
+  }
+  .motion-tile .editing-card {
+    display: block;
+    aspect-ratio: var(--ratio);
+  }
+  @media (max-width: 640px) {
+    .motion-grid { --row-h: 100px; }
   }
 
   /* ── Case study card ── */

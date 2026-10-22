@@ -541,6 +541,7 @@ const REELS_IDS = [
 
     const sections: Record<SectionKey, {
       ids: string[];
+      ratios?: number[];  // width / height per clip; the lightbox card reshapes to fit
       index: number;
       lightboxEl: HTMLElement | null;
       iframeEl: HTMLIFrameElement | null;
@@ -549,6 +550,7 @@ const REELS_IDS = [
     }> = {
       motion: {
         ids: dataJson<string[]>('.motion-grid', 'ids'),
+        ratios: dataJson<number[]>('.motion-grid', 'ratios'),
         index: 0,
         lightboxEl: document.getElementById('motion-lightbox'),
         iframeEl: document.getElementById('motion-iframe') as HTMLIFrameElement | null,
@@ -574,12 +576,20 @@ const REELS_IDS = [
     };
 
     // ── Lightbox helpers ──
+    function showClip(key: SectionKey) {
+      const s = sections[key];
+      if (!s.iframeEl) return;
+      const ratio = s.ratios?.[s.index];
+      if (ratio) s.iframeEl.parentElement!.style.setProperty('--lb-ratio', String(ratio));
+      s.iframeEl.src = s.buildSrc(s.ids[s.index]);
+    }
+
     function openLightbox(key: SectionKey, videoId: string) {
       const s = sections[key];
       if (!s.lightboxEl || !s.iframeEl) return;
       const idx = s.ids.indexOf(videoId);
       s.index = idx >= 0 ? idx : 0;
-      s.iframeEl.src = s.buildSrc(s.ids[s.index]);
+      showClip(key);
       s.lightboxEl.classList.add('open');
       s.lightboxEl.setAttribute('aria-hidden', 'false');
       s.lightboxEl.focus();
@@ -597,7 +607,7 @@ const REELS_IDS = [
       const s = sections[key];
       if (!s.iframeEl) return;
       s.index = (s.index + dir + s.ids.length) % s.ids.length;
-      s.iframeEl.src = s.buildSrc(s.ids[s.index]);
+      showClip(key);
     }
 
     // ── Panel navigation ──

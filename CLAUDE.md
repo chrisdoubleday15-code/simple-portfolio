@@ -193,7 +193,7 @@ Section order:
 1. **Hero** — `<section class="text-center relative pt-8 pb-4">`
 2. **Sticky section nav** — `<div class="sticky top-[72px] z-10 ...">`
 3. **Case Study** — `<section id="case-study" class="py-12">`: `.case-card` link to `/work/live-it-awards`, looping `CASE_STUDY_ID` (player.mediadelivery.net) + stats footer
-4. **Motion** — `<section id="motion" class="py-12 border-t border-white/5">`: `<ReelsCarousel />` (meant for 9:16 motion pieces; still holds short-form edits until swapped) above a 2×2 grid driven by `MOTION_IDS` in `index.astro`; grid cards open `#motion-lightbox`
+4. **Motion** — `<section id="motion" class="py-12 border-t border-white/5">`: `<ReelsCarousel />` (meant for 9:16 motion pieces; still holds short-form edits until swapped) above a justified-rows grid driven by `MOTION_CLIPS` (`{ id, ratio }`) in `index.astro`: every row shares one height, clips keep their true shape (16:9, 1:1, …), `--row-h` tunes how many fit per row; grid cards open `#motion-lightbox`, which reshapes to each clip's ratio
 5. **Editing & Short Form** — `<WorkOverlay />`: `<section id="work">` preview block; tabs open a fullscreen overlay with Editing / Short Form panels. Hawaii 2026 is the first Editing clip and the preview loop.
 6. **Contact CTA** — `<section id="contact-cta">`, red `.cta-btn` → `/contact`
 
@@ -230,7 +230,7 @@ Card 5: 510b0d07-cd34-4daf-92d4-74bbac5e915b   President's Club
 
 ### Motion + Work overlay grids — uses `iframe.mediadelivery.net`
 
-Source of truth: `EDITING_IDS`, `REELS_IDS` at the top of `WorkOverlay.astro`; `MOTION_IDS` in `index.astro` (Motion section). Panels and `.motion-grid` expose them via `data-ids`; the lightbox JS reads them back, so edit the arrays only. Overlay panel count is derived from the track's children.
+Source of truth: `EDITING_IDS`, `REELS_IDS` at the top of `WorkOverlay.astro`; `MOTION_CLIPS` in `index.astro` (Motion section). Panels and `.motion-grid` expose them via `data-ids` (plus `data-ratios` on the motion grid); the lightbox JS reads them back, so edit the arrays only. Overlay panel count is derived from the track's children.
 
 Motion cards carry `data-section="motion"` → routed to `#motion-lightbox`. **Do not remove this attribute.**
 
