@@ -22,7 +22,7 @@ No tests in this project.
 
 **Waiting on Chris** — the live checklist is `../TODO.txt` (outside the repo). Read it at the start of a session and tick items off as they land.
 - Live It case study (`/work/live-it-awards`): order is Brief, Stats, Tier Awards, Rep of the Year, Visual Direction, On the Night, Outcome. Award clips are 5120×1536 screen renders (`SCREEN = '10 / 3'`, full width). Tier Awards and Rep of the Year are visuals only; Chris will write their copy later. On the Night ("In the room") holds three 16:9 room clips (`ROOM`: Logo, Facade, Stage), stacked full width. Room clips use MediaSlot `autoplay` (play once when scrolled into view, hold the last frame). The 7 award clips use MediaSlot `spotlight`: brightness and scale (94%→100%) follow scroll, the clip nearest the viewport centre plays from the start and holds its last frame, the previous one pauses (Bunny autoplays by default, so URLs need `autoplay=false`). Next up: style frames. The "5 Award templates" stat stays until Chris reworks the text.
-- Motion carousel: still holds the old short-form edits until ~6 vertical (9:16) motion clips arrive; swap the 6 IDs in `ReelsCarousel.astro`.
+- Motion carousel: becoming motion-only. Keep Airrack Teaser and Mark Rober Interview (motion-heavy); Top Reps is in. Tom Brady, Cruise Recap and President's Club get replaced as new 9:16 motion clips arrive (IDs at the top of `ReelsCarousel.astro`).
 - Contact form hidden until `formspreeEndpoint` is set in `src/config.ts`.
 - `public/resume.pdf` still shows the old title.
 
@@ -220,8 +220,8 @@ Active state: `IntersectionObserver` adds `.active` → `color: var(--color-acce
 ### Carousel — uses `player.mediadelivery.net`
 
 ```
-Card 0: a8690e6e-a04f-4b23-b12e-6a85fed5e559   Airrack Teaser
-Card 1: 12af665e-cacc-41ae-929b-81430ede21fa   Bali Recap
+Card 0: 72800d07-958e-4ca9-b8f8-96c1880685e4   Top Reps
+Card 1: a8690e6e-a04f-4b23-b12e-6a85fed5e559   Airrack Teaser
 Card 2: 5c2d49c1-09e0-477c-9762-9eda11c363f7   Tom Brady Dynasty
 Card 3: 317bcbe4-b3a9-4307-ade6-02f4f1f4de5c   Cruise Recap
 Card 4: 5629d473-f7ce-49e2-9264-cba3e6fc68f0   Mark Rober Interview
